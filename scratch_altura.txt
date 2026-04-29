@@ -1,0 +1,650 @@
+
+
+
+
+
+
+
+
+
+
+PROCEDIMIENTO GENERAL DE TRABAJO EN ALTURA
+
+Código: PRO-OPE-005-CORP
+
+
+Formalización del Procedimiento
+Elaborado:  Javiera Rojas 
+Revisado:  Raúl Díaz
+Aprobado: Alexis Olivares 
+Cargo:  Asesor HSE
+Cargo: Gerente HSEC 
+Cargo: Adm. de Contrato
+
+
+Firma:
+
+
+
+Firma:
+
+
+Firma:
+
+Fecha: 05-03-2025
+Fecha: 05-03-2025 
+Fecha: 05-03-2025 
+
+INDICE
+
+0.	MODIFICACIONES	2
+1.	OBJETIVO	2
+2.	ALCANCE	2
+3.	DEFINICIONES	3
+4.	RESPONSABILIDADES	5
+5.	RECURSOS	6
+6.	DESCRIPCIÓN DE ACTIVIDADES	6
+7.	MEDIDAS DE PREVENCIÓN DE RIESGOS	18
+9.	ANÁLISIS DE VARIABLE AMBIENTAL	22
+10.	CONTROL DE REGISTRO	22
+11.	REFERENCIAS	23
+12.	ANEXOS	23
+
+
+
+
+
+
+
+
+
+
+
+	•	MODIFICACIONES
+
+FECHA
+MODIFICACIONES
+REVISIÓN
+
+
+
+
+	•	OBJETIVO	
+Establecer las normas para realizar los distintos trabajos en altura, en forma segura y eficiente, tendientes a conformar hábitos en los Soldadores, Ayudantes, Supervisores, también describir la metodología para realizar trabajos en altura, indicar los principales riesgos y medidas de control para minimizar la ocurrencia de accidentes, con la finalidad de proteger la integridad física del personal.
+Indicar las medidas de prevención de riesgos para los trabajos en altura (sobre o bajo 1,8 metros de altura del piso), para minimizar los riesgos inherentes, evitando lesiones a las personas, equipos e instalaciones.
+Reforzar los enlaces y comunicaciones, para no entorpecer las actividades de terceros, estableciendo un método seguro para la correcta ejecución de los trabajos.
+También controlar todos los riesgos potenciales de accidentes que pudieran afectar tanto a los trabajadores como también, vehículos o maquinarias, instalaciones, equipos, materiales y ambiente, específicamente, dando cumplimiento a lo establecido en Ley 16.744, NCh2458/Of.1999 Sistemas de protección para trabajos en altura, Decretos Complementarios, Decreto N°44 y Decreto N° 594 y en general, la normativa legal vigente.
+
+	•	ALCANCE	
+En este procedimiento se resume en las responsabilidades individuales que tiene cada persona involucrada en los distintos trabajos de mantención. Este procedimiento debe ser conocido e internalizado por todo el personal de la empresa BOILER COMP S.A. que deben realizar trabajos en altura.
+
+	•	DEFINICIONES	
+
+	•	Trabajo en altura: La definición legal de un trabajo en altura es aquel que se realiza a más de 1.8 metros de altura, desde el punto de vista técnico, debe considerarse trabajo en altura aquel en el que un operario puede caer a un nivel diferente del que se encuentra trabajando.
+Un ejemplo claro sería estar trabajando por encima del nivel del suelo (escaleras, tejados, encima de cisternas, trenes o autobuses, etc.), pero también hay que incluir en esta definición los trabajos que se realizan en agujeros, alcantarillas, minas y similares.
+	•	Riesgo de caída: cuando un trabajador realiza una tarea sobre una superficie o plataforma, emplazada a 1,8 metros, o más, de altura por encima del nivel más bajo (OSHA 1926.502 (b1) (1)), o donde una caída de menor altura pueda causar una lesión grave.
+	•	Sistema Personal para Detención de Caídas (SPDC): Reducir el riesgo de lesiones al trabajador que cae, limitando la altura recorrida por el cuerpo, reduciendo la magnitud y los efectos de la fuerza de frenado a un nivel tolerable para la salud o integridad física del trabajador y permitiendo que, una vez producida la caída, se garantice una suspensión segura hasta el rescate
+	•	Sistemas de posicionamiento: accesorios de protección utilizados, que tienen por objetivo la sujeción del usuario a una estructura para tener las manos libres.
+	•	Sistema de retención: accesorios de protección utilizados para limitar el acceso del trabajador a zonas en que se puede producir la caída.
+	•	Sistema de detención de caídas: Es el conjunto de equipos, componentes y elementos que se configuran sinérgicamente para detener una caída
+	•	Sistemas pasivos de protección contra caídas: Son sistemas que no requieren el uso de equipos de protección contra caídas. Son sistemas que tienen como función evitar que la caída ocurra.
+	•	Suspensión: Tareas en las que el trabajador debe “suspenderse” o colgarse y mantenerse en esa posición sin posibilidad de caída, mientras realiza su tarea o mientras es subido o bajado.
+	•	Detención de caídas: Es la acción o el evento de detener o parar una caída libre.
+	•	Absorbedor de impacto: Equipo cuya función es disminuir las fuerzas de impacto en el cuerpo del trabajador o en los puntos de anclaje en el momento de una caída.
+	•	Anclaje: Punto seguro al que se puede conectar un equipo personal de protección contra caídas con resistencia mínima de 5000 libras (2.272 Kg) por persona conectada.
+	•	Actividad: Acción u operación medible para convertir datos en resultados en un periodo de tiempo determinado.
+	•	Argolla D: Es un conector integral en forma de “D” que tiene como función servir de punto de conexión, eslinga u otro elemento donde se use.
+	•	Arnés: Sistema de correas cosidas y debidamente aseguradas, incluye elementos para conectar equipos y asegurarse a un punto de anclaje; su diseño permite distribuir en varias partes del cuerpo el impacto generado durante una caída.
+	•	Carabinero: Equipo metálico que es parte integral de los conectores y permite realizar conexiones entre el arnés a los puntos de anclaje, sus dimensiones varían de acuerdo con su uso, tiene un sistema de apertura y cierre con doble sistema de accionamiento para evitar una apertura accidental que asegura que no se salga de su punto de conexión.
+	•	Certificación: Constancia que se entrega al final de un proceso, que acredita que un determinado elemento cumple con las exigencias de calidad de la norma que lo regula, o que una persona posee los conocimientos y habilidades necesarias para desempeñar ciertas actividades determinadas por el tipo de capacitación.
+	•	Conector: Cualquier equipo que permita unir el arnés del trabajador al punto de anclaje.
+	•	Distancia de Caída Libre: Desplazamiento vertical y súbito del conector para detención de caídas, y va desde el inicio de la caída hasta que ésta se detiene o comienza a activarse el Absorbedor de impacto. Esta distancia excluye la distancia de desaceleración, pero incluye cualquier distancia de activación del detenedor de caídas antes de que se activen las fuerzas de detención de caídas.
+	•	Distancia de detención: La distancia vertical total requerida para detener una caída, incluyendo la distancia de desaceleración y la distancia de activación.
+	•	Distancia de desaceleración: La distancia vertical entre el punto donde termina la caída libre y se comienza a activar el absorbente de choque hasta que este último pare por completo.
+	•	Eslinga: Conector con una longitud máxima de 1.80 m fabricado en materiales como cuerda, reata, cable de acero o cadena. Las eslingas cuentan con ganchos para facilitar su conexión al arnés y a los puntos de anclaje; algunas eslingas se les incorporan un absorbedor de impacto para detención de caídas.
+	•	Eslinga de posicionamiento: Es aquella eslinga que es de longitud fija o variable que permite realizar labores de posicionamiento. Se conecta entre el arnés en los puntos de conexión destinados para posicionamiento y el punto de anclaje.
+	•	Gancho: Equipo metálico que es parte integral de los conectores y permite realizar conexiones entre el arnés a los puntos de anclaje, sus dimensiones varían de acuerdo a su uso, los ganchos están provistos de una argolla u ojo al que está asegurado el material del equipo conector (cuerda, reata, cable, cadena) y un sistema de apertura y cierre con doble sistema de accionamiento para evitar una apertura accidental que asegura que el gancho no se salga de su punto de conexión.
+	•	Líneas de vida horizontales: Sistemas de cables de acero, cuerdas o rieles que debidamente ancladas a la estructura donde se realizará el trabajo en alturas, permitirán la conexión de los equipos personales de protección contra caídas y el desplazamiento horizontal del trabajador sobre una determinada superficie.
+	•	Líneas de vida verticales: Sistemas de cables de acero o cuerdas que debidamente ancladas en un punto superior a la zona de labor, protegen al trabajador en su desplazamiento vertical (ascenso/descenso).
+	•	Mosquetón: Equipo metálico en forma de argolla que permite realizar conexiones directas del arnés a los puntos de anclaje. Otro uso es servir de conexión entre equipos de protección contra caídas o rescate a su punto de anclaje.
+	•	Posicionamiento: Es la acción de soportar el cuerpo con un sistema de posicionamiento con el fin de mantenerlo en una posición estable y tener las manos libres.
+	•	RESPONSABILIDADES
+
+4.1	Administrador de contrato
+	•	Es el responsable de aprobar la metodología del presente Procedimiento y asignar los recursos necesarios para su implementación.
+
+4.2	Jefe de producción 
+	•	Encargado de difundir y controlar el cumplimiento de este Procedimiento, además son responsables de mantener la comunicación permanente con el cliente, respecto a los requisitos, documentos y autorizaciones requeridas.
+
+4.3 	Asesor de prevención de riesgo
+	•	Responsable de asesorar a la línea de mando en materia de requerimientos de los clientes como; requisitos normativos y los de tipo legal aplicable a la actividad. Controlar el cumplimiento en terreno de lo dispuesto en este Procedimiento.
+
+	•	     Supervisión.
+
+	•	Interiorizarse de la actividad a realizar y de los procedimientos relacionados con la tarea. Será responsable de la ejecución y cumplimiento de este procedimiento.
+	•	Personal/trabajadores
+
+	•	Tomar conocimiento y cumplir con lo dispuesto en el presente procedimiento.
+
+	•	4.6		Restricciones y prohibiciones.
+	•	La o las restricciones específicas para la realización de una tarea que resultan del análisis riguroso de los riesgos que el trabajador puede enfrentar y sobre los cuales deben decidir y actuar según limitaciones o prohibiciones específicas.
+
+	•	RECURSOS	
+5.1.- Elementos de Protección Personal
+	•	Zapatos de Seguridad.
+	•	Arnés de seguridad de con colas de seguridad de acero.
+	•	Lentes de Seguridad Herméticos Claros y/o Oscuros
+	•	Protectores auditivos del tipo fono y/ tapones.
+	•	Casco.
+	•	Barbiquejo.
+
+5.2.- Equipos	
+Según corresponda a los trabajos, pueden requerirse:
+	•	Andamios certificados.
+	•	Alza hombre.
+	•	Escalera.
+	•	Línea de vida.
+
+	•	DESCRIPCIÓN DE ACTIVIDADES 
+	•	Una vez determinada la forma de hacer el trabajo se debe realizar un AST específico para la tarea, participando toda persona que realizara el trabajo en altura, además del supervisor para dar los lineamientos sobre este.
+	•	Realizado el AST, formulario de evaluación y permiso de trabajo, en donde se debe equipar con el equipo de detención de caída e instalar según corresponda, plataformas, cuerpos de andamio y equipos móviles para realizar la tarea.
+	•	Se debe hacer una revisión detallada del estado de estos equipos para comprobar su buen estado antes de instalarlos, así también todos los equipos de protección personal para trabajos en altura.
+	•	Para el montaje de cuerpos de andamio se debe tener una supervisión constante, los trabajadores deben contar con su equipo de protección personal anticaídas, arnés de seguridad con dos cabos de vida.
+	•	Se delimitará el área alrededor de la zona donde se instalan estas plataformas para evitar golpes por caída de materiales en altura.
+	•	Según el tipo y lugar de trabajo se deberá contar con tarjetas de colores que identifiquen las condiciones en que se encuentra la estructura. El color verde significa que la plataforma se puede utilizar para trabajos y está aprobada, el color rojo significa que está en construcción y ninguna persona ajena al grupo de trabajo puede utilizar la plataforma.
+	•	A medida que se avanza en los trabajos, los trabajadores deben asegurar tanto su persona como la plataforma a una estructura fija y resistente. Por ningún motivo un trabajador puede soltarse de la estructura al que está sujeto, salvo cuando se desplace, pero siempre manteniendo uno de sus dos cabos de vida fijados a ella.
+	•	Una vez terminada de montar la plataforma los trabajadores descenderán por la caja escala interior con que cuenta el equipo, está prohibido subir y bajar la plataforma si no es por este medio.
+	•	Para los trabajos específicos sobre esta plataforma se deben tomar las siguientes medidas; para trabajos de soldadura, esmerilado y oxicorte se deben proteger bien el arnés de seguridad, una medida para esto es utilizar este equipo bajo el traje de cuero del trabajador, además sus cabos de vida deben ser de piola de acero.
+	•	Los trabajadores que permanezcan en esta plataforma en ningún momento pueden quedar libres o no sujetos a la estructura para evitar caídas a distinto nivel.
+	•	Para los trabajos en altura apoyados con equipos móviles (alza hombre tipo telescopio y articulado) se debe considerar lo siguiente:
+	•	Todo equipo móvil debe ser revisado antes de su utilización, tanto mecánica, eléctrica e hidráulicamente.
+	•	Estos equipos deben contar con su certificación que acredite que son aptos para el uso en altura.
+	•	Los operadores de estos equipos deben estar capacitados y con conocimientos sobre como operar de buena manera estos vehículos.
+	•	Para el alza hombres tipo tijeras se deberán utilizar por obligación los estabilizadores de sus 4 esquinas.
+	•	Los equipos alza hombres solo pueden ser usados para el desplazamiento de personas hasta un límite especifico de carga, por ningún motivo se debe ocupar para subir materiales que sobrepasen su capacidad (Telescópico 250 kilogramos aproximadamente – Tijera 500 kilogramos aproximadamente).
+	•	Los trabajadores que suban a estos equipos deben utilizar por obligación su equipo de protección anticaídas.
+	•	No realizar trabajos apoyados de forma innecesaria en las barandas de estos equipos.
+	•	Cada vez que se posicione un equipo se deberá apagar para evitar la pérdida de combustible innecesario.
+	•	Para trabajos sobre estructuras elevadas donde sea imposible utilizar equipos móviles o plataformas y solo se use el EPP específico se debe realizar lo siguiente:
+	•	Dependiendo del tipo de estructura se deberá instalar una o más líneas de vida para asegurar el libre desplazamiento del trabajador, en su defecto se podrán utilizar las mismas estructuras para la fijación de los cabos de vida.
+	•	Para amarrar las líneas de vida se debe utilizar prensa cable, como mínimo 3 en cada extremo, la línea de vida no debe quedar completamente tensada.
+	•	Cuando sea necesario se instalarán bobinas retractiles, todo desplazamiento entre estructuras donde haya posibilidad de caída libre se debe realizar con el mayor cuidado posible y utilizando sus 2 cabos de vida, uno para sujetar y el otro para desplazar.
+	•	La distancia de cálculo de caída para la instalación de dispositivos de seguridad se tomará de la siguiente manera
+Altura promedio trabajador
+1.80 metro s
+Largo cola de vida
+1.80 metros
+Amortiguador de caída
+1.2 metros
+Margen de seguridad
+1.0 metros
+Total
+5,8 metros
+
+	
+
+	•	Se prohíbe terminantemente hacer bromas mientras se está trabajando en altura.
+	•	Las personas que realicen trabajos en esta situación deberán tener la mayor concentración posible en la tarea, el uso obligatorio de los EPP específicos y seguir las órdenes emitidas por el supervisor al pie de la letra.
+	•	Si cualquier trabajador no se siente en condiciones para realizar este tipo de trabajos debe informar de inmediato a su supervisor.
+6.1 	Sistemas y equipos de protección contra caídas.
+Todos los sistemas o equipos de protección contra riesgos de caídas en altura y sus componentes deberán ser sometidos a inspecciones visuales antes de cada uso, para detectar signos de daño deterioro o defectos.
+
+6.2 	Revisión del sistema personal para detención de caídas
+Todo el personal que realice labores de trabajo en altura física deberá realizar un chequeo de su sistema de protección contra caídas cada vez que sea utilizado.
+El sistema personal de detención de caída debe ser inspeccionado para verificar que funciona correctamente.
+Son muchos los factores que podrían afectar al equipo: El desgaste general, la suciedad, radiación UV, la humedad, la abrasión, los químicos, entre otros. La severidad con que estos factores estén presentes en el ambiente de trabajo, el modo de uso y el tiempo de exposición de los equipos a estas condiciones deberá ser considerada para definir la frecuencia con que se deba realizar la revisión
+
+
+6.3	 Arnés de cuerpo completo.
+Son dispositivos corporales utilizados para interrupción y restricción de caídas, rescate, posicionamiento de trabajo, transporte de personal y para escalar. Se deberán usar los subsistemas conectivos apropiados para enganchar el arnés al sistema de anclaje, siendo su uso obligatorio para todo el personal que trabaje en altura a más de 1,80 metros o más.
+El arnés de cuerpo completo está compuesto de correas, cintas tejidas de nylon, poliéster o de otro tipo que aseguran alrededor de cuerpo de una persona, de tal manera que en caso de sufrir una caída libre, las fuerzas de la carga de impacto que se generan al frenar una caída, se distribuyan a través de las piernas, caderas, el pecho y los hombros dirigiendo la presiones hacia arriba y hacia fuera. Esta condición contribuye a reducir la posibilidad de que el usuario sufra lesiones al ser detenida su caída.
+Los cinturones y arneses deberán ser fabricados en un material (nylon, poliéster o de otro tipo) que permita que el producto terminado soporte sin sufrir daños, el ensayo de impacto descrito, para cada tipo en NCh 1258/2
+El arnés debe contener, además, los elementos de acople necesario para permitir la conexión con el sistema de detención (argollas tipo “D”) a una línea de sujeción o estrobos, a una línea de vida o un dispositivo de desaceleración o absorción de impactos.
+Los conectores mosquetones y ganchos con auto-cierre y auto-bloqueo y argolla tipo D, deben estar en capacidad de soportar a lo menos 2,300 Kg. Los conectores deben ser compatibles con los otros componentes del sistema.
+El uso de los elementos de enganche, para aplicaciones de protección contra caídas, conecte la argolla tipo D, o el elemento de enganche a su espalda entre los omóplatos.
+Las argollas tipo D de los costados, son únicamente para aplicaciones de posicionamiento o restricción. Las argollas tipo D de hombro de recuperación son solamente para aplicaciones de rescate o recuperación.
+Las argollas tipo D del frente son para subir escaleras o para posicionamiento.
+Las argollas tipo D en asientos de horquetas son solamente para aplicaciones de suspensión o posicionamiento.
+Todo arnés de seguridad debe contar con dos líneas de sujeción o estrobos para desplazamiento y garantizar la protección contra caídas.
+El trabajador usuario de un arnés deberá mantener a lo menos, una línea de sujeción asegurada en todo momento y la otra deberá ser utilizada para su desplazamiento. Sea en sentido vertical, horizontal o combinado, cuando trabaje a más de 1,80 metros de altura.
+
+
+	•	 Uso obligatorio de arnés de cuerpo completo
+
+	•	Estructuras permanentes incompletas.
+	•	Techos inclinados, cualquiera sea el ángulo de inclinación.
+	•	A tres (3) metros de la orilla de un techo desde un piso provisorio elevado.
+	•	Al remover tablones de un techo desde un piso provisorio elevado.
+	•	Mientras se efectúan trabajos en una plataforma de elevación con accionamiento eléctrico o mecánico.
+	•	En bordes de un envigado.
+	•	Al efectuar trabajo sobre un andamio.
+	•	Cuando la persona se debe trasladar o moverse de un lado a otro en alturas a 1,80 metros o superiores.
+	•	Al efectuar trabajos suspendidos en canastillos colgantes aprobados. En andamios.
+	•	En instalaciones donde no existan barandas y que estén a más de 1.8 metros. de altura.
+	•	En posiciones inseguras de trabajo a cualquier altura (taludes, bancos, pendientes, estructuras, etc.)
+	•	Al quitar tablones de pisos, tapas de aberturas, rejillas, pisos, etc.
+	•	En excavaciones que superen la profundidad de 1.80 metros. o se esté expuesto a una caída libre.
+	•	Queda estrictamente prohibido realizar cualquier trabajo en altura física sin arnés de seguridad. El no cumplimiento de esta disposición será considerado falta grave.
+
+	•	Identificación del arnés de cuerpo completo
+
+	•	Los arneses de cuerpo completo deben disponer de una etiqueta de tipo permanentemente con la siguiente información:
+	•	La identificación de la norma NCh 1258/1- Of2004, su tipo y clase. (por ejemplo: A, AD, ADP, etcétera).
+	•	El nombre, marca registrada u otros medios de identificación del fabricante o proveedor.
+	•	Información respecto a la identificación del producto del fabricante, la que debe incluir el número de partida o serie que permita trazar el origen.
+	•	El	año	de	fabricación	del producto. e. La identificación de la fibra utilizada como material de construcción.
+	•	Información que establezca por medios apropiados el propósito deseado de cada elemento de fijación y específicamente identificando aquellos elementos que estén diseñados para ser utilizados como parte de un sistema para detención de caídas.
+	•	Una advertencia sobre la lectura de las instrucciones del fabricante.
+	•	Una marca especial que indique la argolla de fijación para una aplicación en detención de caídas. Se debe marcar una letra A sobre cada cinta de hombro bajo la argolla de fijación para detención de caídas y sobre la cintura.
+ Etiqueta permanente de marcado en ACC
+
+	•	Modo de colocación del arnés de cuerpo.
+El usuario del arnés al momento de su colocación deberá considerar las siguientes indicaciones:
+A. Vaciar sus bolsillos de objetos que lo puedan dañar.
+B. Tomar el arnés desde la argolla de espalda para alinear las cintas.
+C. Ubicar las cintas de hombros.
+D. Instalar las cintas de piernas.
+E. Ajustar la cinta horizontal de pecho.
+F. Ajustar el arnés al cuerpo cómodamente.
+G. Instalar el estrobo o cabo de vida en la argolla de espalda.
+	•	Dispositivos para control de caídas
+Línea de Sujeción o Estrobo: También denominada como “estrobo”, “tirante” y “cuerda o cola de seguridad”, la línea de sujeción es un componente de un sistema o equipo de protección para limitar y/o detener una caída, restringiendo el movimiento del trabajador o
+limitando la caída del usuario. Está constituida por una correa de nylon, tejido de cuerda de nylon trenzado, o por una línea o estrobo de cable de acero galvanizado.
+Las líneas de sujeción o estrobo son de longitud entre 1,20 metros y 1,80 metros (6”) fabricadas de correas de nylon, poliéster de cuerdas de nylon trenzadas, o de cables de acero.
+Para trabajos de oxicorte, soldadura u otro con llama abierta en altura, debe usarse arnés de seguridad con cola de piola de acero de ¼” de diámetro forrado en goma o plástico.
+Línea de Vida Horizontal: La línea de vida horizontal se conecta entre dos puntos de anclajes por ambos extremos.
+Líneas de Sujeción con Dispositivo Amortiguador de Impactos: Las líneas de sujeción o estrobos con un dispositivo amortiguador de impactos (atenuador de caídas), son líneas de sujeción–correas de nylon o cuerda trenzada--que cuentan con un dispositivo amortiguador de impactos que permite disipar la energía del impacto, reduciendo la fuerza de detención en un 50% aproximadamente, actuando en el usuario y en el anclaje.
+Líneas de Sujeción de Posicionamiento: Las líneas de sujeción o estrobos para posicionamiento no deberán ser usadas como un equipo de protección contra caídas. Adicionalmente se deberá usar una línea de sujeción con atenuador o amortiguador de caída conectada a la espalda.
+Amortiguador de impactos: Es un dispositivo diseñado para disipar la energía del impacto en caso de caídas reduciendo la fuerza máxima de suspensión y amplían.
+Dispositivos de Desaceleración: Es cualquier mecanismo utilizado para disipar la energía del impacto durante una caída. Ejemplo: El dispositivo amortiguador de impactos.
+Anclaje: Es la parte estructural, fuente o punto seguro el cual se emplea para fijar o conectar cualquier sistema / equipo de protección contra caída accidental tales como líneas de vida y líneas de sujeción con dispositivo amortiguador deimpactos. El anclaje debe resistir a lo menos 5.000 libras por cada persona o sistema/ equipo de protección personal que se conecte.
+Líneas de Vida: Las líneas de vida o cabos de vida, son componentes de un sistema / equipo de protección contra caídas, consistentes de una cuerda de nylon o cable de acero galvanizado que, instalada en forma horizontal o vertical, estirada y sujetada entre dos puntos de anclaje para otorgar movilidad al personal que trabaja en áreas elevadas. La línea de vida permite la fijación o enganche en forma directa o indirecta al cinturón de seguridad, a la línea de sujeción o estrobo, al arnés completo para el cuerpo, o un dispositivo de absorción de impacto.
+Línea de Vida Vertical: Pueden estar compuestas de una cuerda de poliéster trenzado o cable de acero galvanizado, dispuestas verticalmente para detener la caída de una persona al subir torres de acero para líneas de transmisión, postes, plantas térmicas de energía, antenas transmisoras, escalas de gato, lugares de construcción de edificios, minas y otras estructuras de altura. La línea vertical puede estar sujeta solo en el extremo superior al acople de anclaje y caer libremente en sentido vertical hasta el piso, permitiendo el deslizamiento del conector del sistema de protección de caída, en este caso un dispositivo de agarre de seguridad.
+Distancia de Caída Libre: Desplazamiento vertical y súbito del conector para detención de caídas, y va desde el inicio de la caída hasta que ésta se detiene o comienza a activarse el absorbente de choque.
+Esta distancia excluye la distancia de desaceleración, pero incluye cualquier distancia de activación del detenedor de caídas antes de que se activen las fuerzas de detención de caídas.
+Mientras más grande es la caída libre, el amortiguador de impacto se tiene que extender aún más para disminuir el impacto. Por ende, el espacio libre requerido debe ser mayor. En caso de utilizar dispositivos para detención tipo retráctiles, la caída libre es mucho más reducida (verificar las especificaciones del fabricante).
+Margen de Seguridad: Mayor o igual que 1 m, permite algún margen entre los pies del usuario y el piso u otro peligro en el punto de extensión máxima del sistema para detención de caídas, al objeto de evitar lesiones (incluyendo el rebote).
+Elongación del Arnés para el cuerpo completo: El punto de fijación de un arnés para el cuerpo completo tiende a subir conforme se aplica la fuerza de detención.
+Peso de Trabajador: Mientras mayor es el peso que se tiene que detener, más se tiene que extender el amortiguador de impacto o extraer la línea de anclaje.
+Altura de Usuario: La distancia entre el punto de fijación y los pies del usuario.
+Distancia de desaceleración: La distancia vertical entre el punto donde termina la caída libre y se comienza a activar el absorbedor de choque hasta que este último pare por completo.
+Distancia de detención: La distancia vertical total requerida para detener una caída, incluyendo la distancia de desaceleración y la distancia de activación
+	•	Cálculo del espacio libre de caída.
+El uso de un SPDC en base a un estrobo amortiguador de impacto no se considerarse cuando el espacio libre de caída sea insuficiente; es decir, cuando el trabajador pueda golpear el piso u otro obstáculo.
+La detención se debe ejecutar reduciendo gradualmente la velocidad de la caída mientras ésta se lleva a cabo.
+
+Donde:
+ELC: Espacio libre de caída debajo de un usuario para evitar colisiones con el piso o una estructura (metros).
+LE: Longitud del estrobo (metros).
+AE: Elongación del amortiguador de impacto (según NCh 1258/2; para Tipo 1: 1.2 metros).
+AT: Altura del Trabajador (metros).
+MS: Margen de seguridad (según NCh 1258/6 mayor o igual a 1 metro)
+
+	•	Diagrama para el cálculo del espacio libre de caída.
+
+	•	Diagrama para el cálculo del espacio libre de caída (ELC)
+ELC= LE + EA + AT+ MS
+1.80 metros + 1,2 metros + 1.70 metros + 1 metro.
+ ELC= 5.7 Metros
+Ejemplo 2: Un trabajador conectado 90 centímetros encima de su argolla dorsal a la altura de su argolla dorsal, utilizando una eslinga estándar de 1.8 metros, cae repentinamente. (Factor de caída 0.5).
+ELC= LE + EA + ET+ MS
+90 metros + 1.2 metros + 1.70 metros + 1 metro.
+ELC= 4.8 Metros
+	•	Sistema de retención de caída
+Sistema de protección contra caídas que evita que el usuario alcance zonas donde existe el riesgo de caídas de altura.
+Este sistema consiste en impedir que el trabajador alcance una zona que presente un riesgo de caída.
+No es un sistema pensado para detener caídas sino para prevenirlas, esta será la primera opción para tener en cuenta. Un ejemplo sería una visera de tolva de un camión de extracción o una cubierta sin barandilla.
+Para ello será necesario el uso de un arnés de sujeción y un elemento de amarre fijo o regulable, este sistema combinado puede prevenir.
+	•	Impide que el usuario alcance una zona que presente un riesgo de caída, restringiendo los movimientos y desplazamientos del trabajador.
+	•	Previene la caída libre; no está previsto para detenerla.
+	•	Usos: trabajos en cubiertas, en plataformas en altura, equipos desprovistos de barandas, etc.
+
+	•	Sistema de sujeción contra caída
+Sistema de protección contra caídas que permite al usuario trabajar en tensión o suspensión de forma que se previene una caída.
+Cuando el trabajo no pueda ser ejecutado utilizando un sistema de retención (situaciones en las que sea necesario acceder a una zona con riesgo de caída), se valorará la utilización de un sistema de sujeción. Un ejemplo sería trabajar sobre un tejado inclinado o una estructura metálica tipo torre de telecomunicaciones.
+En este caso será necesario asegurarse mediante un sistema de sujeción que deje al trabajador con las manos libres y aporte sujeción en el puesto de trabajo.
+	•	Sistema de detención de caída.
+Evitan que, después de una caída, el trabajador pueda golpear el piso y/o cualquier obstrucción que se encuentre debajo del punto de trabajo.
+	•	Procedimiento de rescate.
+Ningún programa de protección contra caídas estaría completo sin disposiciones para los rescates de emergencia cuando un trabajador ha sufrido una caída y permanece suspendido, incapaz de evacuarse a sí mismo o a sí misma y dirigirse a un nivel seguro dentro del área de trabajo.
+Cuando se trabaja en altura se debe tener en cuenta los riesgos asociados a la actividad recursos además de las acciones y pasos a seguir ante un rescate en los diferentes niveles y superficies.
+La planificación de un rescate de emergencia implica el llegar hasta la persona accidentada en menos de seis minutos desde que se produce la caída. Este tipo de rescate requiere planificación y coordinación por parte de los profesionales del área de seguridad.
+Si tu plan contempla un equipo de rescate interno, los miembros del equipo deben formarse y equiparse para la tarea, en un proceso que debe incluir simulacros programados regularmente, planes documentados e instrucciones de implementación.
+¿Que podría ocurrir?
+Incluso si el trabajador no resulta herido, los estudios indican que son sólo 15 - 30 minutos los que se necesitan antes de comenzar con malestares y dificultades de irrigación sanguínea en las extremidades.
+Síndrome Ortoestático
+Si usted sufre una caída y el equipo de protección lo salva, puede quedar suspendido del mismo durante varios minutos.
+Durante ese tiempo, la sangre se puede acumular en las piernas, privar al cerebro de oxígeno y causar intolerancia orto-estática, o trauma por suspensión. Si no es rescatado rápidamente y usando los procedimientos apropiados, el trauma por suspensión puede tener efectos duraderos y hasta causar la muerte.
+Síntomas
+	•	Desfallecimiento.
+	•	Nausea, mareos.
+	•	Dificultad respiratoria.
+	•	Transpiración.
+	•	Ritmo cardiaco excepcionalmente lento.
+	•	Presión sanguínea muy baja.
+	•	Palidez.
+	•	Tono de piel grisáceo.
+	•	Pérdida de visión.
+	•	Aceleración del ritmo cardiaco.
+Tratamiento
+	•	Evite el síndrome de reflujo.
+	•	No lo acueste en posición horizontal.
+	•	Colóquelo sentado con las piernas hacia delante.
+	•	Mantenga calmado al trabajador y vigílelo constantemente para no dejar que se desmaye y caiga a la posición horizontal.
+	•	Lleve de inmediato al trabajador rescatado a recibir atención médica.
+	•	Asegúrese de que el personal médico esté enterado de la posibilidad de trauma por suspensión
+
+	•	MEDIDAS DE PREVENCIÓN DE RIESGOS
+PELIGRO
+EVENTO NO DESEADO
+MEDIDAS DE CONTROL / CONTROLES CRÍTICOS DE LAS EDC                                                                         
+Reunión con el personal involucrado y recorrido general del área. 
+Ingresar al área sin autorización.
+Intromisión de personal o trabajadores no instruidos ni autorizados.
+Desconocimiento de los Riesgos asociados a los trabajos.
+No hacer uso del EPP.
+Antes de realizar cualquier trabajo se debe solicitar al dueño de área el permiso correspondiente, confeccionar lista de todo el personal involucrado en la actividad, desde el supervisor hasta los ejecutores del trabajo.
+Dar a conocer el Procedimiento de Trabajo al personal, indicando los riesgos asociados al trabajo, análisis de riesgo, además de dar a conocer vías de escape y puntos de encuentro de emergencia.
+Uso obligatorio de EPP adecuados para cada actividad.
+Montaje	y desmontaje de plataformas de andamios.
+Caída desde altura.
+Caídas al mismo y distinto nivel.
+Atrapamiento	de dedos y manos.
+Golpeado	por manipular herramienta y/o accesorios.
+Desplome de andamio.
+Caída	de	materiales y accesorios.
+Sobre esfuerzos.
+Exposición a radiación solar.
+
+Empleo del arnés de protección ante caídas desde 1,80 metros de altura.
+Antes de utilizar el SPDC se debe hacer una inspección y dejar registro de ello.
+Prohibido usar SPDC que se encuentre defectuoso. Se debe informar de inmediato cualquier desperfecto que este tenga.
+Ascenso, movimientos de un punto a otro y descenso 100% del tiempo estrobado.
+Utilizar los tres puntos de apoyo al subir y bajar del andamio.
+Utilizar guantes cabritilla al manipular herramientas y equipos.
+Mantener   concentración   en el trabajo.
+Realizar	armado	de andamio sobre superficie nivelada y plana.
+Extremar el orden y la limpieza, del área de trabajo.
+Delimitar el área de trabajo.
+Al realizar manejo manual de equipos, aplicar técnica adecuada de levantamiento.
+Uso de protección solar.
+Mantener hidratación adecuada, disponer de agua en las áreas de trabajo
+Uso de escaleras
+Caída desde altura.
+Atrapamiento	de dedos y manos.
+Caídas al mismo y distinto nivel.
+Desplome de escalera.
+Desplazamiento horizontal de la escalera.
+Golpeado	por manipular herramienta y/o accesorios
+Ascenso y descenso por escalera con manos libres de objetos, herramientas, etc.
+No se debe prolongar el cuerpo por fuera del plomo de la escala.
+Utilizar guantes cabritilla al manipular herramientas y equipos.
+Fijar escalera para evitar desplazamiento horizontal.
+Pedir apoyo, no trabajar solo en el ascenso y descenso por escalera.
+Evitar realizar trabajos en escalera sin el sistema de SPDC adecuado.
+Antes de acceder a la escala, es necesario asegurar que la suela del calzado de seguridad está seca y libre de cualquier sustancia deslizante, como desmoldante, aceite, barro, agua, grasa.
+No utilizar bandeja superior de escala de tijera como plataforma de trabajo
+Extremar el orden y la limpieza, del área de trabajo.
+Todas las Escalas deben tener en su base zapatas antideslizantes.
+Uso de plataformas elevadoras.
+Caída desde altura. Atropello.
+Perdida de equilibrio del operador en posicionamiento sobre plataforma, canastillo de trabajo.
+Caídas al mismo y distinto nivel.
+Atrapamiento	de dedos y manos.
+Golpeado	por manipular herramienta y/o accesorios.
+Desplome del equipo.
+Sobrecarga del equipo.
+Contacto	del operador con líneas energizadas.
+Caída	de	materiales y accesorios.
+Perdida	de	sustentación (desplome del equipo).
+Sobre esfuerzos.
+Exposición a radiación solar.
+Empleo del arnés de protección ante caídas desde 1,80 metros de altura.
+Mantener concentración en el trabajo.
+El equipo deberá poseer una alarma de desplazamiento y elevación y descenso.
+Operador debe contar con la autorización para operar el equipo y también deberá poseer licencia clase “D” (Maquinaria Pesada).
+Todas las plataformas de trabajo elevadas deben tener una baranda en los todos sus cuatro lados.
+No se debe prolongar el cuerpo por fuera de las barandas del equipo.
+Antes de utilizar el SPDC se debe hacer una inspección y dejar registro de ello.
+Prohibido usar SPDC que se encuentre defectuoso. Se debe informar de inmediato cualquier desperfecto que este tenga.
+Ascenso, movimientos de un punto a otro y descenso 100% del tiempo estrobado.
+Utilizar los tres puntos de apoyo al subir y bajar del equipo.
+El límite máximo de carga de trabajo seguro o capacidad nominal máxima debe estar claramente indicada un aviso en la misma plataforma de trabajo elevada.
+Limitar uso de plataformas elevadoras, canastillos de trabajo en áreas de líneas eléctricas, coordinar trabajos con personal eléctrico.
+Las plataformas de trabajo elevadas no se deben utilizar bajo condiciones de viento fuerte que superen los 30 KM/H medidos en piso.
+Las plataformas de trabajado elevadas no se deben desplazar mientras están elevadas.
+El equipo deberá operarse sobre	una	superficie compactada y nivelada.
+Delimitar el área de trabajo.
+Al realizar manejo manual de equipos, aplicar técnica adecuada de levantamiento.
+Uso de protección solar.
+Proporcionar una adecuada hidratación, disponer de agua en las áreas de trabajo.
+Retiro del área de trabajo.
+Golpeado por manipular herramienta y/o accesorios.
+Contacto eléctrico.
+Exposición a radiación solar.
+Generación de residuos producto de las tareas realizadas.
+
+Utilizar guantes al manipular herramientas.
+Mantener concentración en el trabajo.
+Uso de protección solar.
+Segregación de residuos generados en la tarea. Utilizar receptáculos ce acuerdo a codificación código de color.
+
+ 
+
+	•	MEDIDAS HIGIENE INDUSTRIAL 
+AGENTE DE EXPOSICIÓN
+CONSECUENCIA DE LA EXPOSICIÓN
+MEDIDAS PREVENTIVAS Y/O DE CONTROL
+Ergonómico: Manejo manual de cargas (MMC)
+1.Lesiones musculoesqueléticas.
+2. Dolor lumbar (dolor, tensión muscular y rigidez localizada bajo el reborde costal, y sobre los pliegues glúteos con o sin irradiación a las piernas). 
+3. Dolor en la articulación del hombro por el uso de fuerza, del mismo modo cadera y rodillas ante el proceso de levantamiento.
+1. Evitar el manejo manual de objetos pesados, considerando siempre priorizar el uso de ayuda mecánica (carretillas, transpaletas, carros, etc.). 
+2. Incorporar pausas cortas que permitan la recuperación de la fatiga. 
+3. Eliminar las diferencias de altura entre el origen (desde donde se toma la carga) hasta el destino, así la tarea se realiza en la zona de alcance funcional, evitando inclinación, torsión o lateralización de tronco. 
+4. Utilizar guantes de tamaño adecuado a las dimensiones de las manos. 
+5. Es recomendable priorizar el empuje antes que el arrastre de una carga. Si la fuerza se aplica a la altura de la cintura, aumenta la eficacia. 
+6. Las vías de circulación deben estar despejadas y con espacio suficiente para el desplazamiento de equipos y personas. 
+7. El peso máximo de carga que se puede levantar, transportar, descender, empujar o arrastrar es de 25 kg para hombres y 20 kg para mujeres y menores de 18 años, las embarazadas no pueden manipular carga (está prohibido).
+8. Para el MMC el colaborador debe acercarse a esta ubicando los pies separados al nivel de los hombros (idealmente uno atrás y el otro a un costado de la carga), agacharse flexionando las rodillas y manteniendo la espalda recta, tomar la carga y subir haciendo fuerza con las piernas acercándola al cuerpo, trasladarse sin ejercer torsión lumbar y dejar carga en punto de disposición final (altura mínima de 20 cm, de ser repisa, no extender los brazos más arriba de los hombros).
+Ergonómico: trastornos musculo esqueléticos de extremidades superiores (TMERT-EESS)
+1. Trastorno musculoesquelético de Extremidades superiores: Lesión física originada por trauma acumulado, que se desarrolla gradualmente sobre un período de tiempo como resultado de repetidos esfuerzos sobre una parte específica del sistema musculoesquelético, también puede desarrollarse por un esfuerzo puntual que sobrepasa la resistencia fisiológica de los tejidos que componen el sistema musculoesquelético.
+2. Sobreesfuerzo físico.
+1. Generar pausas de trabajo, como criterio general mantener una relación 5:1 en el régimen trabajo-descanso, es decir, 50 minutos de trabajo por 10 de descanso. 
+2. Procurar realizar varias tareas y rotar entre ellas durante el día para evitar la monotonía alternando así el uso de la musculatura. 
+3. Eliminar o reducir el uso de fuerza mediante herramientas que faciliten la tarea (por ejemplo, usar desatornilladores eléctricos). 
+4. Mejorar técnicas manuales para reducir esfuerzos.
+5. Adquisición de herramientas que permitan un buen agarre. 
+6. Realizar ejercicios de elongación de la musculatura utilizada posterior a la 
+ejecución de la tarea
+Físico: Ruido
+1. Hipoacusia neurosensorial de origen laboral o "Sordera Ocupacional".
+1. Ingresar a trabajadores expuestos al programa de vigilancia médica.
+2. Utilizar protector auditivo (tipo fono o de inserción según definición estipulada en programa de protección auditiva).
+3. Contar con programa de protección auditiva.
+4. Chequear estado de los protectores auditivos: Las copas de orejeras deben ser limpiadas con paño húmedo, sus almohadillas se deben verificar periódicamente y reemplazar cuando presenten endurecimiento, grieta o fisuras, las acoplables no deben almacenarse con las copas presionando contra el casco. Los tapones reutilizables se deben lavar al menos una vez a la semana, su almacenamiento debe efectuarse en un estuche o caja, los tapones auditivos desechables deben eliminarse después de un uso.
+5. El elemento de protección auditiva debe contar con ficha técnica, certificado de calidad y aprobación por parte de Laboratorios autorizados por el Instituto de salud pública.
+6. Difundir PREXOR y programa de protección auditiva al personal.
+7. Mantener áreas de trabajo con exposición a ruido señalizadas.
+Físico: radiación UV de origen solar
+1. Queratitis.
+2. Quemaduras.
+3. Cáncer de Piel.
+1. Instalar mallas o techo para producir sombra.
+2. Establecer horarios de colación entre 13:00 y 15:00 hrs.
+3. Rotación del personal en los puestos de trabajo.
+4. Uso de ropa manga larga, calzado cerrado, casco con ala ancha, legionario, lentes de seguridad oscuros.
+5. Aplicación de protector solar con índice mayor a 30 (replicarlo como mínimo cada dos horas).
+6. Considerar porcentaje de reflexión (albedo) de las superficies donde se efectúen los trabajos.
+7. Implementar pausas de trabajo.
+8. Hidratación permanente de los colaboradores expuestos a radiación UV de origen solar.
+9. Difundir guía técnica RUV y “Programa de protección y prevención contra la exposición ocupacional a radiación UV de origen solar”.
+Químicos: metales y metaloides, Humos metálicos.
+1. Enfermedades Pulmonares.
+2. Cáncer.
+3. Irritación de las vías respiratorias.
+1. Realizar trabajos de soldadura, torchado, oxicorte, en espacios con ventilación natural.
+2. Ingresar a trabajadores expuestos al programa de vigilancia médica.
+3. Difundir protocolo de vigilancia ocupacional por exposición a metales y metaloides.
+4. Utilizar respirador con filtros adecuados al agente a cubrir.
+5. Contar con programa de protección respiratoria.
+6. Chequear estado del respirador (correas, conexiones y pieza facial en buen estado, sin deterioros). 
+7. Se debe mantener rostro sin barba para asegurar una hermeticidad efectiva.
+8. Se deben realizar las pruebas de ajuste del respirador antes de su utilización (prueba de presión positiva y prueba de presión negativa).
+9. Mantener áreas de trabajo con exposición a humos metálicos señalizadas.
+Exposición a factores psicosociales
+1. Afecciones a la Salud mental (Definición de Salud: Bienestar físico, Mental y Social).
+1. Implementar cuestionario CEAL-SM en todos los centros de trabajo.
+2. Sensibilizar al personal sobre la implementación de cuestionarios CEAL-SM.
+3. Implementar medidas de control según prescripciones OAL generadas para dimensiones en riesgo.
+4. Favorecer instancias de esparcimiento en los centros de trabajo.
+
+
+	•	ANÁLISIS DE VARIABLE AMBIENTAL
+
+ANÁLISIS DE VARIABLE AMBIENTAL
+CHECK
+ASPECTO AMBIENTAL
+IMPACTO AMBIENTAL
+MEDIDA DE CONTROL
+Trabajo en altura 
+Generación de material particulado 
+Contaminación atmosférica
+Revisión de tubos, válvulas para soldaduras, uso de EPP
+
+Generación de GEIs
+Contaminación atmosférica
+Revisión de tubos maquinaria 
+
+Consumo combustible fósiles
+Agotamiento de recursos naturales 
+Charlas a encargado para optimización del recurso
+
+Consumo de agua 
+Agotamiento de recursos naturales 
+Capacitación eficiencia hídrica/ concientización del personal 
+
+Generación de EPP en mal estado 
+Contaminación de suelos 
+Segregación de residuos, correcto manejo y disposición 
+
+Emisión de ruido 
+Contaminación acústica
+EPP auditivo, se focaliza en la norma de emisión primaria 
+
+Generación de botellas plásticas
+Contaminación de suelos 
+Segregación de residuos, correcto manejo y disposición 
+
+	•	CONTROL DE REGISTRO
+
+Nombre del Registro
+Código
+Retención
+Disposición
+
+
+Medio
+Tiempo
+Responsable de la Custodia
+
+Charla Comunicación
+Reg-prev-002-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Registro general de control de riesgo
+Reg-prev-022-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Análisis seguro del trabajo
+Reg-prev-001-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Lista de verificación para trabajos en altura
+Reg-prev-016-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Lista de verificación de arnés de seguridad
+Reg-prev-019-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Inspección línea de vida
+Reg-prev-047-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Inspección camión pluma para operar
+Reg-prev-033-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+	•	 REFERENCIAS
+	•	Reglamento Interno de Orden Higiene y Seguridad BOILER COMP S.A.
+	•	NCh. 18001, 2015, Sistemas de Gestión de Seguridad y Salud en el Trabajo
+	•	Ley 16.744, Decretos Complementarios, Decreto Supremo 132, Decreto N°44 y Decreto N° 594.
+	•	Norma Chilena 1258/1 Of97 Equipos de protección personal para trabajos con riesgo de caída.
+	•	Decreto Supremo N° 72 de 1985, “Reglamento de Seguridad Minera”. (Modificado por Decreto Supremo Nº132, de 2004).
+	•	Norma Chilena 997 Of 1999, “Andamios – Terminología y Clasificación”
+	•	Norma Chilena 998 Of 1999, “Andamios – Requisitos Generales de Seguridad”
+	•	Resolución Emitida por diario Oficial (10.06.09) sobre la creación de “Guía para la selección y control de equipos de protección personal de trabajos con riesgos de caídas”
+
+	•	ANEXOS
+	•	Anexo 1 Charla Comunicación
+	•	Anexo 2 HCR
+	•	Anexo 3 AST
+	•	Anexo 4 Lista de Verificación de Trabajos en Altura.
+	•	Anexo 5 Lista de Verificación de Arnés de Seguridad.
+	•	Anexo 6 Inspección de Línea de Vida.
+	•	Anexo 7 Inspección de Camión Pluma.
+	•	Anexo 8 Inspección de Andamios y Plataformas.
+	•	Anexo 9 Inspección de Plataforma Elevadora.
+
+
+
+
+
+
+ANEXO 1 
+CHARLA COMUNICACIÓN 
+
+
+ANEXO 2 
+HCR
+
+
+ANEXO 3 
+AST 
+
+
+ANEXO 4 
+LISTA DE VERIFICACIÓN DE TRABAJOS EN ALTURA
+
+ANEXO 5 
+LISTA DE VERIFICACIÓN DE ARNÉS DE SEGURIDAD
+
+ANEXO 6 
+INSPECCIÓN DE LÍNEA DE VIDA
+
+
+ANEXO 7 
+INSPECCIÓN DE CAMIÓN PLUMA
+
+
+ANEXO 8 
+INSPECCIÓN DE ANDAMIOS Y PLATAFORMAS
+
+ANEXO 9 
+INSPECCIÓN DE PLATAFORMA ELEVADORA
+

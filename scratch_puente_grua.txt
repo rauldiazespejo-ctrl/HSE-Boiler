@@ -1,0 +1,300 @@
+
+
+
+
+
+
+
+
+
+
+PROCEDIMIENTO DE TRABAJO SEGURO CON PUENTE GRUA
+
+Código: PRO-OPE-024-CORP 
+
+
+
+
+
+Formalización del Procedimiento
+Elaborado:  Javiera Rojas 
+Revisado:  Raúl Díaz
+Aprobado: Alexis Olivares 
+Cargo:  Asesor HSE
+Cargo: Gerente HSEC 
+Cargo: Adm. de Contrato
+
+
+Firma:
+
+
+
+Firma:
+
+
+Firma:
+
+Fecha: 04-04-2025
+Fecha: 04-04-2025 
+Fecha: 04-04-2025 
+
+INDICE
+
+0.	MODIFICACIONES	2
+1.	OBJETIVO	2
+2.	ALCANCE	3
+3.	DEFINICIONES	3
+4.	RESPONSABILIDADES	5
+5.	RECURSOS	5
+6.	DESCRIPCIÓN DE ACTIVIDADES	6
+7.	MEDIDAS DE PREVENCIÓN DE RIESGOS	17
+8.	MEDIDAS HIGIENE INSUSTRIAL	18
+9.	ANÁLISIS DE VARIABLE AMBIENTAL	20
+10.	CONTROL DE REGISTROS	21
+11.	REFERENCIAS	21
+12.	ANEXOS	21
+
+
+
+
+
+
+
+
+
+
+
+	•	MODIFICACIONES
+
+FECHA
+MODIFICACIONES
+REVISIÓN
+04-04-2025
+Realización del documento
+
+
+	•	OBJETIVO	
+Establecer los lineamientos y condiciones necesarias para el uso seguro y eficiente del Puente Grúa, garantizando que todas las operaciones de izaje, traslado y posicionamiento de cargas se realicen bajo estándares que prevengan accidentes, protejan la integridad física de los trabajadores, eviten daños a los equipos y minimicen impactos al entorno. Este procedimiento se alinea con lo establecido en la Ley 16.744 y los Decretos Supremos N°132, N°594 y N°40, entre otras normativas vigentes.
+	•	ALCANCE	
+
+Este procedimiento aplica a todo el personal autorizado encargado de operar el Puente Grúa al interior de la maestranza, durante actividades rutinarias de izaje, movimiento de piezas metálicas, posicionamiento de estructuras o elementos de gran peso, tanto en procesos productivos como en maniobras de mantenimiento o montaje.
+	•	DEFINICIONES	
+
+	•	Accidente: Bajo el concepto técnico, es aquel evento no deseado que indistintamente o en conjunto provoca lesiones a personas, daños a los bienes físicos, el medio ambiente y/o a la comunidad.
+	•	Accidente con tiempo perdido (CTP): Es aquel cuyas lesiones requieren de un tratamiento médico que lo deja incapacitado para realizar sus labores habituales y requiere días de reposo para su recuperación.
+	•	Accidente sin tiempo perdido: Es aquel accidente en que la lesión sufrida sólo necesita tratamiento de primeros auxilios.
+	•	Aspecto Ambiental: Elemento de las actividades, productos o servicios de una organización que puede interactuar con el ambiente.
+	•	Cuasi Accidentes: Acontecimiento no deseado que en circunstancias ligeramente diferentes podría haber resultado en daño físico a las personas, a los bienes físicos y/o al medio ambiente.
+	•	Enfermedad Profesional: Es la causada de una manera directa por el ejercicio de la profesión o el trabajo que realiza una persona y que le produce incapacidad o muerte.
+	•	Incidente: Acontecimiento no deseado que puede o no resultar en pérdidas, afectando a la integridad de las personas, a los equipos o instalaciones, a la continuidad de los procesos, a la calidad de los procesos y/o al medio ambiente.
+	•	Instalación de faenas: Lugar asignado a la Empresa Contratista para la instalación de sus oficinas y bodegas, relacionadas con el Contrato.
+	•	Peligro: Fuente o situación con el potencial de daños, en términos de lesiones o enfermedades, daño a la propiedad, al ambiente de trabajo o la combinación de éstos
+	•	Riesgo: Combinación entre la probabilidad, y consecuencia de la ocurrencia de un determinado evento peligroso. Para estos Estándares, el concepto riesgo incluye el evento, que producto de un aspecto ambiental, pueda generar un impacto ambiental.
+	•	Puente grúa: Sistema mecánico instalado en altura que permite el movimiento horizontal y vertical de cargas pesadas mediante un polipasto.
+	•	Polipasto: Mecanismo con motor eléctrico, cable de acero y gancho que realiza el izaje de la carga.
+	•	Eslinga: Elemento de sujeción, ya sea de cadena, cable o textil, que permite fijar la carga al gancho del polipasto.
+	•	Izaje: Operación de levantar o bajar una carga mediante un equipo mecánico, ejecutada bajo condiciones controladas.
+	•	RESPONSABILIDADES
+
+4.1	Administrador de contrato
+	•	Responsable de aprobar la metodología del presente procedimiento y asignar los recursos necesarios para su correcta implementación.
+4.2 	Asesor en prevención de riesgo
+	•	Responsable de asesorar a la línea de mando en materia de requisitos normativos y legales aplicables a la actividad, definidos por el cliente o la legislación vigente. Controla el cumplimiento en terreno de lo dispuesto en este procedimiento.
+4.3     Supervisor
+	•	Encargado de difundir y controlar el cumplimiento de este procedimiento. Además, mantiene la comunicación permanente con el cliente respecto a requisitos, documentación y autorizaciones necesarias. Será responsable de la ejecución y cumplimiento de este procedimiento.
+	•		Personal/Trabajadores
+	•	Tomar conocimiento y cumplir con lo dispuesto en el presente Procedimiento.
+
+	•	RECURSOS	
+5.1.- Elementos de Protección Personal
+	•	Zapatos de seguridad.
+	•	Careta facial clara. (si aplica)
+	•	Guantes de cuero descarne.
+	•	Lentes de Seguridad Herméticos Claros bajo la Careta.
+	•	Protectores auditivos del tipo fono y/ tapones.
+	•	Casco de seguridad.
+	•	Barbiquejo.
+5.2.- Equipos	
+	•	Gabinete eléctrico con botonera y parada de emergencia
+	•	DESCRIPCIÓN DE ACTIVIDADES 
+
+Las maniobras con puente grúa consisten en ejecutar el izaje, traslado y posicionamiento de cargas pesadas a través del control del polipasto y desplazamiento de la viga. El proceso inicia con la inspección visual del equipo, comprobando el estado de cables, gancho, eslingas y controles. Posteriormente se posiciona el gancho sobre el centro de gravedad de la carga, se fijan las eslingas según el tipo de carga y se realiza el izaje vertical con desplazamiento lento. El operador debe asegurar un movimiento controlado y continuo, sin detenerse bruscamente ni girar la carga en el aire. Finalmente, la carga se baja hasta el punto definido, se libera el gancho y se verifica que no haya daños o desalineaciones. Durante toda la operación, se deben respetar las zonas de seguridad y mantener el área despejada.
+6.1	Generalidades.
+El Puente Grúa es un equipo de izaje fijo instalado en la parte superior de una nave industrial, compuesto por una viga principal, rieles laterales, y un sistema de polipasto eléctrico que permite levantar, mover y posicionar cargas pesadas en sentido longitudinal, transversal y vertical. Su operación implica riesgos de atrapamiento, golpes, caídas de carga y electrocución si no se cumplen las condiciones técnicas y de seguridad necesarias. Sólo debe ser operado por personal debidamente capacitado y autorizado, siguiendo protocolos de verificación antes, durante y después de cada maniobra.
+6.1.1 Equipo de trabajo (número de trabajadores, competencias técnicas)
+	•	Se ha definido que los trabajos que todos los trabajos se realizaran a lo menos en grupos compuestos por dos personas.
+	•	Un maestro mayor quien ejecutará la labor de operar el esmeril.
+	•	Un maestro primera, segunda o ayudante. (en caso de aplicar)
+	•	Para la ejecución de este trabajo ambos trabajadores deberán contar con el mismo equipamiento.
+	•	Herramientas y equipos a utilizar
+
+	•	Extintor de Polvo Químico Seco, Certificado y Vigente.
+	•	Listas de chequeo de los equipos a utilizar
+
+	•	Preparación del área de trabajo
+Antes de iniciar cualquier operación de plegado con estas máquinas, se debe realizar una preparación rigurosa del entorno y del equipo, siguiendo estos pasos:
+	•	 Verificar que el entorno esté libre de obstáculos, herramientas u objetos que interfieran con el desplazamiento de la carga
+	•	Confirmar que el área esté debidamente iluminada y señalizada como zona de izaje
+	•	Revisar que no haya personal ajeno a la operación circulando en las cercanías del trayecto de carga
+	•	Inspeccionar visualmente el estado del puente grúa, gancho, cables, eslingas y sistema de freno
+	•	Asegurar que los EPP estén disponibles y en uso: casco, guantes, zapatos de seguridad y ropa ajustada
+	•	Validar funcionamiento del mando a distancia o botonera antes de iniciar la maniobra
+
+	•	Etapas de la actividad
+
+Etapa
+Descripción
+Inspección del equipo
+Revisar que todos los elementos del puente grúa estén operativos y sin daños visible
+Planificación de la maniobra
+Evaluar ruta de desplazamiento, tipo de carga, puntos de amarre y señalización del área
+Eslingado
+Fijar correctamente la carga con eslingas adecuadas, equilibradas y en buen estado
+Izaje de la carga
+Levantar lentamente la carga asegurando el equilibrio y supervisando que no haya interferencias
+Traslado y posicionamiento
+Mover la carga en forma controlada hacia el lugar designado, evitando movimientos bruscos
+Descarga y liberación
+Bajar la carga al nivel deseado, soltar eslingas y verificar que la operación haya concluido con éxito
+Verificación y limpieza
+Revisar estado del equipo tras la maniobra y despejar el área de trabajo
+	•	MEDIDAS DE PREVENCIÓN DE RIESGOS
+PELIGRO
+EVENTO NO DESEADO
+MEDIDAS DE CONTROL / CONTROLES CRÍTICOS DE LAS EDC                                                                         
+Caída de carga por falla de eslingado
+Golpes graves, atrapamiento, lesiones fatales
+Revisión del estado de eslingas y ganchos, uso de elementos certificados, correcta distribución del peso
+Atrapamiento entre carga y estructura
+Aplastamientos, fracturas, lesiones musculares
+Mantener distancia segura, señalización de trayecto, comunicación clara entre operador y apoyo
+Contacto eléctrico por puente energizado
+Descarga eléctrica, quemaduras
+Inspección previa del equipo, señalización de líneas energizadas, prohibición de contacto con líneas activas
+Golpes por movimiento brusco de carga
+Lesiones por impacto
+Operar con suavidad, evitar giros bruscos o detenciones repentinas
+Caídas a distinto nivel (desde estructuras)
+Fracturas, contusiones
+Uso de línea de vida y arnés en trabajos de altura si aplica
+
+
+
+	•	MEDIDAS HIGIENE INSUSTRIAL
+
+AGENTE DE EXPOSICIÓN
+CONSECUENCIA DE LA EXPOSICIÓN
+MEDIDAS PREVENTIVAS Y/O DE CONTROL
+Esfuerzo físico al eslingar manualmente
+Dolores musculares, fatiga, lesiones por sobrecarga
+Uso de técnicas de ergonomía, ayuda de segundo operador o elemento mecánico
+Ruidos de motor y desplazamiento
+Molestia auditiva, estrés
+Uso de protección auditiva cuando aplique
+Polvo o partículas del ambiente
+Irritación ocular o respiratoria
+Mantención del área limpia, uso de lentes y mascarilla si es necesario
+
+
+
+
+
+
+
+	•	ANALISIS DE VARIABLE AMBIENTAL
+ANÁLISIS DE VARIABLE AMBIENTAL
+CHECK
+ASPECTO AMBIENTAL
+IMPACTO AMBIENTAL
+MEDIDA DE CONTROL
+Consumo energético
+Uso continuo del puente grúa
+Agotamiento de recursos
+Uso responsable del equipo, apagar cuando no esté en operación
+Pérdida de aceite hidráulico (si aplica)
+Derrame en suelo
+Contaminación del suelo
+Mantención preventiva, uso de bandejas de contención y absorción de derrames
+Manipulación de estructuras metálicas
+Generación de residuos metálicos
+Contaminación de entorno
+Recolección y disposición en contenedores designados
+Emisión de ruidos
+Operación del motor o poleas
+Contaminación acústica
+Señalizar zona, uso de EPP auditivo, revisión del sistema de transmisión y frenos
+
+	•	CONTROL DE REGISTROS
+
+Nombre del Registro
+Código
+Retención
+Disposición
+
+
+Medio
+Tiempo
+Responsable de la Custodia
+
+Charla Comunicación
+Reg-hseq-002-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive 
+Registro general de control de riesgo
+Reg-hseq-022-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive 
+Análisis seguro del trabajo
+Reg-hseq-001-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive 
+Registro operación puente grúa
+Reg-hseq-028-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive 
+Registro plan de mantenimiento puente grúa
+Prog-hseq-024-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive 
+	•	 REFERENCIAS
+	•	Ley 16.744, Decretos Complementarios, Decreto Supremo 132, Decreto N°44 y Decreto N° 594.
+
+	•	ANEXOS
+	•	Anexo 1 Charla Comunicación
+	•	Anexo 2 HCR
+	•	Anexo 3 AST
+	•	Anexo 4 Registro operación puente grúa
+ANEXO 1 
+CHARLA COMUNICACIÓN
+ 
+
+
+ANEXO 2 
+HCR
+
+
+ANEXO 3 
+AST
+
+
+ANEXO 4
+REGISTRO OPERACIÓN PUENTE GRÚA
+
+ANEXO 5
+REGISTRO PLAN DE MANTENIMIENTO PUENTE GRÚA
+
+
+
+
+
+

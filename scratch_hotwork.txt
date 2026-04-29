@@ -1,0 +1,405 @@
+
+
+
+
+
+
+
+
+
+
+PROCEDIMIENTO GENERAL DE TRABAJOS EN CALIENTE 
+
+Código: PRO-OPE-004-CORP
+
+
+
+Formalización del Procedimiento
+Elaborado:  Javiera Rojas 
+Revisado:  Raúl Díaz
+Aprobado: Alexis Olivares 
+Cargo:  Asesor HSE
+Cargo: Gerente HSEC 
+Cargo: Adm. de Contrato
+
+
+Firma:
+
+
+
+Firma:
+
+
+Firma:
+
+Fecha: 10-10-2024
+Fecha: 10-10-2024 
+Fecha: 10-10-2024 
+
+INDICE
+
+0.	MODIFICACIONES	2
+1.	OBJETIVO	2
+2.	ALCANCE	2
+3.	DEFINICIONES	2
+4.	RESPONSABILIDADES	3
+5.	RECURSOS	4
+6.	DESCRIPCIÓN DE ACTIVIDADES	5
+7.	MEDIDAS DE PREVENCIÓN DE RIESGOS	6
+8.	ANÁLISIS DE VARIABLE AMBIENTAL	6
+9.	CONTROL DE REGISTROS	9
+10.	REFERENCIAS	10
+11.	ANEXOS	10
+
+
+
+
+
+
+
+
+
+
+
+	•	MODIFICACIONES
+
+FECHA
+MODIFICACIONES
+REVISIÓN
+
+
+
+
+	•	OBJETIVO	
+
+El objetivo de este procedimiento es establecer el uso correcto de los distintos equipos para todos los trabajos en caliente, en fabricación y reparación de componentes estructurales, siguiendo una secuencia lógica de tareas para asegurar un efectivo resultado en los trabajos.
+Además, entrega los lineamientos a seguir por parte de los supervisores, soldadores, ayudantes y asesores en prevención de riesgos para controlar los peligros y aspectos asociados a la actividad a fin de evitar daños a las personas, equipos y medio ambiente, dando cumplimiento a lo establecido en Ley 16.744, Decretos Complementarios, Decreto Supremo 132, Decreto N°44 y Decreto N° 594 y en general, la normativa legal vigente.
+
+	•	ALCANCE	
+
+En este procedimiento se resume en las responsabilidades individuales que tiene cada persona involucrada en la obtención de permisos y la realización de trabajos en caliente, los requerimientos y las exenciones de permisos para trabajos en caliente, control de documentos y capacitación, este deberá ser conocido y aplicado por todo el personal Boiler Comp S.A.
+
+	•	DEFINICIONES	
+
+	•	Trabajo en caliente: Corresponde a toda tarea que pueda generar una fuente de ignición o que presente el potencial de encender materiales combustibles o inflamables, sustancias, atmósferas peligrosas, emanaciones o vapores.
+Tales tareas incluyen el uso de equipos y herramientas que produzcan chispas, generen calor o que empleen llamas abiertas en su operación, tales como: esmerilado, soldadura eléctrica, soldaduras con llama (oxiacetilénica), corte de metales con oxicorte, entre otras.
+	•	Accidente: Bajo el concepto técnico, es aquel evento no deseado que indistintamente o en conjunto provoca lesiones a personas, daños a los bienes físicos, el medio ambiente y/o a la comunidad.
+	•	Accidente con tiempo perdido (CTP): Es aquel cuyas lesiones requieren de un tratamiento médico que lo deja incapacitado para realizar sus labores habituales y requiere días de reposo para su recuperación.
+	•	Accidente sin tiempo perdido: Es aquel accidente en que la lesión sufrida sólo necesita tratamiento de primeros auxilios.
+	•	Aspecto Ambiental: Elemento de las actividades, productos o servicios de una organización que puede interactuar con el ambiente.
+	•	Cuasi Accidentes: Acontecimiento no deseado que en circunstancias ligeramente diferentes podría haber resultado en daño físico a las personas, a los bienes físicos y/o al medio ambiente.
+	•	Enfermedad Profesional: Es la causada de una manera directa por el ejercicio de la profesión o el trabajo que realiza una persona y que le produce incapacidad o muerte.
+	•	Incidente: Acontecimiento no deseado que puede o no resultar en pérdidas, afectando a la integridad de las personas, a los equipos o instalaciones, a la continuidad de los procesos, a la calidad de los procesos y/o al medio ambiente.
+	•	Peligro: Fuente o situación con el potencial de daños, en términos de lesiones o enfermedades, daño a la propiedad, al ambiente de trabajo o la combinación de éstos
+	•	Riesgo: Combinación entre la probabilidad, y consecuencia de la ocurrencia de un determinado evento peligroso. Para estos Estándares, el concepto riesgo incluye el evento, que producto de un aspecto ambiental, pueda generar un impacto ambiental.
+
+	•	RESPONSABILIDADES
+
+4.1	Administrador de contrato 
+	•	Es el responsable de aprobar la metodología del presente Procedimiento y asignar los recursos necesarios para su implementación.
+
+4.2	Jefe producción
+	•	Encargado de difundir y controlar el cumplimiento de este Procedimiento, además son responsables de mantener la comunicación permanente con el cliente, respecto a los requisitos, documentos y autorizaciones requeridas.
+
+
+
+4.3 	Asesor en prevención de riesgo
+	•	Responsable de asesorar a la línea de mando en materia de requerimientos de los clientes como; requisitos normativos y los de tipo legal aplicable a la actividad. Controlar el cumplimiento en terreno de lo dispuesto en este Procedimiento.
+
+	•	     Supervisor
+	•	Interiorizarse de la actividad a realizar y de los procedimientos relacionados con la tarea. Será responsable de la ejecución y cumplimiento de este procedimiento.
+
+	•	 Personal/trabajadores
+	•	Tomar conocimiento y cumplir con lo dispuesto en el presente Procedimiento. 
+	•	Aplicar lista de verificación para trabajos en caliente. 
+	•	RECURSOS	
+5.1.- Elementos de Protección Personal
+Para trabajos de soldadura
+	•	Bota de soldador.
+	•	Polainas de cuero.
+	•	Arnés de seguridad de con colas de seguridad de acero (cuando se requiera).
+	•	Traje de cuero Completo.
+	•	Guantes de cuero descarne.
+	•	Lentes de Seguridad Herméticos Claros bajo la Careta.
+	•	Capucha o escafandra (gorro monja).
+	•	Respirador de medio rostro con filtros para polvos y humos metálicos.
+	•	Protectores auditivos tipo tapones desechables.
+	•	Mascara de Soldar con cristales inactínicos de acuerdo con el trabajo a realizar.
+Para trabajos de Corte
+	•	Zapatos de Seguridad.
+	•	Coleto de cuero o descarne largo.
+	•	Arnés de seguridad de con colas de seguridad de acero (cuando se requiera).
+	•	Careta facial clara.
+	•	Guantes de cuero descarne.
+	•	Lentes de Seguridad Herméticos Claros bajo la Careta.
+	•	Protectores auditivos del tipo fono o tapones.
+	•	Casco.
+	•	Barbiquejo (cuando se requiera).
+5.2.- Equipos	
+	•	Pirómetro, con calibraciones o certificados vigentes, cuando aplique.
+	•	Extintor de Polvo Químico Seco, Certificado y Vigente.
+	•	Biombos, Mantas Ignifugas u otro elemento definido para proteger del destello y para interrumpir o acortar la trayectoria de las partículas incandescentes.
+
+	•	DESCRIPCIÓN DE ACTIVIDADES 
+
+6.1 	Generalidades.
+
+6.1.1 Equipos de trabajo (número de trabajadores competencias técnicas).
+
+	•	Se ha definido que los trabajos se realizaran a lo menos en grupos compuestos por dos personas: 
+	•	Un soldador de cualquiera de los tres tramos de calificación.
+	•	Un ayudante independiente del tramo en el que se encuentre calificado.
+	•	Para la ejecución de este trabajo ambos trabajadores deberán contar con el mismo equipamiento.
+MEDIDAS DE CONTROL ANTES DEL INICIO DEL TRABAJO EN CALIENTE. 
+	•	Los equipos de combate de amagos de incendio deben estar operativos y disponibles en todo momento, mientras se desarrolle el trabajo. 
+	•	El Personal ejecutor debe conocer la ubicación de todos los dispositivos contra incendio dispuestos alrededor del área de trabajo, deberá saber la ubicación de la alarma de emergencia más cercana, frecuencia de emergencia, anexo o número teléfono de emergencia, estar capacitado e instruido adecuadamente en caso de algún requerimiento. 
+	•	Todas las herramientas, equipos y accesorios que se utilicen para ejecutar trabajo en caliente deben encontrarse en buenas condiciones de funcionamiento, revisadas y aprobadas para su uso. 
+	•	El supervisor con apoyo con el grupo de trabajo que deberán identificar los riesgos y las medidas de control que se deben abordar, esta actividad será responsabilidad del supervisor de terreno y de los trabajadores que ejecutan la tarea. Si el grupo de trabajo determina que el análisis de la tarea no es suficiente garantía para la ejecución del trabajo, esta deberá ser detenida y postergada hasta que el procedimiento sea revisado y modificado si es necesario.
+	•	MEDIDAS DE PREVENCIÓN DE RIESGOS
+PELIGRO
+EVENTO NO DESEADO
+MEDIDAS DE CONTROL / CONTROLES CRÍTICOS DE LAS EDC                                                                         
+Corte y desbaste de metales con esmeril angular.
+Contacto del operador con energía eléctrica.
+Atrapamiento de dedos y manos. 
+Golpeado por manipular herramienta y/o accesorios.
+Instalar disco incorrecto.
+Proyección de material incandescente.
+Presencia de focos de ignición y de materiales combustibles (llama, chispas, escorias, aceites, grasas, disolventes, etc.).
+Exposición a ruido.
+Contacto del operador con elementos punzantes.
+Sobre esfuerzos.
+Contacto del operador con objetos cortantes.
+Exposición a radiación solar. Exposición de los operadores a altas temperaturas.
+Revisar extensiones y cables del esmeril.
+Utilizar guantes cabritilla al manipular herramientas.
+Mantener concentración en el trabajo.
+Utilizar herramientas solo personales capacitados.
+Utilizar protección facial para trabajos de corte de metales, uso de antiparras en todo momento.
+Disponer de medios de extinción (extintor químico de incendios tipo P.Q.S.), de incendios
+suficientes, adecuados y su
+mantención al día.
+Utilizar guantes soldador descarne al manipular herramientas.
+Usar protectores auditivos del tipo tapones o fonos de casco.
+No retirar jamás carcaza de protección del equipo.
+La herramienta debe estar desconectada de la energía eléctrica al momento de realizar cambio de disco.
+Uso de protección solar.
+Mantener hidratación adecuada, disponer de agua en las áreas de trabajo.
+Soldadura de metales con electrodos revestidos.
+Contacto del operador con energía eléctrica.
+Atrapamiento de dedos	y manos.
+Golpeado por manipular herramienta y/o accesorios.
+Contacto del operador radiación UV.
+Proyección de material incandescente.
+Contacto del operador con materiales incandescentes.
+Presencia de focos de ignición y de materiales combustibles (aceites, grasas, disolventes, etc.).
+Exposición a ruido. Sobre esfuerzos.
+ Exposición a radiación solar.
+Exposición de los operadores a altas temperaturas.
+Revisar extensiones y cables de equipo de soldadura.
+Utilizar equipo solo personales capacitado.
+Mantener concentración en el trabajo.
+Utilizar mascara de soldar con protección inactínica de acuerdo con el proceso y la intensidad de corriente.
+Aislación del área de trabajo, delimitación del área con conos.
+Se colocará señalética que indique peligro de proyección de partículas.
+Uso de traje y guantes de cuero completo de soldador.
+Disponer de medios de extinción adecuados (extintor químico de incendios tipo P.Q.S.).
+Antes de realizar trabajos de soldadura deberá verificarse que no existan materiales inflamables en el área.
+Usar protectores auditivos del tipo tapones o fonos de casco.
+Al realizar manejo manual de equipos, aplicar técnica adecuada de levantamiento.
+Uso de protección solar.
+Mantener hidratación adecuada, disponer de agua en las áreas de trabajo.
+Retiro del área de trabajo
+Golpeado por manipular herramienta y/o accesorios.
+Contacto eléctrico.
+Exposición a radiación solar.
+Generación de residuos producto de las tareas realizadas.
+Utilizar guantes al manipular herramientas.
+Mantener concentración en el trabajo.
+Uso de protección solar.
+Segregación de residuos generados en la tarea. Utilizar receptáculos ce acuerdo a codificación código de color.
+
+
+
+
+
+
+
+   7.1      MEDIDAS HIGIENE INDUSTRIAL
+AGENTE DE EXPOSICIÓN
+CONSECUENCIA DE LA EXPOSICIÓN
+MEDIDAS PREVENTIVAS Y/O DE CONTROL
+Ergonómico: Manejo manual de cargas (MMC)
+1.Lesiones musculoesqueléticas.
+2. Dolor lumbar (dolor, tensión muscular y rigidez localizada bajo el reborde costal, y sobre los pliegues glúteos con o sin irradiación a las piernas). 
+3. Dolor en la articulación del hombro por el uso de fuerza, del mismo modo cadera y rodillas ante el proceso de levantamiento.
+1. Evitar el manejo manual de objetos pesados, considerando siempre priorizar el uso de ayuda mecánica (carretillas, transpaletas, carros, etc.). 
+2. Incorporar pausas cortas que permitan la recuperación de la fatiga. 
+3. Eliminar las diferencias de altura entre el origen (desde donde se toma la carga) hasta el destino, así la tarea se realiza en la zona de alcance funcional, evitando inclinación, torsión o lateralización de tronco. 
+4. Utilizar guantes de tamaño adecuado a las dimensiones de las manos. 
+5. Es recomendable priorizar el empuje antes que el arrastre de una carga. Si la fuerza se aplica a la altura de la cintura, aumenta la eficacia. 
+6. Las vías de circulación deben estar despejadas y con espacio suficiente para el desplazamiento de equipos y personas. 
+7. El peso máximo de carga que se puede levantar, transportar, descender, empujar o arrastrar es de 25 kg para hombres y 20 kg para mujeres y menores de 18 años, las embarazadas no pueden manipular carga (está prohibido).
+8. Para el MMC el colaborador debe acercarse a esta ubicando los pies separados al nivel de los hombros (idealmente uno atrás y el otro a un costado de la carga), agacharse flexionando las rodillas y manteniendo la espalda recta, tomar la carga y subir haciendo fuerza con las piernas acercándola al cuerpo, trasladarse sin ejercer torsión lumbar y dejar carga en punto de disposición final (altura mínima de 20 cm, de ser repisa, no extender los brazos más arriba de los hombros).
+Ergonómico: trastornos musculo esqueléticos de extremidades superiores (TMERT-EESS)
+1. Trastorno musculoesquelético de Extremidades superiores: Lesión física originada por trauma acumulado, que se desarrolla gradualmente sobre un período de tiempo como resultado de repetidos esfuerzos sobre una parte específica del sistema musculoesquelético, también puede desarrollarse por un esfuerzo puntual que sobrepasa la resistencia fisiológica de los tejidos que componen el sistema musculoesquelético.
+2. Sobreesfuerzo físico.
+1. Generar pausas de trabajo, como criterio general mantener una relación 5:1 en el régimen trabajo-descanso, es decir, 50 minutos de trabajo por 10 de descanso. 
+2. Procurar realizar varias tareas y rotar entre ellas durante el día para evitar la monotonía alternando así el uso de la musculatura. 
+3. Eliminar o reducir el uso de fuerza mediante herramientas que faciliten la tarea (por ejemplo, usar desatornilladores eléctricos). 
+4. Mejorar técnicas manuales para reducir esfuerzos.
+5. Adquisición de herramientas que permitan un buen agarre. 
+6. Realizar ejercicios de elongación de la musculatura utilizada posterior a la 
+ejecución de la tarea
+Físico: Ruido
+1. Hipoacusia neurosensorial de origen laboral o "Sordera Ocupacional".
+1. Ingresar a trabajadores expuestos al programa de vigilancia médica.
+2. Utilizar protector auditivo (tipo fono o de inserción según definición estipulada en programa de protección auditiva).
+3. Contar con programa de protección auditiva.
+4. Chequear estado de los protectores auditivos: Las copas de orejeras deben ser limpiadas con paño húmedo, sus almohadillas se deben verificar periódicamente y reemplazar cuando presenten endurecimiento, grieta o fisuras, las acoplables no deben almacenarse con las copas presionando contra el casco. Los tapones reutilizables se deben lavar al menos una vez a la semana, su almacenamiento debe efectuarse en un estuche o caja, los tapones auditivos desechables deben eliminarse después de un uso.
+5. El elemento de protección auditiva debe contar con ficha técnica, certificado de calidad y aprobación por parte de Laboratorios autorizados por el Instituto de salud pública.
+6. Difundir PREXOR y programa de protección auditiva al personal.
+7. Mantener áreas de trabajo con exposición a ruido señalizadas.
+Físico: radiación UV de origen solar
+1. Queratitis.
+2. Quemaduras.
+3. Cáncer de Piel.
+1. Instalar mallas o techo para producir sombra.
+2. Establecer horarios de colación entre 13:00 y 15:00 hrs.
+3. Rotación del personal en los puestos de trabajo.
+4. Uso de ropa manga larga, calzado cerrado, casco con ala ancha, legionario, lentes de seguridad oscuros.
+5. Aplicación de protector solar con índice mayor a 30 (replicarlo como mínimo cada dos horas).
+6. Considerar porcentaje de reflexión (albedo) de las superficies donde se efectúen los trabajos.
+7. Implementar pausas de trabajo.
+8. Hidratación permanente de los colaboradores expuestos a radiación UV de origen solar.
+9. Difundir guía técnica RUV y “Programa de protección y prevención contra la exposición ocupacional a radiación UV de origen solar”.
+Químicos: metales y metaloides, Humos metálicos.
+1. Enfermedades Pulmonares.
+2. Cáncer.
+3. Irritación de las vías respiratorias.
+1. Realizar trabajos de soldadura, torchado, oxicorte, en espacios con ventilación natural.
+2. Ingresar a trabajadores expuestos al programa de vigilancia médica.
+3. Difundir protocolo de vigilancia ocupacional por exposición a metales y metaloides.
+4. Utilizar respirador con filtros adecuados al agente a cubrir.
+5. Contar con programa de protección respiratoria.
+6. Chequear estado del respirador (correas, conexiones y pieza facial en buen estado, sin deterioros). 
+7. Se debe mantener rostro sin barba para asegurar una hermeticidad efectiva.
+8. Se deben realizar las pruebas de ajuste del respirador antes de su utilización (prueba de presión positiva y prueba de presión negativa).
+9. Mantener áreas de trabajo con exposición a humos metálicos señalizadas.
+Exposición a factores psicosociales
+1. Afecciones a la Salud mental (Definición de Salud: Bienestar físico, Mental y Social).
+1. Implementar cuestionario CEAL-SM en todos los centros de trabajo.
+2. Sensibilizar al personal sobre la implementación de cuestionarios CEAL-SM.
+3. Implementar medidas de control según prescripciones OAL generadas para dimensiones en riesgo.
+4. Favorecer instancias de esparcimiento en los centros de trabajo.
+
+
+	•	ANÁLISIS DE VARIABLE AMBIENTAL
+
+ANÁLISIS DE VARIABLE AMBIENTAL
+CHECK
+ASPECTO AMBIENTAL
+IMPACTO AMBIENTAL
+MEDIDA DE CONTROL
+Corte y desbaste con esmeril angular
+Generación de polución atmosférica humos por fricción de corte 
+Contaminación atmosférica
+Revisión de tubos, válvulas para soldaduras, uso de EPP
+
+Generación de EPP en mal estado 
+Contaminación de suelos 
+Segregación de residuos, correcto manejo y disposición 
+
+Emisión de ruido 
+Contaminación acústica
+EPP auditivo, se focaliza en la norma de emisión primaria 
+
+Emisión de partículas incandescentes
+Contaminación de suelos 
+Priorización de uso mesa de corte cnc, Encapsulamiento de área del trabajo, cuantificar cantidad de veces que se realiza el trabajo mensualmente, darle seguimiento, visualizando y evidenciando la cantidad de escoria que queda luego del trabajo.
+
+Generación de discos usados 
+Contaminación de suelos 
+Segregación de residuos, correcto manejo y disposición 
+
+Generación de botellas plásticas
+Contaminación de suelos 
+Segregación de residuos, correcto manejo y disposición 
+
+Consumo eléctrico por esmeril angular 
+Agotamiento de recursos naturales 
+Capacitación de eficiencia energética/concientización del personal 
+
+Consumo eléctrico luminaria 
+Agotamiento de recursos naturales 
+Capacitación de eficiencia energética/concientización del personal 
+
+	•	CONTROL DE REGISTROS
+
+Nombre del Registro
+Código
+Retención
+Disposición
+
+
+Medio
+Tiempo
+Responsable de la Custodia
+
+Charla Comunicación
+Reg-HSEQ-002-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Registro general de control de riesgo
+Reg-HSEQ-022-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Análisis seguro del trabajo
+Reg-HSEQ-001-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+Lista de verificación para trabajos en caliente
+Reg-HSEQ-017-corp
+Digital/físico
+5 años
+HSE
+Archivo / Drive
+	•	 REFERENCIAS
+
+	•	Manual de Soldadura por Arco Eléctrico Wes Arco ESAB.
+	•	NFPA 51b, “Los procesos de Corte y Soldadura”
+	•	ANZI Z 49-1, 2005, Safety in Welding and Cutting,	Seguridad en las operaciones de Soldadura y Corte.
+	•	Ley 16.744, Decretos Complementarios, Decreto Supremo 132, Decreto  N°44 y Decreto N° 594.
+	•	NCh. 2928 of. 2005 prevención de Riesgos-Seguridad en trabajos de soldadura, corte Procesos a fines – Especificaciones.
+	•	NCH 1562, Of1979, Protección Personal – Pantallas para soldadores Requisitos – Ensayos.
+	•	NCH 2914, Of 2005, Elementos de Protección Ocular, Filtros para soldadura y Técnicas relacionadas – Requisitos, uso y recomendado.
+	•	NCH 1805, Of 1980, Protección	Personal Ropa para Soldadores, Generalidades.
+	•	Guía Técnica para la Selección y Control de Protectores Auditivos, Depto. Salud Ocupacional, ISPCh.
+
+
+	•	ANEXOS
+	•	Anexo 1 Charla Comunicación
+	•	Anexo 2 HCR
+	•	Anexo 3 AST
+	•	Anexo 4 Lista verificación trabajo en caliente 
+
+ANEXO 1
+CHARLA COMUNICACIÓN 
+
+
+ANEXO 2 
+HCR
+
+
+ANEXO 3 
+AST 
+
+ANEXO 4 
+LISTA VERIFICACIÓN TRABAJO EN CALIENTE
+

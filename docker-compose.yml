@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: hse_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: hse_admin
+      POSTGRES_PASSWORD: hse_password
+      POSTGRES_DB: hse_maestranza_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hse_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: hse_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hse.cl
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+    networks:
+      - hse_network
+
+volumes:
+  postgres_data:
+
+networks:
+  hse_network:
+    driver: bridge
