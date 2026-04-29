@@ -17,6 +17,18 @@ export default function PermisoStep1() {
     }
   }, [tipo]);
 
+  const updateDetalle = (key: string, value: string) => {
+    updateData({ detalles: { ...data.detalles, [key]: value } });
+  };
+
+  const isComplete = () => {
+    if (!data.zona) return false;
+    if (tipo === 'HOT_WORK') return !!(data.detalles?.tipo && data.detalles?.material && data.detalles?.espesor);
+    if (tipo === 'ALTURA') return !!(data.detalles?.tipoAcceso && data.detalles?.altura && data.detalles?.sistemaAnticaida);
+    if (tipo === 'PUENTE_GRUA') return !!(data.detalles?.tipoManiobra && data.detalles?.carga && data.detalles?.equipo);
+    return false;
+  };
+
   if (!tipo) return null;
 
   return (
@@ -43,37 +55,113 @@ export default function PermisoStep1() {
         </View>
 
         <Card variant="solid" style={styles.formCard}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Tipo de Soldadura / Trabajo</Text>
-            <TouchableOpacity style={styles.dropdownInput} onPress={() => updateData({ tipo: 'SMAW' })}>
-              <Text style={data.tipo ? styles.inputText : styles.placeholderText}>
-                {data.tipo || 'Seleccionar tipo... (Toca para SMAW)'}
-              </Text>
-              <ChevronDown color={colors.text.secondary} size={20} />
-            </TouchableOpacity>
-          </View>
+          {tipo === 'HOT_WORK' && (
+            <>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Tipo de Soldadura / Trabajo</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Soldadura TIG, Oxicorte..."
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.tipo || ''}
+                  onChangeText={(text) => updateDetalle('tipo', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Material Base</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Acero al Carbono"
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.material || ''}
+                  onChangeText={(text) => updateDetalle('material', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Espesor (mm)</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: 5"
+                  placeholderTextColor={colors.text.disabled}
+                  keyboardType="numeric"
+                  value={data.detalles?.espesor || ''}
+                  onChangeText={(text) => updateDetalle('espesor', text)}
+                />
+              </View>
+            </>
+          )}
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Material Base</Text>
-            <TouchableOpacity style={styles.dropdownInput} onPress={() => updateData({ material: 'Acero Inox' })}>
-              <Text style={data.material ? styles.inputText : styles.placeholderText}>
-                {data.material || 'Seleccionar material... (Toca para Acero)'}
-              </Text>
-              <ChevronDown color={colors.text.secondary} size={20} />
-            </TouchableOpacity>
-          </View>
+          {tipo === 'ALTURA' && (
+            <>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Tipo de Acceso</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Andamio, Elevador Manlift..."
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.tipoAcceso || ''}
+                  onChangeText={(text) => updateDetalle('tipoAcceso', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Altura Estimada (metros)</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: 5.5"
+                  placeholderTextColor={colors.text.disabled}
+                  keyboardType="numeric"
+                  value={data.detalles?.altura || ''}
+                  onChangeText={(text) => updateDetalle('altura', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Sistema Anticaídas</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Arnés doble cola"
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.sistemaAnticaida || ''}
+                  onChangeText={(text) => updateDetalle('sistemaAnticaida', text)}
+                />
+              </View>
+            </>
+          )}
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Espesor (mm)</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Ej: 5"
-              placeholderTextColor={colors.text.disabled}
-              keyboardType="numeric"
-              value={data.espesor}
-              onChangeText={(text) => updateData({ espesor: text })}
-            />
-          </View>
+          {tipo === 'PUENTE_GRUA' && (
+            <>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Tipo de Maniobra</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Izaje de piezas pesadas"
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.tipoManiobra || ''}
+                  onChangeText={(text) => updateDetalle('tipoManiobra', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Carga Estimada (Ton)</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: 3.5"
+                  placeholderTextColor={colors.text.disabled}
+                  keyboardType="numeric"
+                  value={data.detalles?.carga || ''}
+                  onChangeText={(text) => updateDetalle('carga', text)}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Equipo Utilizado</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ej: Grúa viajera 10T"
+                  placeholderTextColor={colors.text.disabled}
+                  value={data.detalles?.equipo || ''}
+                  onChangeText={(text) => updateDetalle('equipo', text)}
+                />
+              </View>
+            </>
+          )}
 
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Zona de Trabajo</Text>
@@ -102,7 +190,7 @@ export default function PermisoStep1() {
           icon={<ArrowRight color="#FFF" size={20} />}
           iconPosition="right"
           onPress={() => router.push('/lider/permiso/step2')} 
-          disabled={!data.tipo || !data.material || !data.espesor || !data.zona}
+          disabled={!isComplete()}
         />
       </View>
     </KeyboardAvoidingView>

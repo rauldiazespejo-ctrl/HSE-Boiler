@@ -12,10 +12,8 @@ export type TipoPermiso = 'HOT_WORK' | 'ALTURA' | 'PUENTE_GRUA' | '';
 
 export interface PermisoData {
   tipoPermiso: TipoPermiso;
-  tipo: string;
-  material: string;
-  espesor: string;
   zona: string;
+  detalles: Record<string, string>;
   riesgosSeleccionados: string[];
   anexos: Anexo[];
   firmaLider: string | null;
@@ -23,10 +21,8 @@ export interface PermisoData {
 
 const initialState: PermisoData = {
   tipoPermiso: '',
-  tipo: '',
-  material: '',
-  espesor: '',
   zona: '',
+  detalles: {},
   riesgosSeleccionados: [],
   anexos: [],
   firmaLider: null,

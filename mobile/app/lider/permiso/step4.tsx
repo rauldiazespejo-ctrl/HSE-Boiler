@@ -26,9 +26,7 @@ export default function PermisoStep4() {
         tipo_documento: data.tipoPermiso?.replace('_', ' ') || 'PERMISO',
         sector: data.zona,
         contenido_json: {
-          tipo: data.tipo,
-          material: data.material,
-          espesor: data.espesor,
+          ...data.detalles,
           firma: data.firmaLider,
           anexos: data.anexos
         },
@@ -72,10 +70,12 @@ export default function PermisoStep4() {
         <Card variant="outline" style={styles.summaryCard}>
           <Text style={styles.summaryTitle}>Resumen del Documento</Text>
           
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Tipo:</Text>
-            <Text style={styles.summaryValue}>{data.tipo || 'No especificado'}</Text>
-          </View>
+          {Object.entries(data.detalles || {}).map(([k, v]) => (
+            <View key={k} style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}:</Text>
+              <Text style={styles.summaryValue}>{v as string || 'No especificado'}</Text>
+            </View>
+          ))}
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Sector:</Text>
             <Text style={styles.summaryValue}>{data.zona || 'No especificado'}</Text>

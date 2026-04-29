@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Modal, Image, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Card } from '../../../../src/components/Card';
-import { Button } from '../../../../src/components/Button';
-import { colors, radius } from '../../../../src/theme/colors';
+import { Card } from '../../../src/components/Card';
+import { Button } from '../../../src/components/Button';
+import { colors, radius } from '../../../src/theme/colors';
 import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, Send } from 'lucide-react-native';
-import { api } from '../../../../src/services/api';
+import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
 
 export default function JefeApproveScreen() {
