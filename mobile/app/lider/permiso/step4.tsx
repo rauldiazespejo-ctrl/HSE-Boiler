@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Button } from '../../../src/components/Button';
 import { Card } from '../../../src/components/Card';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, Send, PenTool, X } from 'lucide-react-native';
+import { ArrowLeft, Send, PenTool, X, CheckCircle } from 'lucide-react-native';
 import { PermisoContext } from '../../../src/context/PermisoContext';
 import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
@@ -73,7 +73,12 @@ export default function PermisoStep4() {
           {Object.entries(data.detalles || {}).map(([k, v]) => (
             <View key={k} style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}:</Text>
-              <Text style={styles.summaryValue}>{v as string || 'No especificado'}</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                {v ? <CheckCircle color={colors.status.success} size={16} /> : <X color={colors.status.danger} size={16} />}
+                <Text style={[styles.summaryValue, {marginLeft: 6, color: v ? colors.status.success : colors.status.danger}]}>
+                  {v ? 'Verificado' : 'No verificado'}
+                </Text>
+              </View>
             </View>
           ))}
           <View style={styles.summaryRow}>

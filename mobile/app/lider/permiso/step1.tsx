@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Switch } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Card } from '../../../src/components/Card';
 import { Button } from '../../../src/components/Button';
@@ -17,17 +17,29 @@ export default function PermisoStep1() {
     }
   }, [tipo]);
 
-  const updateDetalle = (key: string, value: string) => {
+  const updateDetalle = (key: string, value: boolean) => {
     updateData({ detalles: { ...data.detalles, [key]: value } });
   };
 
   const isComplete = () => {
     if (!data.zona) return false;
-    if (tipo === 'HOT_WORK') return !!(data.detalles?.tipo && data.detalles?.material && data.detalles?.espesor);
-    if (tipo === 'ALTURA') return !!(data.detalles?.tipoAcceso && data.detalles?.altura && data.detalles?.sistemaAnticaida);
-    if (tipo === 'PUENTE_GRUA') return !!(data.detalles?.tipoManiobra && data.detalles?.carga && data.detalles?.equipo);
+    if (tipo === 'HOT_WORK') return !!(data.detalles?.areaLimpia && data.detalles?.extintor && data.detalles?.vigia);
+    if (tipo === 'ALTURA') return !!(data.detalles?.anclajes && data.detalles?.arnes && data.detalles?.superficie);
+    if (tipo === 'PUENTE_GRUA') return !!(data.detalles?.inspeccion && data.detalles?.exclusion && data.detalles?.vientos);
     return false;
   };
+
+  const renderSwitch = (label: string, key: string) => (
+    <View style={styles.switchRow}>
+      <Text style={styles.switchLabel}>{label}</Text>
+      <Switch 
+        value={data.detalles?.[key] || false}
+        onValueChange={(val) => updateDetalle(key, val)}
+        trackColor={{ false: colors.border.medium, true: colors.primary.main }}
+        thumbColor={'#FFF'}
+      />
+    </View>
+  );
 
   if (!tipo) return null;
 
@@ -56,111 +68,30 @@ export default function PermisoStep1() {
 
         <Card variant="solid" style={styles.formCard}>
           {tipo === 'HOT_WORK' && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Tipo de Soldadura / Trabajo</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Soldadura TIG, Oxicorte..."
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.tipo || ''}
-                  onChangeText={(text) => updateDetalle('tipo', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Material Base</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Acero al Carbono"
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.material || ''}
-                  onChangeText={(text) => updateDetalle('material', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Espesor (mm)</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: 5"
-                  placeholderTextColor={colors.text.disabled}
-                  keyboardType="numeric"
-                  value={data.detalles?.espesor || ''}
-                  onChangeText={(text) => updateDetalle('espesor', text)}
-                />
-              </View>
-            </>
+            <View style={styles.controlsGroup}>
+              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
+              {renderSwitch('¿Área libre de materiales inflamables (radio 11m)?', 'areaLimpia')}
+              {renderSwitch('¿Extintor PQS inspeccionado y en el punto de trabajo?', 'extintor')}
+              {renderSwitch('¿Vigía de fuego (Loro Vivo) asignado e instruido?', 'vigia')}
+            </View>
           )}
 
           {tipo === 'ALTURA' && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Tipo de Acceso</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Andamio, Elevador Manlift..."
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.tipoAcceso || ''}
-                  onChangeText={(text) => updateDetalle('tipoAcceso', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Altura Estimada (metros)</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: 5.5"
-                  placeholderTextColor={colors.text.disabled}
-                  keyboardType="numeric"
-                  value={data.detalles?.altura || ''}
-                  onChangeText={(text) => updateDetalle('altura', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Sistema Anticaídas</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Arnés doble cola"
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.sistemaAnticaida || ''}
-                  onChangeText={(text) => updateDetalle('sistemaAnticaida', text)}
-                />
-              </View>
-            </>
+            <View style={styles.controlsGroup}>
+              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
+              {renderSwitch('¿Puntos de anclaje fijos/móviles validados?', 'anclajes')}
+              {renderSwitch('¿Arnés y eslingas inspeccionadas con código del mes?', 'arnes')}
+              {renderSwitch('¿Superficie de trabajo segura (andamio verde/elevador)?', 'superficie')}
+            </View>
           )}
 
           {tipo === 'PUENTE_GRUA' && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Tipo de Maniobra</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Izaje de piezas pesadas"
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.tipoManiobra || ''}
-                  onChangeText={(text) => updateDetalle('tipoManiobra', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Carga Estimada (Ton)</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: 3.5"
-                  placeholderTextColor={colors.text.disabled}
-                  keyboardType="numeric"
-                  value={data.detalles?.carga || ''}
-                  onChangeText={(text) => updateDetalle('carga', text)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Equipo Utilizado</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ej: Grúa viajera 10T"
-                  placeholderTextColor={colors.text.disabled}
-                  value={data.detalles?.equipo || ''}
-                  onChangeText={(text) => updateDetalle('equipo', text)}
-                />
-              </View>
-            </>
+            <View style={styles.controlsGroup}>
+              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
+              {renderSwitch('¿Inspección pre-uso de la grúa y accesorios completada?', 'inspeccion')}
+              {renderSwitch('¿Zona de exclusión completamente delimitada?', 'exclusion')}
+              {renderSwitch('¿Vientos (cuerdas guía) amarrados a la carga?', 'vientos')}
+            </View>
           )}
 
           <View style={styles.inputGroup}>
@@ -320,5 +251,35 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.paper,
     borderTopWidth: 1,
     borderTopColor: colors.border.light,
+  },
+  controlsGroup: {
+    marginBottom: 24,
+    backgroundColor: 'rgba(0,0,0,0.15)',
+    padding: 16,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border.medium,
+  },
+  controlsTitle: {
+    color: colors.text.primary,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.light,
+  },
+  switchLabel: {
+    flex: 1,
+    color: colors.text.primary,
+    fontSize: 14,
+    marginRight: 16,
+    lineHeight: 20,
   },
 });

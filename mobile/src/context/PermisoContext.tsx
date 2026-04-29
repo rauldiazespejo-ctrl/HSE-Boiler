@@ -13,7 +13,7 @@ export type TipoPermiso = 'HOT_WORK' | 'ALTURA' | 'PUENTE_GRUA' | '';
 export interface PermisoData {
   tipoPermiso: TipoPermiso;
   zona: string;
-  detalles: Record<string, string>;
+  detalles: Record<string, boolean>;
   riesgosSeleccionados: string[];
   anexos: Anexo[];
   firmaLider: string | null;

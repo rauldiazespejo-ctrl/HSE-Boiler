@@ -8,10 +8,10 @@ export const colors = {
   
   // Acentos y estados
   primary: {
-    main: '#3B82F6', // Azul brillante moderno
-    light: '#60A5FA',
-    dark: '#2563EB',
-    gradient: ['#3B82F6', '#2563EB'], // Para botones principales
+    main: '#9B1B1B', // Rojo Boiler Comp
+    light: '#C42A2A',
+    dark: '#731414',
+    gradient: ['#B82222', '#801616'], // Para botones principales
   },
   secondary: {
     main: '#8B5CF6', // Púrpura sutil para acciones secundarias
@@ -20,10 +20,10 @@ export const colors = {
   
   // Semánticos HSE
   status: {
-    danger: '#EF4444', // Rojo crítico (Hot Work, Riesgos altos)
-    warning: '#F59E0B', // Naranja/Amarillo (AST, Riesgos medios)
-    success: '#10B981', // Verde (Aprobado, Seguro)
-    info: '#3B82F6',    // Azul info
+    danger: '#EF4444', // Rojo crítico
+    warning: '#F59E0B', // Naranja/Amarillo
+    success: '#10B981', // Verde
+    info: '#9B1B1B',    // Info adaptada a la marca
   },
 
   // Gradientes semánticos

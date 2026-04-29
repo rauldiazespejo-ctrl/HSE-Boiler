@@ -123,14 +123,24 @@ export default function JefeApproveScreen() {
                   <Text style={styles.infoLabel}>Sector</Text>
                   <Text style={styles.infoValue}>{documento.sector}</Text>
                 </View>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Material</Text>
-                  <Text style={styles.infoValue}>{documento.contenido_json?.material || 'N/A'}</Text>
-                </View>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Espesor</Text>
-                  <Text style={styles.infoValue}>{documento.contenido_json?.espesor || 'N/A'}</Text>
-                </View>
+                {Object.entries(documento.contenido_json || {})
+                  .filter(([k]) => k !== 'firma' && k !== 'anexos')
+                  .map(([k, v]) => {
+                    if (typeof v === 'boolean') {
+                      return (
+                        <View key={k} style={[styles.infoCol, { width: '100%' }]}>
+                          <Text style={styles.infoLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}</Text>
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            {v ? <CheckCircle color={colors.status.success} size={16} /> : <XCircle color={colors.status.danger} size={16} />}
+                            <Text style={[styles.infoValue, {marginLeft: 6, color: v ? colors.status.success : colors.status.danger}]}>
+                              {v ? 'Verificado' : 'No verificado'}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    }
+                    return null;
+                  })}
               </View>
             </Card>
 
