@@ -1,387 +1,477 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from '../src/components/Button';
-import { Card } from '../src/components/Card';
-import { colors, radius } from '../src/theme/colors';
-import { Lock, User, AlertCircle, Eye, EyeOff, ShieldCheck, Zap } from 'lucide-react-native';
+import { colors, radius, shadows } from '../src/theme/colors';
+import { Lock, User, Eye, EyeOff, ShieldCheck, AlertCircle, Hammer } from 'lucide-react-native';
 import { AuthContext } from '../src/context/AuthContext';
 import { api } from '../src/services/api';
 
+const DEMO_ROLES = [
+  {
+    role: 'operario' as const,
+    label: 'Operario',
+    desc: 'Crea permisos y documentos HSE',
+    color: colors.primary.main,
+    gradient: colors.primary.gradient,
+    route: '/lider' as const,
+    token: 'mock_token_operario',
+    user: { id: 1, email: 'operario@forjasafe.cl', rol: 'lider' as const, nombre: 'Carlos Muñoz' },
+  },
+  {
+    role: 'jefe' as const,
+    label: 'Jefe Maestranza',
+    desc: 'Verifica y autoriza actividades',
+    color: colors.secondary.main,
+    gradient: colors.secondary.gradient,
+    route: '/jefe' as const,
+    token: 'mock_token_jefe',
+    user: { id: 2, email: 'jefe@forjasafe.cl', rol: 'jefe' as const, nombre: 'Roberto Vega' },
+  },
+  {
+    role: 'gerente' as const,
+    label: 'Gerencia',
+    desc: 'Dashboard de indicadores HSE',
+    color: colors.status.success,
+    gradient: colors.gradients.success,
+    route: '/gerente' as const,
+    token: 'mock_token_gerente',
+    user: { id: 3, email: 'gerente@forjasafe.cl', rol: 'gerente' as const, nombre: 'Alejandro Ríos' },
+  },
+];
+
 export default function LoginScreen() {
-  const { login } = React.useContext(AuthContext);
-  const [rut, setRut] = useState('');
+  const { login } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingRole, setLoadingRole] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [focusedField, setFocusedField] = useState<'rut' | 'password' | null>(null);
+  const [focusedField, setFocusedField] = useState<'email' | 'password' | null>(null);
 
-  const companyLogo = require('../assets/images/company-logo.png');
-
-  const handleLogin = async (roleOverride?: 'lider' | 'jefe') => {
-    const cleanRut = rut.trim();
-    const cleanPassword = password.trim();
-
-    if (!roleOverride && (!cleanRut || !cleanPassword)) {
-      setErrorMsg('Debes ingresar usuario y contraseña para continuar.');
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      setErrorMsg('Ingresa tu usuario y contraseña para continuar.');
       return;
     }
-
     setIsLoading(true);
     setErrorMsg('');
     try {
-      if (roleOverride === 'lider') {
-        await login('mock_token_lider', { id: 1, email: 'lider@hse.cl', rol: 'lider', nombre: 'Líder Demo' });
-        router.replace('/lider');
-        return;
-      } else if (roleOverride === 'jefe') {
-        await login('mock_token_jefe', { id: 2, email: 'jefe@hse.cl', rol: 'jefe', nombre: 'Jefe Demo' });
-        router.replace('/jefe');
-        return;
-      }
-
-      const response = await api.post('/auth/login', {
-        email: cleanRut,
-        password: cleanPassword
-      });
-
+      const response = await api.post('/auth/login', { email: email.trim(), password: password.trim() });
       if (response.data.success) {
         await login(response.data.token, response.data.usuario);
-        if (response.data.usuario.rol === 'jefe') {
-          router.replace('/jefe');
-        } else {
-          router.replace('/lider');
-        }
+        const rol = response.data.usuario.rol;
+        if (rol === 'jefe') router.replace('/jefe');
+        else if (rol === 'gerente') router.replace('/gerente');
+        else router.replace('/lider');
       }
     } catch (error: any) {
-      console.error(error);
-      setErrorMsg(error.response?.data?.message || 'Error al conectar con el servidor');
+      setErrorMsg(error.response?.data?.message || 'Error al conectar con el servidor.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <LinearGradient
-        colors={['#09090B', '#18060d', '#09090B']}
-        style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0.8, y: 1 }}
-      >
-        <View style={styles.accentGlow} pointerEvents="none" />
+  const handleDemoLogin = async (demo: typeof DEMO_ROLES[0]) => {
+    setLoadingRole(demo.role);
+    setErrorMsg('');
+    try {
+      await login(demo.token, demo.user as any);
+      router.replace(demo.route as any);
+    } finally {
+      setLoadingRole(null);
+    }
+  };
 
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
-              <Image source={companyLogo} style={styles.logoImage} resizeMode="contain" />
-            </View>
-            <View style={styles.badge}>
-              <ShieldCheck size={13} color={colors.status.success} />
-              <Text style={styles.badgeText}>Plataforma Certificada HSE</Text>
-            </View>
-            <Text style={styles.title}>Maestranza HSE</Text>
-            <Text style={styles.subtitle}>Gestión de permisos y seguridad operacional</Text>
+  return (
+    <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <LinearGradient
+        colors={['#050608', '#0C0E18', '#050608']}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      />
+
+      <View style={styles.glowTop} pointerEvents="none" />
+      <View style={styles.glowBottom} pointerEvents="none" />
+
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+
+        <View style={styles.logoBlock}>
+          <View style={styles.logoCircle}>
+            <LinearGradient
+              colors={colors.primary.gradient}
+              style={StyleSheet.absoluteFill}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
+            <Hammer color="#FFF" size={36} strokeWidth={2.5} />
+          </View>
+          <Text style={styles.brand}>ForjaSafe</Text>
+          <Text style={styles.brandSub}>HSE Digital para Maestranzas</Text>
+          <View style={styles.certBadge}>
+            <ShieldCheck size={12} color={colors.status.success} />
+            <Text style={styles.certText}>Plataforma Certificada ISO 45001</Text>
+          </View>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Iniciar Sesión</Text>
+
+          <View style={[styles.inputWrapper, focusedField === 'email' && styles.inputWrapperFocus]}>
+            <User color={focusedField === 'email' ? colors.primary.main : colors.text.disabled} size={18} />
+            <TextInput
+              style={styles.input}
+              placeholder="Correo electrónico"
+              placeholderTextColor={colors.text.disabled}
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              onFocus={() => setFocusedField('email')}
+              onBlur={() => setFocusedField(null)}
+            />
           </View>
 
-          <Card variant="glass" style={styles.formCard}>
-            <View style={styles.formHeader}>
-              <ShieldCheck size={16} color={colors.primary.light} />
-              <Text style={styles.formHeaderText}>Acceso seguro</Text>
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>RUT de Usuario</Text>
-              <View style={[styles.inputWrapper, focusedField === 'rut' && styles.inputWrapperFocused]}>
-                <User color={focusedField === 'rut' ? colors.primary.light : colors.text.secondary} size={18} style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="12.345.678-9"
-                  placeholderTextColor={colors.text.disabled}
-                  value={rut}
-                  onChangeText={setRut}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  onFocus={() => setFocusedField('rut')}
-                  onBlur={() => setFocusedField(null)}
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Contraseña</Text>
-              <View style={[styles.inputWrapper, focusedField === 'password' && styles.inputWrapperFocused]}>
-                <Lock color={focusedField === 'password' ? colors.primary.light : colors.text.secondary} size={18} style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="••••••••"
-                  placeholderTextColor={colors.text.disabled}
-                  secureTextEntry={!showPassword}
-                  value={password}
-                  onChangeText={setPassword}
-                  onFocus={() => setFocusedField('password')}
-                  onBlur={() => setFocusedField(null)}
-                />
-                <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)} hitSlop={10} style={styles.eyeBtn}>
-                  {showPassword ? (
-                    <EyeOff color={colors.text.secondary} size={18} />
-                  ) : (
-                    <Eye color={colors.text.secondary} size={18} />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {errorMsg ? (
-              <View style={styles.errorContainer}>
-                <AlertCircle color={colors.status.danger} size={15} />
-                <Text style={styles.errorText}>{errorMsg}</Text>
-              </View>
-            ) : null}
-
-            <Button
-              title="Ingresar al Sistema" 
-              onPress={() => handleLogin()} 
-              isLoading={isLoading}
-              style={{ marginTop: 8 }}
+          <View style={[styles.inputWrapper, focusedField === 'password' && styles.inputWrapperFocus]}>
+            <Lock color={focusedField === 'password' ? colors.primary.main : colors.text.disabled} size={18} />
+            <TextInput
+              style={[styles.input, { flex: 1 }]}
+              placeholder="Contraseña"
+              placeholderTextColor={colors.text.disabled}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              onFocus={() => setFocusedField('password')}
+              onBlur={() => setFocusedField(null)}
             />
+            <TouchableOpacity onPress={() => setShowPassword(v => !v)} hitSlop={12}>
+              {showPassword
+                ? <EyeOff color={colors.text.disabled} size={18} />
+                : <Eye color={colors.text.disabled} size={18} />
+              }
+            </TouchableOpacity>
+          </View>
 
-            <View style={styles.demoSection}>
-              <View style={styles.dividerRow}>
-                <View style={styles.divider} />
-                <View style={styles.demoBadge}>
-                  <Zap color={colors.text.disabled} size={11} />
-                  <Text style={styles.demoTitle}>ACCESO RÁPIDO (DEMO)</Text>
-                </View>
-                <View style={styles.divider} />
-              </View>
-              <View style={styles.demoButtons}>
-                <Button 
-                  title="Líder Demo" 
-                  variant="outline"
-                  size="sm"
-                  onPress={() => handleLogin('lider')} 
-                  isLoading={isLoading}
-                  style={{ flex: 1 }}
-                />
-                <Button 
-                  title="Jefe Demo" 
-                  variant="outline"
-                  size="sm"
-                  onPress={() => handleLogin('jefe')} 
-                  isLoading={isLoading}
-                  style={{ flex: 1 }}
-                />
-              </View>
+          {!!errorMsg && (
+            <View style={styles.errorRow}>
+              <AlertCircle color={colors.status.danger} size={15} />
+              <Text style={styles.errorText}>{errorMsg}</Text>
             </View>
-          </Card>
+          )}
 
-          <Text style={styles.footerText}>Maestranza Industrial · Sistema HSE v2.0</Text>
-        </ScrollView>
-      </LinearGradient>
+          <TouchableOpacity
+            style={[styles.loginBtn, isLoading && styles.loginBtnDisabled]}
+            onPress={handleLogin}
+            disabled={isLoading}
+            activeOpacity={0.85}
+          >
+            <LinearGradient
+              colors={isLoading ? ['#2D3344', '#1E2330'] : colors.primary.gradient}
+              style={styles.loginBtnGrad}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <Text style={styles.loginBtnText}>{isLoading ? 'Ingresando...' : 'Ingresar'}</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.dividerRow}>
+          <View style={styles.dividerLine} />
+          <View style={styles.dividerBadge}>
+            <Text style={styles.dividerText}>ACCESO RÁPIDO DEMO</Text>
+          </View>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <View style={styles.demoGrid}>
+          {DEMO_ROLES.map(demo => (
+            <Pressable
+              key={demo.role}
+              style={({ pressed }) => [styles.demoCard, pressed && styles.demoCardPressed]}
+              onPress={() => handleDemoLogin(demo)}
+              disabled={loadingRole !== null}
+            >
+              <LinearGradient
+                colors={[demo.color + '22', demo.color + '08']}
+                style={StyleSheet.absoluteFill}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              />
+              <View style={[styles.demoCardBorder, { borderColor: demo.color + '55' }]} />
+              <View style={[styles.demoIconDot, { backgroundColor: demo.color + '30' }]}>
+                <View style={[styles.demoIconDotInner, { backgroundColor: demo.color }]} />
+              </View>
+              <Text style={[styles.demoLabel, { color: demo.color }]}>{demo.label}</Text>
+              <Text style={styles.demoDesc} numberOfLines={2}>{demo.desc}</Text>
+              {loadingRole === demo.role && (
+                <View style={styles.demoLoading}>
+                  <Text style={[styles.demoLoadingText, { color: demo.color }]}>•••</Text>
+                </View>
+              )}
+            </Pressable>
+          ))}
+        </View>
+
+        <Text style={styles.footer}>ForjaSafe v2.0 · Datos demo — no reales</Text>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
     backgroundColor: colors.background.main,
   },
-  gradient: {
-    flex: 1,
-  },
-  accentGlow: {
-    position: 'absolute',
-    top: -80,
-    left: -80,
-    width: 320,
-    height: 320,
-    borderRadius: 160,
-    backgroundColor: 'rgba(225, 29, 72, 0.06)',
-  },
-  scrollContent: {
+  scroll: {
     flexGrow: 1,
-    justifyContent: 'center',
     padding: 24,
-    paddingVertical: 52,
+    paddingTop: 64,
+    paddingBottom: 40,
   },
-  header: {
+  glowTop: {
+    position: 'absolute',
+    top: -100,
+    left: '10%',
+    width: '80%',
+    height: 260,
+    backgroundColor: colors.primary.main,
+    opacity: 0.07,
+    borderRadius: 999,
+    transform: [{ scaleX: 2.5 }],
+  },
+  glowBottom: {
+    position: 'absolute',
+    bottom: -80,
+    right: '5%',
+    width: '60%',
+    height: 180,
+    backgroundColor: colors.secondary.main,
+    opacity: 0.05,
+    borderRadius: 999,
+    transform: [{ scaleX: 2 }],
+  },
+  logoBlock: {
     alignItems: 'center',
     marginBottom: 32,
   },
-  logoContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: 26,
-    backgroundColor: '#FFFFFF',
+  logoCircle: {
+    width: 84,
+    height: 84,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: colors.primary.main,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    elevation: 12,
+    marginBottom: 16,
+    overflow: 'hidden',
+    ...shadows.glow(colors.primary.main),
   },
-  logoImage: {
-    width: '72%',
-    height: '72%',
-  },
-  badge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    marginBottom: 14,
-  },
-  badgeText: {
-    color: '#A7F3D0',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.3,
-  },
-  title: {
-    fontSize: 30,
+  brand: {
+    fontSize: 34,
     fontWeight: '800',
     color: colors.text.primary,
-    marginBottom: 8,
-    textAlign: 'center',
-    letterSpacing: -0.8,
+    letterSpacing: -0.5,
   },
-  subtitle: {
-    fontSize: 14,
+  brandSub: {
+    fontSize: 13,
     color: colors.text.secondary,
-    textAlign: 'center',
-    maxWidth: 280,
-    lineHeight: 21,
+    marginTop: 4,
+    letterSpacing: 0.3,
   },
-  formCard: {
-    padding: 24,
-    borderRadius: radius.xl,
-  },
-  formHeader: {
+  certBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 22,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.06)',
+    gap: 5,
+    marginTop: 10,
+    backgroundColor: colors.status.success + '18',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: colors.status.success + '30',
   },
-  formHeaderText: {
-    color: colors.text.primary,
-    fontSize: 14,
+  certText: {
+    fontSize: 11,
+    color: colors.status.success,
     fontWeight: '600',
-  },
-  inputContainer: {
-    marginBottom: 18,
-  },
-  label: {
-    color: colors.text.secondary,
-    fontSize: 13,
-    fontWeight: '600',
-    marginBottom: 8,
     letterSpacing: 0.2,
+  },
+  card: {
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.xl,
+    padding: 24,
+    marginBottom: 28,
+    borderWidth: 1,
+    borderColor: colors.border.light,
+    ...shadows.soft,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text.primary,
+    marginBottom: 20,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    gap: 10,
+    backgroundColor: colors.background.elevated,
     borderRadius: radius.md,
-    height: 52,
+    borderWidth: 1,
+    borderColor: colors.border.light,
     paddingHorizontal: 14,
+    paddingVertical: 13,
+    marginBottom: 12,
   },
-  inputWrapperFocused: {
-    borderColor: colors.primary.main + '70',
-    backgroundColor: 'rgba(225, 29, 72, 0.05)',
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  eyeBtn: {
-    padding: 4,
+  inputWrapperFocus: {
+    borderColor: colors.primary.main + '80',
+    backgroundColor: colors.primary.main + '08',
   },
   input: {
     flex: 1,
     color: colors.text.primary,
-    fontSize: 16,
+    fontSize: 15,
+    padding: 0,
   },
-  errorContainer: {
+  errorRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(239, 68, 68, 0.08)',
-    padding: 12,
-    borderRadius: radius.md,
-    marginTop: 4,
-    marginBottom: 8,
+    gap: 6,
+    marginBottom: 12,
+    backgroundColor: colors.status.danger + '15',
+    padding: 10,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.25)',
-    gap: 8,
+    borderColor: colors.status.danger + '30',
   },
   errorText: {
     color: colors.status.danger,
     fontSize: 13,
     flex: 1,
-    lineHeight: 18,
   },
-  demoSection: {
-    marginTop: 24,
+  loginBtn: {
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    marginTop: 4,
+  },
+  loginBtnDisabled: {
+    opacity: 0.6,
+  },
+  loginBtnGrad: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginBtnText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 16,
+    gap: 10,
+    marginBottom: 20,
   },
-  divider: {
+  dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: colors.border.light,
   },
-  demoBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+  dividerBadge: {
+    backgroundColor: colors.background.elevated,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: colors.border.medium,
   },
-  demoTitle: {
-    color: colors.text.disabled,
+  dividerText: {
     fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontWeight: '700',
-  },
-  demoButtons: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  footerText: {
     color: colors.text.disabled,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  demoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 32,
+  },
+  demoCard: {
+    flex: 1,
+    minWidth: '28%',
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.lg,
+    padding: 14,
+    overflow: 'hidden',
+    alignItems: 'flex-start',
+    position: 'relative',
+    minHeight: 100,
+  },
+  demoCardPressed: {
+    opacity: 0.7,
+    transform: [{ scale: 0.97 }],
+  },
+  demoCardBorder: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+  },
+  demoIconDot: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  demoIconDotInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  demoLabel: {
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  demoDesc: {
     fontSize: 11,
+    color: colors.text.secondary,
+    lineHeight: 15,
+  },
+  demoLoading: {
+    position: 'absolute',
+    top: 8,
+    right: 10,
+  },
+  demoLoadingText: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 3,
+  },
+  footer: {
     textAlign: 'center',
-    marginTop: 24,
+    fontSize: 11,
+    color: colors.text.disabled,
     letterSpacing: 0.3,
   },
 });

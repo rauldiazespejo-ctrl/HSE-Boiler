@@ -36,6 +36,9 @@ Revisión completa de la app mobile (React Native / Expo Router) con corrección
 - `RefreshControl` (pull-to-refresh)
 - Tiempo relativo en lugar de fecha completa
 
+### [x] Step 7: Gerente dashboard KPI
+- `gerente/index.tsx`: Dashboard ejecutivo con 4 KPIs, barra de estado apilada, ranking de trabajos frecuentes, alertas y tarjeta de tasa de cumplimiento HSE con gradiente dinámico
+
 ### [x] Step 6: Mejoras pantalla de login
 - `LinearGradient` real con acento rojo sutil
 - Glow decorativo de fondo
