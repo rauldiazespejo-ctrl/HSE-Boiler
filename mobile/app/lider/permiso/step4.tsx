@@ -4,10 +4,11 @@ import { router } from 'expo-router';
 import { Button } from '../../../src/components/Button';
 import { Card } from '../../../src/components/Card';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, Send, PenTool, X, CheckCircle } from 'lucide-react-native';
+import { ArrowLeft, Send, PenTool, X, CheckCircle, Camera, MapPin } from 'lucide-react-native';
 import { PermisoContext } from '../../../src/context/PermisoContext';
 import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
+import * as Location from 'expo-location';
 
 export default function PermisoStep4() {
   const { data, resetData, updateData } = React.useContext(PermisoContext);
@@ -21,6 +22,25 @@ export default function PermisoStep4() {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    let currentLoc = data.ubicacionGPS;
+    
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const location = await Location.getCurrentPositionAsync({});
+        currentLoc = {
+          latitud: location.coords.latitude,
+          longitud: location.coords.longitude,
+          timestamp: new Date().toISOString()
+        };
+        updateData({ ubicacionGPS: currentLoc });
+      } else {
+        Alert.alert('Advertencia', 'Al no dar permiso GPS, este permiso podría ser rechazado en auditoría.');
+      }
+    } catch (e) {
+      console.warn("Error getting location", e);
+    }
+
     try {
       const response = await api.post('/documentos', {
         tipo_documento: data.tipoPermiso?.replace('_', ' ') || 'PERMISO',
@@ -28,7 +48,8 @@ export default function PermisoStep4() {
         contenido_json: {
           ...data.detalles,
           firma: data.firmaLider,
-          anexos: data.anexos
+          anexos: data.anexos,
+          ubicacionGPS: currentLoc
         },
         riesgos_json: data.riesgosSeleccionados
       });
@@ -70,17 +91,21 @@ export default function PermisoStep4() {
         <Card variant="outline" style={styles.summaryCard}>
           <Text style={styles.summaryTitle}>Resumen del Documento</Text>
           
-          {Object.entries(data.detalles || {}).map(([k, v]) => (
+          {Object.entries(data.detalles || {}).map(([k, v]: [string, any]) => {
+            const verificado = typeof v === 'boolean' ? v : v?.verificado;
+            const foto = typeof v === 'object' ? v?.fotoBase64 : null;
+            return (
             <View key={k} style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}:</Text>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {v ? <CheckCircle color={colors.status.success} size={16} /> : <X color={colors.status.danger} size={16} />}
-                <Text style={[styles.summaryValue, {marginLeft: 6, color: v ? colors.status.success : colors.status.danger}]}>
-                  {v ? 'Verificado' : 'No verificado'}
+                {foto && <Camera color={colors.text.secondary} size={14} style={{marginRight: 4}} />}
+                {verificado ? <CheckCircle color={colors.status.success} size={16} /> : <X color={colors.status.danger} size={16} />}
+                <Text style={[styles.summaryValue, {marginLeft: 6, color: verificado ? colors.status.success : colors.status.danger}]}>
+                  {verificado ? 'Verificado' : 'No verificado'}
                 </Text>
               </View>
             </View>
-          ))}
+          )})}
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Sector:</Text>
             <Text style={styles.summaryValue}>{data.zona || 'No especificado'}</Text>

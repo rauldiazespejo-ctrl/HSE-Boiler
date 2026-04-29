@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Switch } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Switch, Alert, Image } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
 import { Card } from '../../../src/components/Card';
 import { Button } from '../../../src/components/Button';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, ArrowRight, ChevronDown, ShieldAlert } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, ChevronDown, ShieldAlert, Camera } from 'lucide-react-native';
 import { PermisoContext, TipoPermiso } from '../../../src/context/PermisoContext';
 
 export default function PermisoStep1() {
@@ -17,29 +18,65 @@ export default function PermisoStep1() {
     }
   }, [tipo]);
 
-  const updateDetalle = (key: string, value: boolean) => {
-    updateData({ detalles: { ...data.detalles, [key]: value } });
+  const updateDetalleVerificado = (key: string, verificado: boolean) => {
+    const current = data.detalles?.[key] || { verificado: false };
+    updateData({ detalles: { ...data.detalles, [key]: { ...current, verificado } } });
+  };
+
+  const handlePickImage = async (key: string) => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'Se requiere permiso de cámara para adjuntar evidencia.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0].base64) {
+      const current = data.detalles?.[key] || { verificado: false };
+      updateData({ 
+        detalles: { 
+          ...data.detalles, 
+          [key]: { ...current, fotoBase64: `data:image/jpeg;base64,${result.assets[0].base64}` } 
+        } 
+      });
+    }
   };
 
   const isComplete = () => {
     if (!data.zona) return false;
-    if (tipo === 'HOT_WORK') return !!(data.detalles?.areaLimpia && data.detalles?.extintor && data.detalles?.vigia);
-    if (tipo === 'ALTURA') return !!(data.detalles?.anclajes && data.detalles?.arnes && data.detalles?.superficie);
-    if (tipo === 'PUENTE_GRUA') return !!(data.detalles?.inspeccion && data.detalles?.exclusion && data.detalles?.vientos);
+    const d = data.detalles || {};
+    if (tipo === 'HOT_WORK') return !!(d.areaLimpia?.verificado && d.extintor?.verificado && d.epp?.verificado);
+    if (tipo === 'ALTURA') return !!(d.spdc?.verificado && d.anclajes?.verificado && d.superficie?.verificado);
+    if (tipo === 'PUENTE_GRUA') return !!(d.inspeccion?.verificado && d.exclusion?.verificado && d.comunicacion?.verificado);
     return false;
   };
 
-  const renderSwitch = (label: string, key: string) => (
-    <View style={styles.switchRow}>
-      <Text style={styles.switchLabel}>{label}</Text>
-      <Switch 
-        value={data.detalles?.[key] || false}
-        onValueChange={(val) => updateDetalle(key, val)}
-        trackColor={{ false: colors.border.medium, true: colors.primary.main }}
-        thumbColor={'#FFF'}
-      />
-    </View>
-  );
+  const renderSwitch = (label: string, key: string) => {
+    const control = data.detalles?.[key] || { verificado: false };
+    return (
+      <View style={styles.switchRow}>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => handlePickImage(key)} style={styles.cameraBtn}>
+            <Camera color={control.fotoBase64 ? colors.status.success : colors.text.secondary} size={20} />
+          </TouchableOpacity>
+          <Text style={styles.switchLabel}>{label}</Text>
+        </View>
+        <Switch 
+          value={control.verificado}
+          onValueChange={(val) => updateDetalleVerificado(key, val)}
+          trackColor={{ false: colors.border.medium, true: colors.status.success }}
+          thumbColor={'#FFF'}
+        />
+      </View>
+    );
+  };
 
   if (!tipo) return null;
 
@@ -70,27 +107,27 @@ export default function PermisoStep1() {
           {tipo === 'HOT_WORK' && (
             <View style={styles.controlsGroup}>
               <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿Área libre de materiales inflamables (radio 11m)?', 'areaLimpia')}
-              {renderSwitch('¿Extintor PQS inspeccionado y en el punto de trabajo?', 'extintor')}
-              {renderSwitch('¿Vigía de fuego (Loro Vivo) asignado e instruido?', 'vigia')}
+              {renderSwitch('¿Área libre de inflamables y biombos/mantas ignífugas instaladas?', 'areaLimpia')}
+              {renderSwitch('¿Extintor PQS inspeccionado y operativo en el punto de trabajo?', 'extintor')}
+              {renderSwitch('¿EPP Específico operativo (Traje cuero completo, máscara, respirador)?', 'epp')}
             </View>
           )}
 
           {tipo === 'ALTURA' && (
             <View style={styles.controlsGroup}>
               <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿Puntos de anclaje fijos/móviles validados?', 'anclajes')}
-              {renderSwitch('¿Arnés y eslingas inspeccionadas con código del mes?', 'arnes')}
-              {renderSwitch('¿Superficie de trabajo segura (andamio verde/elevador)?', 'superficie')}
+              {renderSwitch('¿SPDC (Arnés y colas) inspeccionado antes de uso?', 'spdc')}
+              {renderSwitch('¿Puntos de anclaje y líneas de vida asegurados correctamente?', 'anclajes')}
+              {renderSwitch('¿Superficie aprobada (Andamio con Tarjeta Verde o Alza Hombre)?', 'superficie')}
             </View>
           )}
 
           {tipo === 'PUENTE_GRUA' && (
             <View style={styles.controlsGroup}>
               <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿Inspección pre-uso de la grúa y accesorios completada?', 'inspeccion')}
-              {renderSwitch('¿Zona de exclusión completamente delimitada?', 'exclusion')}
-              {renderSwitch('¿Vientos (cuerdas guía) amarrados a la carga?', 'vientos')}
+              {renderSwitch('¿Inspección pre-uso de Puente Grúa, ganchos y eslingas?', 'inspeccion')}
+              {renderSwitch('¿Zona de izaje delimitada y libre de personal ajeno?', 'exclusion')}
+              {renderSwitch('¿Mandos a distancia probados y comunicación de maniobra acordada?', 'comunicacion')}
             </View>
           )}
 
@@ -281,5 +318,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginRight: 16,
     lineHeight: 20,
+  },
+  cameraBtn: {
+    marginRight: 12,
+    padding: 8,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: radius.full,
   },
 });

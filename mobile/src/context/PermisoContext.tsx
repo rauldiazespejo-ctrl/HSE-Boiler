@@ -10,13 +10,25 @@ export interface Anexo {
 
 export type TipoPermiso = 'HOT_WORK' | 'ALTURA' | 'PUENTE_GRUA' | '';
 
+export interface ControlCritico {
+  verificado: boolean;
+  fotoBase64?: string | null;
+}
+
+export interface UbicacionGPS {
+  latitud: number;
+  longitud: number;
+  timestamp: string;
+}
+
 export interface PermisoData {
   tipoPermiso: TipoPermiso;
   zona: string;
-  detalles: Record<string, boolean>;
+  detalles: Record<string, ControlCritico>;
   riesgosSeleccionados: string[];
   anexos: Anexo[];
   firmaLider: string | null;
+  ubicacionGPS: UbicacionGPS | null;
 }
 
 const initialState: PermisoData = {
@@ -26,6 +38,7 @@ const initialState: PermisoData = {
   riesgosSeleccionados: [],
   anexos: [],
   firmaLider: null,
+  ubicacionGPS: null,
 };
 
 interface PermisoContextData {

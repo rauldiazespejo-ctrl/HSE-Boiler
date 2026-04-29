@@ -4,9 +4,10 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Card } from '../../../src/components/Card';
 import { Button } from '../../../src/components/Button';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, Send } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, Send, MapPin } from 'lucide-react-native';
 import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
+import * as Linking from 'expo-linking';
 
 export default function JefeApproveScreen() {
   const { id } = useLocalSearchParams();
@@ -125,16 +126,27 @@ export default function JefeApproveScreen() {
                 </View>
                 {Object.entries(documento.contenido_json || {})
                   .filter(([k]) => k !== 'firma' && k !== 'anexos')
-                  .map(([k, v]) => {
-                    if (typeof v === 'boolean') {
+                  .map(([k, v]: [string, any]) => {
+                    const isObj = typeof v === 'object' && v !== null;
+                    const verificado = isObj ? v.verificado : (typeof v === 'boolean' ? v : false);
+                    const foto = isObj ? v.fotoBase64 : null;
+                    
+                    if (typeof v === 'boolean' || (isObj && 'verificado' in v)) {
                       return (
                         <View key={k} style={[styles.infoCol, { width: '100%' }]}>
                           <Text style={styles.infoLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}</Text>
-                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            {v ? <CheckCircle color={colors.status.success} size={16} /> : <XCircle color={colors.status.danger} size={16} />}
-                            <Text style={[styles.infoValue, {marginLeft: 6, color: v ? colors.status.success : colors.status.danger}]}>
-                              {v ? 'Verificado' : 'No verificado'}
-                            </Text>
+                          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                              {verificado ? <CheckCircle color={colors.status.success} size={16} /> : <XCircle color={colors.status.danger} size={16} />}
+                              <Text style={[styles.infoValue, {marginLeft: 6, color: verificado ? colors.status.success : colors.status.danger}]}>
+                                {verificado ? 'Verificado' : 'No verificado'}
+                              </Text>
+                            </View>
+                            {foto && (
+                              <TouchableOpacity onPress={() => Alert.alert('Evidencia Fotográfica', 'Aquí se mostraría la foto en pantalla completa.')}>
+                                <ImageIcon color={colors.primary.main} size={20} />
+                              </TouchableOpacity>
+                            )}
                           </View>
                         </View>
                       );
@@ -176,6 +188,29 @@ export default function JefeApproveScreen() {
                 ))}
               </View>
             </Card>
+
+            {documento.contenido_json?.ubicacionGPS && (
+              <Card variant="outline" style={[styles.infoCard, { borderColor: colors.primary.main + '50', backgroundColor: colors.primary.main + '05' }]}>
+                <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12}}>
+                  <MapPin color={colors.primary.main} size={20} />
+                  <Text style={[styles.sectionTitle, {marginBottom: 0, marginLeft: 8}]}>Sello de Auditoría Incorruptible</Text>
+                </View>
+                <View style={styles.infoCol}>
+                  <Text style={styles.infoLabel}>Fecha/Hora Firma:</Text>
+                  <Text style={styles.infoValue}>{new Date(documento.contenido_json.ubicacionGPS.timestamp).toLocaleString()}</Text>
+                </View>
+                <View style={styles.infoCol}>
+                  <Text style={styles.infoLabel}>Coordenadas Exactas:</Text>
+                  <Text style={styles.infoValue}>{documento.contenido_json.ubicacionGPS.latitud.toFixed(5)}, {documento.contenido_json.ubicacionGPS.longitud.toFixed(5)}</Text>
+                </View>
+                <Button 
+                  title="Verificar en Mapa" 
+                  variant="outline" 
+                  style={{marginTop: 12}}
+                  onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${documento.contenido_json.ubicacionGPS.latitud},${documento.contenido_json.ubicacionGPS.longitud}`)}
+                />
+              </Card>
+            )}
 
             <View style={styles.signSection}>
               <Text style={styles.sectionTitle}>Firma del Jefe General</Text>
