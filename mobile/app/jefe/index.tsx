@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Card } from '../../src/components/Card';
 import { StatusBadge } from '../../src/components/StatusBadge';
 import { colors, radius } from '../../src/theme/colors';
-import { LogOut, Flame, Clock, ShieldAlert, Activity, ArrowUp, Truck } from 'lucide-react-native';
+import { LogOut, Flame, Clock, Activity, ArrowUp, Truck } from 'lucide-react-native';
 import { api } from '../../src/services/api';
 import { AuthContext } from '../../src/context/AuthContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -12,6 +12,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 export default function JefeDashboard() {
   const { user, logout } = useContext(AuthContext);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
+  const [approvedToday, setApprovedToday] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -22,9 +23,13 @@ export default function JefeDashboard() {
     try {
       const response = await api.get('/documentos');
       if (response.data.success) {
-        // Filtrar pendientes y mapear para UI
-        const pendientes = response.data.data.filter((doc: any) => doc.estado === 'PENDIENTE');
+        const pendientes = response.data.data.filter((doc: any) => doc.estado === 'PENDIENTE_JEFE');
+        const aprobadosHoy = response.data.data.filter((doc: any) => {
+          if (doc.estado !== 'APROBADO' || !doc.fecha_aprobacion) return false;
+          return new Date(doc.fecha_aprobacion).toDateString() === new Date().toDateString();
+        });
         setPendingApprovals(pendientes);
+        setApprovedToday(aprobadosHoy.length);
       }
     } catch (error) {
       console.error('Error fetching pending:', error);
@@ -58,7 +63,7 @@ export default function JefeDashboard() {
             <Text style={styles.statLabel}>Pendientes</Text>
           </View>
           <View style={[styles.statBox, { borderColor: colors.status.success }]}>
-            <Text style={styles.statNumber}>-</Text>
+            <Text style={styles.statNumber}>{approvedToday}</Text>
             <Text style={styles.statLabel}>Aprobados Hoy</Text>
           </View>
         </View>
@@ -74,23 +79,23 @@ export default function JefeDashboard() {
             <Animated.View key={doc.id_documento} entering={FadeInDown.delay(index * 100)}>
               <Card 
                 variant="glass" 
-                style={[styles.approvalCard, doc.tipo_documento === 'HOT WORK' && { borderColor: colors.status.danger }]}
-                onPress={() => router.push(`/jefe/approve/${doc.numero_documento}`)}
+                style={[styles.approvalCard, doc.tipo_documento === 'HOT_WORK' && { borderColor: colors.status.danger }]}
+                onPress={() => router.push(`/jefe/approve/${doc.id_documento}`)}
               >
                 <View style={styles.cardHeader}>
                   <View style={styles.cardTitleRow}>
-                    {doc.tipo_documento === 'HOT WORK' ? (
+                    {doc.tipo_documento === 'HOT_WORK' ? (
                       <Flame color={colors.status.danger} size={24} />
-                    ) : doc.tipo_documento === 'TRABAJO EN ALTURA' ? (
+                    ) : doc.tipo_documento === 'ALTURA' ? (
                       <ArrowUp color={colors.status.info} size={24} />
-                    ) : doc.tipo_documento === 'PUENTE GRÚA' ? (
+                    ) : doc.tipo_documento === 'PUENTE_GRUA' ? (
                       <Truck color={colors.status.warning} size={24} />
                     ) : (
                       <Activity color={colors.status.warning} size={24} />
                     )}
                     <Text style={styles.docId}>{doc.numero_documento}</Text>
                   </View>
-                  {doc.tipo_documento === 'HOT WORK' && (
+                  {doc.tipo_documento === 'HOT_WORK' && (
                     <View style={styles.urgentBadge}>
                       <Text style={styles.urgentText}>URGENTE</Text>
                     </View>
@@ -112,7 +117,9 @@ export default function JefeDashboard() {
                   <StatusBadge status="pendiente" label="ESPERANDO FIRMA" />
                   <View style={styles.timeRow}>
                     <Clock color={colors.text.secondary} size={14} />
-                    <Text style={styles.timeText}>hace unos minutos</Text>
+                    <Text style={styles.timeText}>
+                      {doc.fecha_creacion ? new Date(doc.fecha_creacion).toLocaleString() : 'sin fecha'}
+                    </Text>
                   </View>
                 </View>
               </Card>

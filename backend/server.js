@@ -7,8 +7,10 @@ const PORT = process.env.PORT || 3000;
 const startServer = async () => {
   try {
     await testConnection();
-    // In a real scenario, use migrations instead of sync({ force: false })
-    // await sequelize.sync({ force: false });
+    if (process.env.AUTO_SYNC_DB === 'true') {
+      await sequelize.sync({ alter: true });
+      console.log('Database schema synchronized.');
+    }
     
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

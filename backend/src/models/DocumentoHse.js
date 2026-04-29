@@ -14,7 +14,7 @@ const DocumentoHse = sequelize.define('DocumentoHse', {
     allowNull: false
   },
   tipo_documento: {
-    type: DataTypes.ENUM('HOT_WORK', 'AST', 'LOTO', 'INSPECCION'),
+    type: DataTypes.ENUM('HOT_WORK', 'AST', 'LOTO', 'INSPECCION', 'ALTURA', 'PUENTE_GRUA'),
     allowNull: false
   },
   sector: {
@@ -32,8 +32,16 @@ const DocumentoHse = sequelize.define('DocumentoHse', {
     type: DataTypes.JSONB
   },
   estado: {
-    type: DataTypes.ENUM('BORRADOR', 'PENDIENTE', 'APROBADO', 'RECHAZADO', 'ARCHIVADO'),
-    defaultValue: 'BORRADOR',
+    type: DataTypes.ENUM(
+      'BORRADOR',
+      'PENDIENTE',
+      'PENDIENTE_LIDER',
+      'PENDIENTE_JEFE',
+      'APROBADO',
+      'RECHAZADO',
+      'ARCHIVADO'
+    ),
+    defaultValue: 'PENDIENTE_LIDER',
     allowNull: false
   },
   creado_por: {

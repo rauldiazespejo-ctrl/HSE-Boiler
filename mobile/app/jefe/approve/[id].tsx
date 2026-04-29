@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Modal, Image, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Card } from '../../../src/components/Card';
 import { Button } from '../../../src/components/Button';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, Send, MapPin } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, MapPin } from 'lucide-react-native';
 import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
 import * as Linking from 'expo-linking';
 
 export default function JefeApproveScreen() {
   const { id } = useLocalSearchParams();
+  const documentId = Array.isArray(id) ? id[0] : id;
   const [signatureData, setSignatureData] = useState<string | null>(null);
   const [isSignModalVisible, setIsSignModalVisible] = useState(false);
   const [isRejectModalVisible, setIsRejectModalVisible] = useState(false);
@@ -19,23 +20,24 @@ export default function JefeApproveScreen() {
   const [documento, setDocumento] = useState<any>(null);
   const [loadingDoc, setLoadingDoc] = useState(true);
 
-  useEffect(() => {
-    fetchDocumento();
-  }, []);
-
-  const fetchDocumento = async () => {
+  const fetchDocumento = useCallback(async () => {
     try {
-      const response = await api.get('/documentos');
+      const response = await api.get(`/documentos/${documentId}`);
       if (response.data.success) {
-        const doc = response.data.data.find((d: any) => d.numero_documento === id);
-        setDocumento(doc);
+        setDocumento(response.data.data);
       }
-    } catch (e) {
+    } catch {
       Alert.alert('Error', 'No se pudo cargar el documento');
     } finally {
       setLoadingDoc(false);
     }
-  };
+  }, [documentId]);
+
+  useEffect(() => {
+    if (documentId) {
+      fetchDocumento();
+    }
+  }, [documentId, fetchDocumento]);
 
   const handleSignature = (signature: string) => {
     setSignatureData(signature);
@@ -43,6 +45,10 @@ export default function JefeApproveScreen() {
   };
 
   const handleApprove = async () => {
+    if (!documentId) {
+      Alert.alert('Error', 'Documento inválido.');
+      return;
+    }
     if (!signatureData) {
       Alert.alert('Firma Requerida', 'Debe firmar el documento para aprobarlo.');
       return;
@@ -50,14 +56,14 @@ export default function JefeApproveScreen() {
 
     setIsLoading(true);
     try {
-      const response = await api.post(`/documentos/${id}/aprobar`, {
+      const response = await api.post(`/documentos/${documentId}/aprobar`, {
         firma: signatureData,
         comentarios: 'Aprobado sin observaciones'
       });
       if (response.data.success) {
         Alert.alert(
           'Documento Aprobado',
-          `El documento ${id} ha sido aprobado exitosamente. El líder ha sido notificado.`,
+          `El documento ${documento?.numero_documento || documentId} ha sido aprobado exitosamente.`,
           [{ text: 'OK', onPress: () => router.back() }]
         );
       }
@@ -70,6 +76,10 @@ export default function JefeApproveScreen() {
   };
 
   const handleReject = async () => {
+    if (!documentId) {
+      Alert.alert('Error', 'Documento inválido.');
+      return;
+    }
     if (rejectComment.trim().length < 10) {
       Alert.alert('Justificación requerida', 'Por favor, ingrese un motivo detallado (mínimo 10 caracteres) para el rechazo.');
       return;
@@ -77,14 +87,14 @@ export default function JefeApproveScreen() {
 
     setIsLoading(true);
     try {
-      await api.post(`/documentos/${id}/rechazar`, { comentarios: rejectComment });
+      await api.post(`/documentos/${documentId}/rechazar`, { comentarios: rejectComment });
       setIsRejectModalVisible(false);
       Alert.alert(
         'Documento Rechazado',
-        `Se ha notificado al líder sobre el rechazo del documento ${id}.`,
+        `Se rechazó el documento ${documento?.numero_documento || documentId}.`,
         [{ text: 'OK', onPress: () => router.back() }]
       );
-    } catch(e) {
+    } catch {
       Alert.alert('Error', 'No se pudo rechazar el documento. Verifique su conexión.');
     } finally {
       setIsLoading(false);

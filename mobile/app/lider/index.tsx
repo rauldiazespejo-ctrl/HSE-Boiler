@@ -2,13 +2,20 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { Card } from '../../src/components/Card';
-import { colors, radius } from '../../src/theme/colors';
-import { Flame, Activity, ShieldAlert, ClipboardCheck, History, LogOut, ArrowUp, Truck } from 'lucide-react-native';
+import { colors } from '../../src/theme/colors';
+import { Flame, Activity, ClipboardCheck, History, LogOut, ArrowUp, Truck } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { api } from '../../src/services/api';
 import { AuthContext } from '../../src/context/AuthContext';
 
 export default function LiderDashboard() {
+  const statusColorMap: Record<string, string> = {
+    PENDIENTE_LIDER: colors.status.warning,
+    PENDIENTE_JEFE: colors.primary.main,
+    APROBADO: colors.status.success,
+    RECHAZADO: colors.status.danger,
+  };
+
   const documentTypes = [
     {
       id: 'hotwork',
@@ -39,7 +46,7 @@ export default function LiderDashboard() {
       title: 'Inspección',
       subtitle: 'Equipos y maquinaria',
       icon: <ClipboardCheck color={colors.status.success} size={32} />,
-      route: '/lider/inspeccion',
+      route: '/lider/permiso/step1?tipo=INSPECCION',
       color: colors.status.success,
     },
   ];
@@ -124,11 +131,11 @@ export default function LiderDashboard() {
                 <Card variant="glass" style={styles.historyCard}>
                   <View style={styles.historyItemRow}>
                     <View style={styles.historyIcon}>
-                      {doc.tipo_documento === 'HOT WORK' ? (
+                      {doc.tipo_documento === 'HOT_WORK' ? (
                         <Flame color={colors.status.danger} size={20} />
-                      ) : doc.tipo_documento === 'TRABAJO EN ALTURA' ? (
+                      ) : doc.tipo_documento === 'ALTURA' ? (
                         <ArrowUp color={colors.status.info} size={20} />
-                      ) : doc.tipo_documento === 'PUENTE GRÚA' ? (
+                      ) : doc.tipo_documento === 'PUENTE_GRUA' ? (
                         <Truck color={colors.status.warning} size={20} />
                       ) : (
                         <Activity color={colors.status.warning} size={20} />
@@ -138,7 +145,7 @@ export default function LiderDashboard() {
                       <Text style={styles.historyItemTitle}>{doc.numero_documento}</Text>
                       <Text style={styles.historyItemSubtitle}>Estado: {doc.estado}</Text>
                     </View>
-                    <View style={[styles.statusDot, { backgroundColor: doc.estado === 'APROBADO' ? colors.status.success : colors.status.warning }]} />
+                    <View style={[styles.statusDot, { backgroundColor: statusColorMap[doc.estado] || colors.status.warning }]} />
                   </View>
                 </Card>
               </Animated.View>

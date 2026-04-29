@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Button } from '../../../src/components/Button';
 import { Card } from '../../../src/components/Card';
 import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, Send, PenTool, X, CheckCircle, Camera, MapPin } from 'lucide-react-native';
+import { ArrowLeft, Send, PenTool, X, CheckCircle, Camera } from 'lucide-react-native';
 import { PermisoContext } from '../../../src/context/PermisoContext';
 import { api } from '../../../src/services/api';
 import SignatureScreen from 'react-native-signature-canvas';
@@ -42,8 +42,9 @@ export default function PermisoStep4() {
     }
 
     try {
+      const tipoDocumento = data.tipoPermiso || 'HOT_WORK';
       const response = await api.post('/documentos', {
-        tipo_documento: data.tipoPermiso?.replace('_', ' ') || 'PERMISO',
+        tipo_documento: tipoDocumento,
         sector: data.zona,
         contenido_json: {
           ...data.detalles,
@@ -57,7 +58,7 @@ export default function PermisoStep4() {
       if (response.data.success) {
         Alert.alert(
           'Documento Enviado',
-          'El HOT WORK ha sido enviado a los Jefes Generales para su aprobación.',
+          `El permiso ${tipoDocumento.replace('_', ' ')} fue enviado correctamente al flujo de aprobación.`,
           [{ text: 'OK', onPress: () => {
             resetData();
             router.replace('/lider');

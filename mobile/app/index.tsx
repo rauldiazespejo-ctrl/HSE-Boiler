@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '../src/components/Button';
 import { Card } from '../src/components/Card';
 import { colors, radius } from '../src/theme/colors';
-import { Lock, User, AlertCircle } from 'lucide-react-native';
+import { Lock, User, AlertCircle, Eye, EyeOff, BadgeCheck, ShieldCheck } from 'lucide-react-native';
 import { AuthContext } from '../src/context/AuthContext';
 import { api } from '../src/services/api';
 
@@ -15,13 +25,24 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const companyLogo = require('../assets/images/company-logo.png');
 
   const handleLogin = async (roleOverride?: 'lider' | 'jefe') => {
+    const cleanRut = rut.trim();
+    const cleanPassword = password.trim();
+
+    if (!roleOverride && (!cleanRut || !cleanPassword)) {
+      setErrorMsg('Debes ingresar usuario y contraseña para continuar.');
+      return;
+    }
+
     setIsLoading(true);
     setErrorMsg('');
     try {
-      let emailToUse = rut;
-      let passwordToUse = password;
+      let emailToUse = cleanRut;
+      let passwordToUse = cleanPassword;
 
       // Mock users based on role for fast demo
       if (roleOverride === 'lider') {
@@ -58,19 +79,25 @@ export default function LoginScreen() {
       style={styles.container} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <LinearGradient colors={['#0B0F19', '#121A2B', '#0B0F19']} style={styles.backgroundGradient}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <LinearGradient
-            colors={colors.primary.gradient as [string, string]}
-            style={styles.logoContainer}
-          >
-            <Text style={styles.logoText}>HSE</Text>
-          </LinearGradient>
+          <View style={styles.logoContainer}>
+            <Image source={companyLogo} style={styles.logoImage} resizeMode="contain" />
+          </View>
+          <View style={styles.badge}>
+            <BadgeCheck size={16} color={colors.status.success} />
+            <Text style={styles.badgeText}>Plataforma oficial</Text>
+          </View>
           <Text style={styles.title}>Maestranza HSE</Text>
-          <Text style={styles.subtitle}>Sistema Integral de Permisos</Text>
+          <Text style={styles.subtitle}>Gestión profesional de permisos y seguridad operacional</Text>
         </View>
 
         <Card variant="glass" style={styles.formCard}>
+          <View style={styles.formHeader}>
+            <ShieldCheck size={18} color={colors.primary.light} />
+            <Text style={styles.formHeaderText}>Acceso seguro</Text>
+          </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>RUT de Usuario</Text>
             <View style={styles.inputWrapper}>
@@ -82,6 +109,7 @@ export default function LoginScreen() {
                 value={rut}
                 onChangeText={setRut}
                 autoCapitalize="none"
+                autoCorrect={false}
               />
             </View>
           </View>
@@ -94,10 +122,17 @@ export default function LoginScreen() {
                 style={styles.input}
                 placeholder="********"
                 placeholderTextColor={colors.text.disabled}
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={setPassword}
               />
+              <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)} hitSlop={8}>
+                {showPassword ? (
+                  <EyeOff color={colors.text.secondary} size={20} />
+                ) : (
+                  <Eye color={colors.text.secondary} size={20} />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -108,7 +143,7 @@ export default function LoginScreen() {
             </View>
           ) : null}
 
-          <Button 
+          <Button
             title="Ingresar" 
             onPress={() => handleLogin()} 
             isLoading={isLoading}
@@ -117,7 +152,7 @@ export default function LoginScreen() {
 
           {/* Botones de atajo para demo (mock roles) */}
           <View style={styles.demoButtonsContainer}>
-            <Text style={styles.demoTitle}>-- Modo Demo: Ingresar como --</Text>
+            <Text style={styles.demoTitle}>Modo demo: ingreso rápido por perfil</Text>
             <View style={{ gap: 12 }}>
               <Button 
                 title="Ingresar como LÍDER" 
@@ -134,6 +169,7 @@ export default function LoginScreen() {
           </View>
         </Card>
       </ScrollView>
+      </LinearGradient>
     </KeyboardAvoidingView>
   );
 }
@@ -143,40 +179,81 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background.main,
   },
+  backgroundGradient: {
+    flex: 1,
+  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 24,
+    paddingVertical: 40,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 28,
   },
   logoContainer: {
-    width: 80,
-    height: 80,
+    width: '100%',
+    maxWidth: 340,
+    height: 120,
     borderRadius: 24,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    overflow: 'hidden',
   },
-  logoText: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
+  logoImage: {
+    width: '95%',
+    height: '80%',
+  },
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.35)',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    marginBottom: 10,
+  },
+  badgeText: {
+    color: '#D1FAE5',
+    fontSize: 12,
+    fontWeight: '600',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     color: colors.text.primary,
-    marginBottom: 8,
+    marginBottom: 6,
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: colors.text.secondary,
+    textAlign: 'center',
+    maxWidth: 330,
+    lineHeight: 22,
   },
   formCard: {
     padding: 24,
+    borderRadius: radius.xl,
+  },
+  formHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 18,
+  },
+  formHeaderText: {
+    color: colors.text.primary,
+    fontSize: 15,
+    fontWeight: '600',
   },
   inputContainer: {
     marginBottom: 20,
@@ -190,7 +267,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(3,7,18,0.45)',
     borderWidth: 1,
     borderColor: colors.border.medium,
     borderRadius: radius.md,
@@ -206,16 +283,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   demoButtonsContainer: {
-    marginTop: 20,
+    marginTop: 22,
     borderTopWidth: 1,
     borderTopColor: colors.border.light,
-    paddingTop: 20,
+    paddingTop: 18,
   },
   demoTitle: {
     color: colors.text.secondary,
     textAlign: 'center',
     marginBottom: 16,
-    fontSize: 12,
+    fontSize: 13,
   },
   errorContainer: {
     flexDirection: 'row',

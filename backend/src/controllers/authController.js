@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../models');
 
+const ADMIN_ROLES = ['gerente_hse', 'jefe'];
+
 // Login User
 exports.login = async (req, res) => {
   try {
@@ -26,7 +28,12 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: usuario.id_usuario, rol: usuario.rol, nombre: usuario.nombre },
+      {
+        id: usuario.id_usuario,
+        rol: usuario.rol,
+        nombre: usuario.nombre,
+        empresa_id: usuario.empresa_id
+      },
       process.env.JWT_SECRET || 'secret',
       { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
     );
@@ -45,6 +52,37 @@ exports.login = async (req, res) => {
     console.error('Error in login:', error);
     res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
+};
+
+exports.me = async (req, res) => {
+  try {
+    const usuario = await Usuario.findByPk(req.user.id, {
+      attributes: ['id_usuario', 'nombre', 'email', 'rol', 'activo', 'empresa_id']
+    });
+    if (!usuario) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+    return res.json({ success: true, usuario });
+  } catch (error) {
+    console.error('Error in me:', error);
+    return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+};
+
+exports.requireRegistrationPrivileges = (req, res, next) => {
+  const allowPublicRegister = process.env.ALLOW_PUBLIC_REGISTER === 'true';
+  if (allowPublicRegister) {
+    return next();
+  }
+
+  if (!req.user || !ADMIN_ROLES.includes(req.user.rol)) {
+    return res.status(403).json({
+      success: false,
+      message: 'Registro restringido. Solo personal autorizado puede crear usuarios.'
+    });
+  }
+
+  return next();
 };
 
 // Register (Development Only)
@@ -66,7 +104,8 @@ exports.register = async (req, res) => {
       password_hash,
       nombre,
       rol: rol || 'trabajador',
-      activo: true
+      activo: true,
+      empresa_id: req.user?.empresa_id || null
     });
 
     res.status(201).json({
