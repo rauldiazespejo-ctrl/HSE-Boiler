@@ -1,29 +1,29 @@
 export const colors = {
-  // Fondos principales (Dark theme)
+  // Fondos principales (Dark theme - Zinc style)
   background: {
-    main: '#0B0F19', // Azul muy oscuro, casi negro (Industrial Dark)
-    paper: '#1A2235', // Tarjetas y paneles
-    elevated: '#252F46', // Modales y elementos superpuestos
+    main: '#09090B', // Zinc 950 - Casi negro absoluto
+    paper: '#18181B', // Zinc 900 - Tarjetas oscuras
+    elevated: '#27272A', // Zinc 800 - Modales y superpuestos
   },
   
   // Acentos y estados
   primary: {
-    main: '#9B1B1B', // Rojo Boiler Comp
-    light: '#C42A2A',
-    dark: '#731414',
-    gradient: ['#B82222', '#801616'], // Para botones principales
+    main: '#E11D48', // Rojo intenso moderno (Rose 600) en lugar de #9B1B1B
+    light: '#F43F5E',
+    dark: '#BE123C',
+    gradient: ['#E11D48', '#BE123C'], // Suavizado
   },
   secondary: {
-    main: '#8B5CF6', // Púrpura sutil para acciones secundarias
-    gradient: ['#8B5CF6', '#6D28D9'],
+    main: '#8B5CF6', 
+    gradient: ['#8B5CF6', '#7C3AED'],
   },
   
   // Semánticos HSE
   status: {
-    danger: '#EF4444', // Rojo crítico
-    warning: '#F59E0B', // Naranja/Amarillo
-    success: '#10B981', // Verde
-    info: '#9B1B1B',    // Info adaptada a la marca
+    danger: '#EF4444', 
+    warning: '#F59E0B', 
+    success: '#10B981', 
+    info: '#E11D48',    
   },
 
   // Gradientes semánticos
@@ -31,21 +31,21 @@ export const colors = {
     danger: ['#EF4444', '#DC2626'],
     warning: ['#F59E0B', '#D97706'],
     success: ['#10B981', '#059669'],
-    surface: ['rgba(26, 34, 53, 0.8)', 'rgba(26, 34, 53, 0.4)'], // Glassmorphism
+    surface: ['rgba(39, 39, 42, 0.6)', 'rgba(24, 24, 27, 0.4)'], // Glassmorphism Zinc
   },
   
   // Texto y tipografía
   text: {
-    primary: '#F8FAFC', // Blanco hielo
-    secondary: '#94A3B8', // Gris azulado (muted)
-    disabled: '#475569',
-    inverse: '#0F172A',
+    primary: '#FAFAFA', // Zinc 50
+    secondary: '#A1A1AA', // Zinc 400
+    disabled: '#52525B', // Zinc 600
+    inverse: '#09090B',
   },
   
   // Bordes y divisores
   border: {
-    light: 'rgba(255, 255, 255, 0.1)',
-    medium: 'rgba(255, 255, 255, 0.2)',
+    light: 'rgba(255, 255, 255, 0.06)',
+    medium: 'rgba(255, 255, 255, 0.12)',
   }
 };
 
@@ -53,15 +53,15 @@ export const shadows = {
   soft: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
   },
   glow: (color: string) => ({
     shadowColor: color,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
     elevation: 8,
   }),
 };

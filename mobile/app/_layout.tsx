@@ -74,7 +74,7 @@ export default function RootLayout() {
     <AuthProvider>
       <PermisoProvider>
       <LinearGradient 
-        colors={['#0A0F1C', '#1A233A', '#0F172A']} 
+        colors={['#09090B', '#18181B', '#09090B']} 
         style={styles.container}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

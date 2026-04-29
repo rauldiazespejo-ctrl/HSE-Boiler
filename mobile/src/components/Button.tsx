@@ -65,9 +65,9 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const textSizes = {
-    sm: { fontSize: 14 },
-    md: { fontSize: 16 },
-    lg: { fontSize: 18 },
+    sm: { fontSize: 13 },
+    md: { fontSize: 15 },
+    lg: { fontSize: 17 },
   };
 
   const isGradient = ['primary', 'secondary', 'danger'].includes(variant);
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   iconContainer: {
     marginRight: 8,

@@ -44,13 +44,15 @@ export default function LoginScreen() {
       let emailToUse = cleanRut;
       let passwordToUse = cleanPassword;
 
-      // Mock users based on role for fast demo
+      // Mock users based on role for fast demo bypass (No backend needed)
       if (roleOverride === 'lider') {
-        emailToUse = 'lider@hse.cl';
-        passwordToUse = '123456';
+        await login('mock_token_lider', { id: 1, email: 'lider@hse.cl', rol: 'lider', nombre: 'Líder Demo' });
+        router.replace('/lider');
+        return;
       } else if (roleOverride === 'jefe') {
-        emailToUse = 'jefe@hse.cl';
-        passwordToUse = '123456';
+        await login('mock_token_jefe', { id: 2, email: 'jefe@hse.cl', rol: 'jefe', nombre: 'Jefe Demo' });
+        router.replace('/jefe');
+        return;
       }
 
       const response = await api.post('/auth/login', {
@@ -79,7 +81,7 @@ export default function LoginScreen() {
       style={styles.container} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <LinearGradient colors={['#0B0F19', '#121A2B', '#0B0F19']} style={styles.backgroundGradient}>
+      <View style={styles.backgroundGradient}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <View style={styles.logoContainer}>
@@ -150,26 +152,30 @@ export default function LoginScreen() {
             style={{ marginTop: 10 }}
           />
 
-          {/* Botones de atajo para demo (mock roles) */}
           <View style={styles.demoButtonsContainer}>
-            <Text style={styles.demoTitle}>Modo demo: ingreso rápido por perfil</Text>
-            <View style={{ gap: 12 }}>
+            <Text style={styles.demoTitle}>Acceso de Desarrollo (Demo)</Text>
+            <View style={{ gap: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
               <Button 
-                title="Ingresar como LÍDER" 
+                title="Líder Demo" 
+                variant="outline"
+                size="sm"
                 onPress={() => handleLogin('lider')} 
                 isLoading={isLoading}
+                style={{ flex: 1 }}
               />
               <Button 
-                title="Ingresar como JEFE" 
-                variant="secondary"
+                title="Jefe Demo" 
+                variant="outline"
+                size="sm"
                 onPress={() => handleLogin('jefe')} 
                 isLoading={isLoading}
+                style={{ flex: 1 }}
               />
             </View>
           </View>
         </Card>
       </ScrollView>
-      </LinearGradient>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -193,21 +199,24 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   logoContainer: {
-    width: '100%',
-    maxWidth: 340,
-    height: 120,
-    borderRadius: 24,
+    width: 100,
+    height: 100,
+    borderRadius: 28,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    overflow: 'hidden',
+    borderColor: 'rgba(255,255,255,0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
   },
   logoImage: {
-    width: '95%',
-    height: '80%',
+    width: '75%',
+    height: '75%',
   },
   badge: {
     flexDirection: 'row',
@@ -227,18 +236,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: '800',
     color: colors.text.primary,
-    marginBottom: 6,
+    marginBottom: 8,
     textAlign: 'center',
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 15,
     color: colors.text.secondary,
     textAlign: 'center',
-    maxWidth: 330,
+    maxWidth: 300,
     lineHeight: 22,
+    fontWeight: '400',
   },
   formCard: {
     padding: 24,
@@ -267,11 +278,11 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(3,7,18,0.45)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderWidth: 1,
-    borderColor: colors.border.medium,
+    borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: radius.md,
-    height: 50,
+    height: 54,
     paddingHorizontal: 16,
   },
   inputIcon: {
@@ -283,16 +294,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   demoButtonsContainer: {
-    marginTop: 22,
+    marginTop: 24,
     borderTopWidth: 1,
-    borderTopColor: colors.border.light,
-    paddingTop: 18,
+    borderTopColor: 'rgba(255,255,255,0.05)',
+    paddingTop: 20,
   },
   demoTitle: {
-    color: colors.text.secondary,
+    color: colors.text.disabled,
     textAlign: 'center',
     marginBottom: 16,
-    fontSize: 13,
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    fontWeight: '600',
   },
   errorContainer: {
     flexDirection: 'row',

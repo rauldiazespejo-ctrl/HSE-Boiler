@@ -52,14 +52,18 @@ export const Card: React.FC<CardProps> = ({
   if (variant === 'glass') {
     return onPress ? (
       <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={wrapperStyle}>
-        <BlurView intensity={20} tint="dark" style={styles.blurContainer}>
-          {content}
+        <BlurView intensity={45} tint="dark" style={styles.blurContainer}>
+          <View style={styles.glassBackground}>
+            {content}
+          </View>
         </BlurView>
       </TouchableOpacity>
     ) : (
       <View style={wrapperStyle}>
-        <BlurView intensity={20} tint="dark" style={styles.blurContainer}>
-          {content}
+        <BlurView intensity={45} tint="dark" style={styles.blurContainer}>
+          <View style={styles.glassBackground}>
+            {content}
+          </View>
         </BlurView>
       </View>
     );
@@ -85,6 +89,9 @@ const styles = StyleSheet.create({
   blurContainer: {
     borderRadius: radius.lg,
     overflow: 'hidden',
+  },
+  glassBackground: {
+    backgroundColor: 'rgba(24, 24, 27, 0.5)', // Zinc 900 semi-transparent
   },
   inner: {
     padding: 16,
