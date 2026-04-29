@@ -8,7 +8,7 @@ export interface Anexo {
   tipoMime: string | null; // application/pdf o image/jpeg
 }
 
-export type TipoPermiso = 'HOT_WORK' | 'ALTURA' | 'PUENTE_GRUA' | '';
+export type TipoPermiso = 'HOT_WORK' | 'ALTURA' | 'PUENTE_GRUA' | 'INSPECCION' | '';
 
 export interface ControlCritico {
   verificado: boolean;
@@ -69,6 +69,11 @@ export const PermisoProvider = ({ children }: { children: ReactNode }) => {
       );
     } else if (tipo === 'PUENTE_GRUA') {
       anexosObligatorios.push({ id: 'anexo4', nombre: 'Registro Operación Puente Grúa', requerido: true, base64: null, tipoMime: null });
+    } else if (tipo === 'INSPECCION') {
+      anexosObligatorios.push(
+        { id: 'anexo4', nombre: 'Check List de Inspección', requerido: true, base64: null, tipoMime: null },
+        { id: 'anexo5', nombre: 'Certificado de Equipos/Herramientas', requerido: false, base64: null, tipoMime: null }
+      );
     }
 
     setData({

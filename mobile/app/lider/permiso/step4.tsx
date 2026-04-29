@@ -79,10 +79,16 @@ export default function PermisoStep4() {
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <ArrowLeft color={colors.text.primary} size={24} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{data.tipoPermiso?.replace('_', ' ') || 'PERMISO'}</Text>
+        <Text style={styles.headerTitle}>
+          {data.tipoPermiso === 'HOT_WORK' ? 'Hot Work' : data.tipoPermiso === 'ALTURA' ? 'Trabajo en Altura' : data.tipoPermiso === 'PUENTE_GRUA' ? 'Puente Grúa' : data.tipoPermiso === 'INSPECCION' ? 'Inspección' : 'PERMISO'}
+        </Text>
         <View style={styles.stepIndicator}>
           <Text style={styles.stepText}>4/4</Text>
         </View>
+      </View>
+
+      <View style={styles.progressBar}>
+        <View style={styles.progressFill} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -219,6 +225,16 @@ const styles = StyleSheet.create({
     color: colors.primary.main,
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  progressBar: {
+    height: 3,
+    backgroundColor: colors.border.light,
+  },
+  progressFill: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: colors.primary.main,
+    borderRadius: 2,
   },
   scrollContent: {
     padding: 24,

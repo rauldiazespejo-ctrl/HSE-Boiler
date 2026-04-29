@@ -88,14 +88,20 @@ export default function PermisoStep3() {
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <ArrowLeft color={colors.text.primary} size={24} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{data.tipoPermiso?.replace('_', ' ') || 'PERMISO'}</Text>
+        <Text style={styles.headerTitle}>
+          {data.tipoPermiso === 'HOT_WORK' ? 'Hot Work' : data.tipoPermiso === 'ALTURA' ? 'Trabajo en Altura' : data.tipoPermiso === 'PUENTE_GRUA' ? 'Puente Grúa' : data.tipoPermiso === 'INSPECCION' ? 'Inspección' : 'PERMISO'}
+        </Text>
         <View style={styles.stepIndicator}>
           <Text style={styles.stepText}>3/4</Text>
         </View>
       </View>
 
+      <View style={styles.progressBar}>
+        <View style={[styles.progressFill, { width: '75%' }]} />
+      </View>
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
+        <View>
           <Text style={styles.title}>Anexos y Evidencias</Text>
           <Text style={styles.subtitle}>Adjunte los documentos requeridos para este permiso.</Text>
         </View>
@@ -196,6 +202,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  progressBar: {
+    height: 3,
+    backgroundColor: colors.border.light,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: colors.primary.main,
+    borderRadius: 2,
+  },
   scrollContent: {
     padding: 24,
     paddingBottom: 100,
@@ -218,11 +233,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.paper,
     padding: 16,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.border.light,
+    borderColor: colors.border.medium,
     marginBottom: 12,
   },
   anexoInfo: {
@@ -258,8 +273,10 @@ const styles = StyleSheet.create({
   },
   iconBtn: {
     padding: 8,
-    backgroundColor: colors.primary.light,
-    borderRadius: radius.round,
+    backgroundColor: 'rgba(225, 29, 72, 0.15)',
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: 'rgba(225, 29, 72, 0.3)',
   },
   anexoThumb: {
     width: 40,

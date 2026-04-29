@@ -23,7 +23,7 @@ export const colors = {
     danger: '#EF4444', 
     warning: '#F59E0B', 
     success: '#10B981', 
-    info: '#E11D48',    
+    info: '#3B82F6',    
   },
 
   // Gradientes semánticos

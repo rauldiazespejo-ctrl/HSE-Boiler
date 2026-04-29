@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle, Animated } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, ActivityIndicator, ViewStyle, TextStyle, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius, shadows } from '../theme/colors';
 
@@ -13,6 +13,7 @@ interface ButtonProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
   icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -25,6 +26,7 @@ export const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
   icon,
+  iconPosition = 'left',
 }) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
 
@@ -73,18 +75,19 @@ export const Button: React.FC<ButtonProps> = ({
   const isGradient = ['primary', 'secondary', 'danger'].includes(variant);
 
   const innerContent = (
-    <>
+    <View style={styles.contentRow}>
       {isLoading ? (
         <ActivityIndicator color={getTextColor()} size="small" />
       ) : (
         <>
-          {icon && <TouchableOpacity disabled style={styles.iconContainer}>{icon}</TouchableOpacity>}
+          {icon && iconPosition === 'left' && <View style={styles.iconContainer}>{icon}</View>}
           <Text style={[styles.text, textSizes[size], { color: getTextColor() }, textStyle]}>
             {title}
           </Text>
+          {icon && iconPosition === 'right' && <View style={styles.iconContainerRight}>{icon}</View>}
         </>
       )}
-    </>
+    </View>
   );
 
   if (isGradient) {
@@ -111,9 +114,8 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  // Estilos para outline o ghost
   const borderStyle = variant === 'outline' ? { borderWidth: 1, borderColor: colors.border.medium } : {};
-  const bgStyle = variant === 'ghost' ? { backgroundColor: 'transparent' } : { backgroundColor: 'transparent' };
+  const bgStyle = { backgroundColor: 'transparent' };
 
   return (
     <Animated.View style={[{ transform: [{ scale: scaleValue }] }, style]}>
@@ -125,9 +127,7 @@ export const Button: React.FC<ButtonProps> = ({
         activeOpacity={0.7}
         style={[styles.container, borderStyle, bgStyle, buttonSizeStyles[size]]}
       >
-        <TouchableOpacity disabled style={styles.contentRow}>
-           {innerContent}
-        </TouchableOpacity>
+        {innerContent}
       </TouchableOpacity>
     </Animated.View>
   );
@@ -158,5 +158,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginRight: 8,
+  },
+  iconContainerRight: {
+    marginLeft: 8,
   },
 });
