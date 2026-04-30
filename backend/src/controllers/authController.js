@@ -4,16 +4,30 @@ const { Usuario } = require('../models');
 
 const ADMIN_ROLES = ['gerente', 'jefe'];
 
+exports.listaUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.findAll({
+      where: { activo: true, rol: ['jefe', 'gerente'] },
+      attributes: ['id_usuario', 'nombre', 'rol', 'certificaciones_json'],
+      order: [['rol', 'ASC'], ['nombre', 'ASC']],
+    });
+    res.json({ success: true, data: usuarios });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+};
+
 // Login User
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, id_usuario, password } = req.body;
 
-    if (!email || !password) {
+    if ((!email && !id_usuario) || !password) {
       return res.status(400).json({ success: false, message: 'Faltan credenciales' });
     }
 
-    const usuario = await Usuario.findOne({ where: { email } });
+    const where = id_usuario ? { id_usuario } : { email };
+    const usuario = await Usuario.findOne({ where });
     if (!usuario) {
       return res.status(401).json({ success: false, message: 'Usuario no encontrado' });
     }
