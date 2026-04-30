@@ -31,10 +31,12 @@ app.get('/health', (req, res) => {
 
 const authRoutes = require('./routes/authRoutes');
 const documentoRoutes = require('./routes/documentoRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/documentos', documentoRoutes);
+app.use('/api/v1/usuarios', usuarioRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

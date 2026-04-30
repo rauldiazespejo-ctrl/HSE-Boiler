@@ -45,8 +45,8 @@ function ProtectedNavigation() {
       return;
     }
 
-    if (inLiderArea && (user.rol === 'jefe' || user.rol === 'gerente')) {
-      router.replace(user.rol === 'gerente' ? '/gerente' : '/jefe');
+    if (inLiderArea && user.rol === 'gerente') {
+      router.replace('/gerente');
     }
   }, [segments, user, isLoading, router]);
 
