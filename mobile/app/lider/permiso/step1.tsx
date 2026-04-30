@@ -354,50 +354,49 @@ export default function PermisoStep1() {
       </Modal>
 
       <Modal visible={trabajadoresModal} transparent animationType="slide" onRequestClose={() => setTrabajadoresModal(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalSheet}>
-            <View style={styles.modalHandle} />
-            <Text style={styles.modalTitle}>Trabajadores Participantes</Text>
-            <FlatList
-              data={trabajadores}
-              keyExtractor={item => String(item.id_usuario)}
-              renderItem={({ item }) => {
-                const selected = !!selectedTrabajadores.find(x => x.id_usuario === item.id_usuario);
-                return (
-                  <TouchableOpacity
-                    style={[styles.trabajadorItem, selected && styles.trabajadorItemSelected]}
-                    onPress={() => toggleTrabajador(item)}
-                  >
-                    <View style={[styles.checkBox, selected && styles.checkBoxChecked]}>
-                      {selected && <Check color="#FFF" size={12} />}
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.trabajadorName}>{item.nombre}</Text>
-                      <Text style={styles.trabajadorCargo}>{item.certificaciones_json?.cargo || '—'}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <Text style={{ color: colors.text.disabled, textAlign: 'center', marginTop: 20 }}>
-                  No hay trabajadores registrados
-                </Text>
-              }
-            />
-            <TouchableOpacity
-              style={styles.modalConfirmBtn}
-              onPress={() => setTrabajadoresModal(false)}
-            >
-              <Text style={styles.modalConfirmBtnText}>
-                Confirmar ({selectedTrabajadores.length} seleccionado{selectedTrabajadores.length !== 1 ? 's' : ''})
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalClose} onPress={() => setTrabajadoresModal(false)}>
-              <X color={colors.text.secondary} size={20} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setTrabajadoresModal(false)}>
+          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <View style={styles.modalSheet}>
+              <View style={styles.modalHandle} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+                <Text style={[styles.modalTitle, { flex: 1, marginBottom: 0 }]}>Personal Participante</Text>
+                {selectedTrabajadores.length > 0 && (
+                  <View style={styles.modalCountBadge}>
+                    <Text style={styles.modalCountText}>{selectedTrabajadores.length} seleccionado{selectedTrabajadores.length !== 1 ? 's' : ''}</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={{ fontSize: 11, color: colors.text.disabled, marginBottom: 12 }}>Toca para marcar · Toca afuera para cerrar</Text>
+              <FlatList
+                data={trabajadores}
+                keyExtractor={item => String(item.id_usuario)}
+                renderItem={({ item }) => {
+                  const selected = !!selectedTrabajadores.find(x => x.id_usuario === item.id_usuario);
+                  return (
+                    <TouchableOpacity
+                      style={[styles.trabajadorItem, selected && styles.trabajadorItemSelected]}
+                      onPress={() => toggleTrabajador(item)}
+                    >
+                      <View style={[styles.checkBox, selected && styles.checkBoxChecked]}>
+                        {selected && <Check color="#FFF" size={12} />}
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.trabajadorName}>{item.nombre}</Text>
+                        <Text style={styles.trabajadorCargo}>{item.certificaciones_json?.cargo || '—'}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text style={{ color: colors.text.disabled, textAlign: 'center', marginTop: 20 }}>
+                    No hay trabajadores registrados
+                  </Text>
+                }
+              />
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </Modal>
     </KeyboardAvoidingView>
   );
@@ -570,12 +569,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center',
   },
   checkBoxChecked: { backgroundColor: colors.secondary.main, borderColor: colors.secondary.main },
-  modalConfirmBtn: {
-    marginTop: 16,
-    backgroundColor: colors.secondary.main,
-    borderRadius: radius.md,
-    paddingVertical: 14,
-    alignItems: 'center',
+  modalCountBadge: {
+    backgroundColor: colors.secondary.main + '20',
+    paddingHorizontal: 10, paddingVertical: 4,
+    borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.secondary.main + '50',
   },
-  modalConfirmBtnText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
+  modalCountText: { fontSize: 11, fontWeight: '700', color: colors.secondary.main },
 });
