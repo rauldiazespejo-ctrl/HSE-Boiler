@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
-  Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,45 +16,11 @@ import { Lock, User, Eye, EyeOff, ShieldCheck, AlertCircle, Hammer } from 'lucid
 import { AuthContext } from '../src/context/AuthContext';
 import { api } from '../src/services/api';
 
-const DEMO_ROLES = [
-  {
-    role: 'operario' as const,
-    label: 'Operario',
-    desc: 'Crea permisos y documentos HSE',
-    color: colors.primary.main,
-    gradient: colors.primary.gradient,
-    route: '/lider' as const,
-    token: 'mock_token_operario',
-    user: { id: 1, email: 'operario@forjasafe.cl', rol: 'lider' as const, nombre: 'Carlos Muñoz' },
-  },
-  {
-    role: 'jefe' as const,
-    label: 'Jefe Maestranza',
-    desc: 'Verifica y autoriza actividades',
-    color: colors.secondary.main,
-    gradient: colors.secondary.gradient,
-    route: '/jefe' as const,
-    token: 'mock_token_jefe',
-    user: { id: 2, email: 'jefe@forjasafe.cl', rol: 'jefe' as const, nombre: 'Roberto Vega' },
-  },
-  {
-    role: 'gerente' as const,
-    label: 'Gerencia',
-    desc: 'Dashboard de indicadores HSE',
-    color: colors.status.success,
-    gradient: colors.gradients.success,
-    route: '/gerente' as const,
-    token: 'mock_token_gerente',
-    user: { id: 3, email: 'gerente@forjasafe.cl', rol: 'gerente' as const, nombre: 'Alejandro Ríos' },
-  },
-];
-
 export default function LoginScreen() {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingRole, setLoadingRole] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState<'email' | 'password' | null>(null);
@@ -80,17 +45,6 @@ export default function LoginScreen() {
       setErrorMsg(error.response?.data?.message || 'Error al conectar con el servidor.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async (demo: typeof DEMO_ROLES[0]) => {
-    setLoadingRole(demo.role);
-    setErrorMsg('');
-    try {
-      await login(demo.token, demo.user as any);
-      router.replace(demo.route as any);
-    } finally {
-      setLoadingRole(null);
     }
   };
 
@@ -188,44 +142,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <View style={styles.dividerBadge}>
-            <Text style={styles.dividerText}>ACCESO RÁPIDO DEMO</Text>
-          </View>
-          <View style={styles.dividerLine} />
-        </View>
-
-        <View style={styles.demoGrid}>
-          {DEMO_ROLES.map(demo => (
-            <Pressable
-              key={demo.role}
-              style={({ pressed }) => [styles.demoCard, pressed && styles.demoCardPressed]}
-              onPress={() => handleDemoLogin(demo)}
-              disabled={loadingRole !== null}
-            >
-              <LinearGradient
-                colors={[demo.color + '22', demo.color + '08']}
-                style={StyleSheet.absoluteFill}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              />
-              <View style={[styles.demoCardBorder, { borderColor: demo.color + '55' }]} />
-              <View style={[styles.demoIconDot, { backgroundColor: demo.color + '30' }]}>
-                <View style={[styles.demoIconDotInner, { backgroundColor: demo.color }]} />
-              </View>
-              <Text style={[styles.demoLabel, { color: demo.color }]}>{demo.label}</Text>
-              <Text style={styles.demoDesc} numberOfLines={2}>{demo.desc}</Text>
-              {loadingRole === demo.role && (
-                <View style={styles.demoLoading}>
-                  <Text style={[styles.demoLoadingText, { color: demo.color }]}>•••</Text>
-                </View>
-              )}
-            </Pressable>
-          ))}
-        </View>
-
-        <Text style={styles.footer}>ForjaSafe v2.0 · Datos demo — no reales</Text>
+        <Text style={styles.footer}>ForjaSafe v2.0 · HSE Digital para Maestranzas</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -379,94 +296,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.3,
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 20,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border.light,
-  },
-  dividerBadge: {
-    backgroundColor: colors.background.elevated,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: colors.border.medium,
-  },
-  dividerText: {
-    fontSize: 10,
-    color: colors.text.disabled,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  demoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 32,
-  },
-  demoCard: {
-    flex: 1,
-    minWidth: '28%',
-    backgroundColor: colors.background.paper,
-    borderRadius: radius.lg,
-    padding: 14,
-    overflow: 'hidden',
-    alignItems: 'flex-start',
-    position: 'relative',
-    minHeight: 100,
-  },
-  demoCardPressed: {
-    opacity: 0.7,
-    transform: [{ scale: 0.97 }],
-  },
-  demoCardBorder: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-  },
-  demoIconDot: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  demoIconDotInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-  },
-  demoLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    marginBottom: 2,
-  },
-  demoDesc: {
-    fontSize: 11,
-    color: colors.text.secondary,
-    lineHeight: 15,
-  },
-  demoLoading: {
-    position: 'absolute',
-    top: 8,
-    right: 10,
-  },
-  demoLoadingText: {
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 3,
   },
   footer: {
     textAlign: 'center',
