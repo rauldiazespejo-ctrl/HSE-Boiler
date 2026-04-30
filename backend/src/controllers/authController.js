@@ -6,10 +6,16 @@ const ADMIN_ROLES = ['gerente', 'jefe'];
 
 exports.listaUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.findAll({
+    const todos = await Usuario.findAll({
       where: { activo: true, rol: ['jefe', 'gerente'] },
       attributes: ['id_usuario', 'nombre', 'rol', 'certificaciones_json'],
       order: [['rol', 'ASC'], ['nombre', 'ASC']],
+    });
+    const seen = new Set();
+    const usuarios = todos.filter(u => {
+      if (seen.has(u.nombre)) return false;
+      seen.add(u.nombre);
+      return true;
     });
     res.json({ success: true, data: usuarios });
   } catch (error) {
