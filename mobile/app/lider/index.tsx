@@ -192,7 +192,7 @@ export default function OperarioDashboard() {
               <LinearGradient colors={colors.primary.gradient} style={StyleSheet.absoluteFill} />
               <Hammer color="#FFF" size={16} strokeWidth={2.5} />
             </View>
-            <Text style={styles.brandName}>ForjaSafe</Text>
+            <Text style={styles.brandName}>Boilercomp</Text>
           </View>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn} hitSlop={12}>
             <LogOut color={colors.text.secondary} size={18} />

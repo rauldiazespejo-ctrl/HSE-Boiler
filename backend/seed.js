@@ -16,7 +16,7 @@ const seed = async () => {
 
     const usuarios = [
       {
-        email: 'raul.diaz@forjasafe.cl',
+        email: 'raul.diaz@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Raúl Díaz',
         rol: 'gerente',
@@ -25,7 +25,7 @@ const seed = async () => {
       },
 
       {
-        email: 'cristian.arancibia@forjasafe.cl',
+        email: 'cristian.arancibia@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Cristian Gilberto Arancibia Estay',
         rol: 'jefe',
@@ -33,7 +33,7 @@ const seed = async () => {
         rut: '19.048.732-6',
       },
       {
-        email: 'leslye.cabrera@forjasafe.cl',
+        email: 'leslye.cabrera@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Leslye Maria Cabrera Meza',
         rol: 'jefe',
@@ -41,7 +41,7 @@ const seed = async () => {
         rut: '18.018.113-k',
       },
       {
-        email: 'edgardo.garcia@forjasafe.cl',
+        email: 'edgardo.garcia@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Edgardo Orlando Garcia Olmos',
         rol: 'jefe',
@@ -49,7 +49,7 @@ const seed = async () => {
         rut: '16.756.472-0',
       },
       {
-        email: 'alexis.olivares@forjasafe.cl',
+        email: 'alexis.olivares@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Alexis Lelis Olivares Machuca',
         rol: 'jefe',
@@ -57,7 +57,7 @@ const seed = async () => {
         rut: '12.820.370-2',
       },
       {
-        email: 'jorge.vilches@forjasafe.cl',
+        email: 'jorge.vilches@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Jorge Vilches Vergara',
         rol: 'jefe',
@@ -66,7 +66,7 @@ const seed = async () => {
       },
 
       {
-        email: 'ivan.cabrera@forjasafe.cl',
+        email: 'ivan.cabrera@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Ivan Felipe Cabrera Pulgar',
         rol: 'lider',
@@ -74,7 +74,7 @@ const seed = async () => {
         rut: '20.710.238-5',
       },
       {
-        email: 'cristian.collao@forjasafe.cl',
+        email: 'cristian.collao@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Cristian Fabian Collao Saavedra',
         rol: 'lider',
@@ -82,7 +82,7 @@ const seed = async () => {
         rut: '14.610.322-7',
       },
       {
-        email: 'ismael.rozas@forjasafe.cl',
+        email: 'ismael.rozas@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Ismael Rozas Bravo',
         rol: 'lider',
@@ -90,7 +90,7 @@ const seed = async () => {
         rut: '19.447.189-0',
       },
       {
-        email: 'pablo.gonzalez@forjasafe.cl',
+        email: 'pablo.gonzalez@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Pablo Gonzalez Bascuñan',
         rol: 'lider',
@@ -98,7 +98,7 @@ const seed = async () => {
         rut: '16.756.357-0',
       },
       {
-        email: 'brandon.guzman@forjasafe.cl',
+        email: 'brandon.guzman@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Brandon Elías Guzman Delgado',
         rol: 'lider',
@@ -106,7 +106,7 @@ const seed = async () => {
         rut: '18.854.216-6',
       },
       {
-        email: 'marco.guzman@forjasafe.cl',
+        email: 'marco.guzman@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Marco Guzman Delgado',
         rol: 'lider',
@@ -114,7 +114,7 @@ const seed = async () => {
         rut: '15.851.279-3',
       },
       {
-        email: 'daniel.ramirez@forjasafe.cl',
+        email: 'daniel.ramirez@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Daniel Ramirez Rodriguez',
         rol: 'lider',
@@ -122,7 +122,7 @@ const seed = async () => {
         rut: '19.447.274-9',
       },
       {
-        email: 'jonathan.saavedra@forjasafe.cl',
+        email: 'jonathan.saavedra@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Jonathan Andres Saavedra Guzman',
         rol: 'lider',
@@ -130,7 +130,7 @@ const seed = async () => {
         rut: '21.404.149-9',
       },
       {
-        email: 'carlos.veliz@forjasafe.cl',
+        email: 'carlos.veliz@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Carlos Veliz Saldivar',
         rol: 'lider',
@@ -138,7 +138,7 @@ const seed = async () => {
         rut: '18.511.549-6',
       },
       {
-        email: 'dylan.forton@forjasafe.cl',
+        email: 'dylan.forton@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Dylan Emerson Forton Donoso',
         rol: 'lider',
@@ -146,7 +146,7 @@ const seed = async () => {
         rut: '19.393.794-2',
       },
       {
-        email: 'miguel.castro@forjasafe.cl',
+        email: 'miguel.castro@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Miguel Angel Castro Gonzales',
         rol: 'lider',
@@ -154,7 +154,7 @@ const seed = async () => {
         rut: '22.923.996-1',
       },
       {
-        email: 'diego.contreras@forjasafe.cl',
+        email: 'diego.contreras@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Diego Jhoan Contreras Aguilar',
         rol: 'lider',
@@ -162,7 +162,7 @@ const seed = async () => {
         rut: '26.766.842-6',
       },
       {
-        email: 'juan.gonzalez@forjasafe.cl',
+        email: 'juan.gonzalez@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Juan Manuel González Contreras',
         rol: 'lider',
@@ -170,7 +170,7 @@ const seed = async () => {
         rut: '13.652.665-0',
       },
       {
-        email: 'pablo.guerra@forjasafe.cl',
+        email: 'pablo.guerra@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Pablo Andrés Cristofer Guerra Chacana',
         rol: 'lider',
@@ -178,7 +178,7 @@ const seed = async () => {
         rut: '17.635.456-9',
       },
       {
-        email: 'brayan.olmos@forjasafe.cl',
+        email: 'brayan.olmos@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Brayan Nicolas Olmos Ahumada',
         rol: 'lider',
@@ -186,7 +186,7 @@ const seed = async () => {
         rut: '20.082.074-6',
       },
       {
-        email: 'cristian.rojas@forjasafe.cl',
+        email: 'cristian.rojas@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Cristian Rodrigo Rojas Segura',
         rol: 'lider',
@@ -194,7 +194,7 @@ const seed = async () => {
         rut: '12.140.137-1',
       },
       {
-        email: 'jose.urrutia@forjasafe.cl',
+        email: 'jose.urrutia@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Jose Martin Urrutia Contreras',
         rol: 'lider',
@@ -202,7 +202,7 @@ const seed = async () => {
         rut: '21.659.153-4',
       },
       {
-        email: 'jaime.vargas@forjasafe.cl',
+        email: 'jaime.vargas@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Jaime Andrés Vargas Ibáñez',
         rol: 'lider',
@@ -210,7 +210,7 @@ const seed = async () => {
         rut: '22.199.718-2',
       },
       {
-        email: 'miguel.vergara@forjasafe.cl',
+        email: 'miguel.vergara@boilercomp.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Miguel Fernando Vergara Cisterna',
         rol: 'lider',
@@ -246,16 +246,16 @@ const seed = async () => {
 
     console.log(`\n✅ Seed completado: ${creados} creados, ${omitidos} omitidos.`);
     console.log('\n--- GERENTE ---');
-    console.log('   raul.diaz@forjasafe.cl  / forja2024');
+    console.log('   raul.diaz@boilercomp.cl  / forja2024');
     console.log('\n--- JEFES (aprueban documentación) ---');
-    console.log('   cristian.arancibia@forjasafe.cl  / forja2024');
-    console.log('   leslye.cabrera@forjasafe.cl      / forja2024');
-    console.log('   edgardo.garcia@forjasafe.cl      / forja2024');
-    console.log('   alexis.olivares@forjasafe.cl     / forja2024');
-    console.log('   jorge.vilches@forjasafe.cl       / forja2024');
+    console.log('   cristian.arancibia@boilercomp.cl  / forja2024');
+    console.log('   leslye.cabrera@boilercomp.cl      / forja2024');
+    console.log('   edgardo.garcia@boilercomp.cl      / forja2024');
+    console.log('   alexis.olivares@boilercomp.cl     / forja2024');
+    console.log('   jorge.vilches@boilercomp.cl       / forja2024');
     console.log('\n--- OPERARIOS (crean permisos) ---');
-    console.log('   cristian.collao@forjasafe.cl     / forja2024');
-    console.log('   ismael.rozas@forjasafe.cl        / forja2024');
+    console.log('   cristian.collao@boilercomp.cl     / forja2024');
+    console.log('   ismael.rozas@boilercomp.cl        / forja2024');
     console.log('   ... (19 operarios, misma contraseña)');
     process.exit(0);
   } catch (error) {

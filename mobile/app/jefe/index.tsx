@@ -82,7 +82,7 @@ export default function JefeDashboard() {
               <LinearGradient colors={colors.secondary.gradient} style={StyleSheet.absoluteFill} />
               <Hammer color="#FFF" size={15} strokeWidth={2.5} />
             </View>
-            <Text style={styles.brandName}>ForjaSafe</Text>
+            <Text style={styles.brandName}>Boilercomp</Text>
             <View style={styles.roleBadge}>
               <ShieldCheck color={colors.secondary.main} size={11} />
               <Text style={styles.roleBadgeText}>Jefe Maestranza</Text>

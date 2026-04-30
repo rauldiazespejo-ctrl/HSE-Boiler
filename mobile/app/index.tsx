@@ -8,11 +8,12 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius, shadows } from '../src/theme/colors';
-import { Lock, User, Eye, EyeOff, ShieldCheck, AlertCircle, Hammer } from 'lucide-react-native';
+import { Lock, Mail, Eye, EyeOff, ShieldCheck, AlertCircle } from 'lucide-react-native';
 import { AuthContext } from '../src/context/AuthContext';
 import { api } from '../src/services/api';
 
@@ -51,40 +52,52 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <LinearGradient
-        colors={['#050608', '#0C0E18', '#050608']}
+        colors={['#040205', '#0C070A', '#08050A']}
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       />
 
       <View style={styles.glowTop} pointerEvents="none" />
+      <View style={styles.glowMid} pointerEvents="none" />
       <View style={styles.glowBottom} pointerEvents="none" />
+
+      <View style={styles.steelLines} pointerEvents="none">
+        {[...Array(6)].map((_, i) => (
+          <View key={i} style={[styles.steelLine, { top: 60 + i * 110, opacity: 0.025 + i * 0.005 }]} />
+        ))}
+      </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
         <View style={styles.logoBlock}>
-          <View style={styles.logoCircle}>
-            <LinearGradient
-              colors={colors.primary.gradient}
-              style={StyleSheet.absoluteFill}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+          <View style={styles.logoAccentLine} />
+          <View style={styles.logoImageWrapper}>
+            <Image
+              source={require('../assets/images/boilercomp-logo.jpg')}
+              style={styles.logoImage}
+              resizeMode="contain"
             />
-            <Hammer color="#FFF" size={36} strokeWidth={2.5} />
           </View>
-          <Text style={styles.brand}>ForjaSafe</Text>
-          <Text style={styles.brandSub}>HSE Digital para Maestranzas</Text>
+          <View style={styles.logoAccentLine} />
+          <Text style={styles.brandSub}>PLATAFORMA HSE · MAESTRANZA INDUSTRIAL</Text>
           <View style={styles.certBadge}>
-            <ShieldCheck size={12} color={colors.status.success} />
-            <Text style={styles.certText}>Plataforma Certificada ISO 45001</Text>
+            <ShieldCheck size={11} color={colors.status.success} />
+            <Text style={styles.certText}>Sistema Certificado ISO 45001</Text>
           </View>
         </View>
 
+        <View style={styles.dividerRow}>
+          <View style={styles.divider} />
+          <Text style={styles.dividerText}>ACCESO AUTORIZADO</Text>
+          <View style={styles.divider} />
+        </View>
+
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Iniciar Sesión</Text>
+          <View style={styles.cardAccent} />
 
           <View style={[styles.inputWrapper, focusedField === 'email' && styles.inputWrapperFocus]}>
-            <User color={focusedField === 'email' ? colors.primary.main : colors.text.disabled} size={18} />
+            <Mail color={focusedField === 'email' ? colors.primary.main : colors.text.disabled} size={17} />
             <TextInput
               style={styles.input}
               placeholder="Correo electrónico"
@@ -99,7 +112,7 @@ export default function LoginScreen() {
           </View>
 
           <View style={[styles.inputWrapper, focusedField === 'password' && styles.inputWrapperFocus]}>
-            <Lock color={focusedField === 'password' ? colors.primary.main : colors.text.disabled} size={18} />
+            <Lock color={focusedField === 'password' ? colors.primary.main : colors.text.disabled} size={17} />
             <TextInput
               style={[styles.input, { flex: 1 }]}
               placeholder="Contraseña"
@@ -110,17 +123,17 @@ export default function LoginScreen() {
               onFocus={() => setFocusedField('password')}
               onBlur={() => setFocusedField(null)}
             />
-            <TouchableOpacity onPress={() => setShowPassword(v => !v)} hitSlop={12}>
+            <TouchableOpacity onPress={() => setShowPassword(v => !v)} hitSlop={14}>
               {showPassword
-                ? <EyeOff color={colors.text.disabled} size={18} />
-                : <Eye color={colors.text.disabled} size={18} />
+                ? <EyeOff color={colors.text.disabled} size={17} />
+                : <Eye color={colors.text.disabled} size={17} />
               }
             </TouchableOpacity>
           </View>
 
           {!!errorMsg && (
             <View style={styles.errorRow}>
-              <AlertCircle color={colors.status.danger} size={15} />
+              <AlertCircle color={colors.status.danger} size={14} />
               <Text style={styles.errorText}>{errorMsg}</Text>
             </View>
           )}
@@ -132,17 +145,24 @@ export default function LoginScreen() {
             activeOpacity={0.85}
           >
             <LinearGradient
-              colors={isLoading ? ['#2D3344', '#1E2330'] : colors.primary.gradient}
+              colors={isLoading ? ['#2A1519', '#1A0C10'] : colors.primary.gradient}
               style={styles.loginBtnGrad}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text style={styles.loginBtnText}>{isLoading ? 'Ingresando...' : 'Ingresar'}</Text>
+              <Text style={[styles.loginBtnText, isLoading && { color: colors.text.disabled }]}>
+                {isLoading ? 'Verificando acceso...' : 'Ingresar al Sistema'}
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.footer}>ForjaSafe v2.0 · HSE Digital para Maestranzas</Text>
+        <View style={styles.footerBlock}>
+          <View style={styles.footerDivider} />
+          <Text style={styles.footer}>Desarrollado por  Pulso AI  ·  v2.0</Text>
+          <Text style={styles.footerSub}>Boilercomp HSE Digital · Todos los derechos reservados</Text>
+        </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -156,89 +176,139 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
     padding: 24,
-    paddingTop: 64,
+    paddingTop: 60,
     paddingBottom: 40,
   },
   glowTop: {
     position: 'absolute',
-    top: -100,
-    left: '10%',
-    width: '80%',
-    height: 260,
+    top: -120,
+    left: '5%',
+    width: '90%',
+    height: 300,
     backgroundColor: colors.primary.main,
-    opacity: 0.07,
-    borderRadius: 999,
-    transform: [{ scaleX: 2.5 }],
-  },
-  glowBottom: {
-    position: 'absolute',
-    bottom: -80,
-    right: '5%',
-    width: '60%',
-    height: 180,
-    backgroundColor: colors.secondary.main,
-    opacity: 0.05,
+    opacity: 0.08,
     borderRadius: 999,
     transform: [{ scaleX: 2 }],
   },
+  glowMid: {
+    position: 'absolute',
+    top: '40%',
+    right: -60,
+    width: 200,
+    height: 200,
+    backgroundColor: colors.primary.dark,
+    opacity: 0.06,
+    borderRadius: 999,
+  },
+  glowBottom: {
+    position: 'absolute',
+    bottom: -60,
+    left: -40,
+    width: 220,
+    height: 220,
+    backgroundColor: colors.secondary.main,
+    opacity: 0.04,
+    borderRadius: 999,
+  },
+  steelLines: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  steelLine: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 1,
+    backgroundColor: colors.primary.main,
+  },
   logoBlock: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 28,
+    gap: 10,
   },
-  logoCircle: {
-    width: 84,
-    height: 84,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-    overflow: 'hidden',
+  logoAccentLine: {
+    width: '85%',
+    height: 2,
+    backgroundColor: colors.primary.main,
+    borderRadius: 2,
+    opacity: 0.7,
+  },
+  logoImageWrapper: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    marginVertical: 6,
     ...shadows.glow(colors.primary.main),
+    borderWidth: 1,
+    borderColor: colors.primary.main + '40',
   },
-  brand: {
-    fontSize: 34,
-    fontWeight: '800',
-    color: colors.text.primary,
-    letterSpacing: -0.5,
+  logoImage: {
+    width: 240,
+    height: 68,
   },
   brandSub: {
-    fontSize: 13,
+    fontSize: 10,
     color: colors.text.secondary,
+    letterSpacing: 2.5,
+    fontWeight: '700',
     marginTop: 4,
-    letterSpacing: 0.3,
   },
   certBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    marginTop: 10,
-    backgroundColor: colors.status.success + '18',
+    backgroundColor: colors.status.success + '14',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radius.full,
     borderWidth: 1,
-    borderColor: colors.status.success + '30',
+    borderColor: colors.status.success + '28',
   },
   certText: {
-    fontSize: 11,
+    fontSize: 10,
     color: colors.status.success,
-    fontWeight: '600',
-    letterSpacing: 0.2,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 20,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border.light,
+  },
+  dividerText: {
+    fontSize: 9,
+    color: colors.text.disabled,
+    fontWeight: '800',
+    letterSpacing: 2,
   },
   card: {
     backgroundColor: colors.background.paper,
     borderRadius: radius.xl,
-    padding: 24,
+    padding: 22,
     marginBottom: 28,
     borderWidth: 1,
     borderColor: colors.border.light,
+    overflow: 'hidden',
     ...shadows.soft,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.text.primary,
-    marginBottom: 20,
+  cardAccent: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 3,
+    backgroundColor: colors.primary.main,
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -249,12 +319,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.light,
     paddingHorizontal: 14,
-    paddingVertical: 13,
+    paddingVertical: 14,
     marginBottom: 12,
+    marginTop: 8,
   },
   inputWrapperFocus: {
     borderColor: colors.primary.main + '80',
-    backgroundColor: colors.primary.main + '08',
+    backgroundColor: colors.primary.main + '0A',
   },
   input: {
     flex: 1,
@@ -267,40 +338,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     marginBottom: 12,
-    backgroundColor: colors.status.danger + '15',
+    backgroundColor: colors.status.danger + '12',
     padding: 10,
     borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: colors.status.danger + '30',
+    borderColor: colors.status.danger + '28',
   },
   errorText: {
     color: colors.status.danger,
     fontSize: 13,
     flex: 1,
+    lineHeight: 18,
   },
   loginBtn: {
     borderRadius: radius.md,
     overflow: 'hidden',
-    marginTop: 4,
+    marginTop: 6,
   },
   loginBtnDisabled: {
-    opacity: 0.6,
+    opacity: 0.65,
   },
   loginBtnGrad: {
-    paddingVertical: 15,
+    paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   loginBtnText: {
     color: '#FFF',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 0.3,
+    fontSize: 15,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  footerBlock: {
+    alignItems: 'center',
+    gap: 6,
+  },
+  footerDivider: {
+    width: 40,
+    height: 1,
+    backgroundColor: colors.border.light,
+    marginBottom: 4,
   },
   footer: {
     textAlign: 'center',
     fontSize: 11,
     color: colors.text.disabled,
-    letterSpacing: 0.3,
+    fontWeight: '600',
+    letterSpacing: 0.4,
+  },
+  footerSub: {
+    textAlign: 'center',
+    fontSize: 10,
+    color: colors.text.disabled,
+    opacity: 0.6,
+    letterSpacing: 0.2,
   },
 });

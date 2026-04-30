@@ -115,7 +115,7 @@ export default function GerenteDashboard() {
               <LinearGradient colors={colors.gradients.success} style={StyleSheet.absoluteFill} />
               <Hammer color="#FFF" size={15} strokeWidth={2.5} />
             </View>
-            <Text style={styles.brandName}>ForjaSafe</Text>
+            <Text style={styles.brandName}>Boilercomp</Text>
             <View style={styles.roleBadge}>
               <BarChart2 color={colors.status.success} size={11} />
               <Text style={styles.roleBadgeText}>Gerencia HSE</Text>

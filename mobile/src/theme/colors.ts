@@ -1,15 +1,15 @@
 export const colors = {
   background: {
-    main: '#07080E',
-    paper: '#0D1018',
-    elevated: '#141720',
-    card: '#181C28',
+    main: '#080608',
+    paper: '#0F0A0C',
+    elevated: '#180F12',
+    card: '#1E1318',
   },
   primary: {
-    main: '#F97316',
-    light: '#FB923C',
-    dark: '#EA580C',
-    gradient: ['#F97316', '#C2410C'] as [string, string],
+    main: '#C41230',
+    light: '#E01A3C',
+    dark: '#8B0000',
+    gradient: ['#C41230', '#7A0000'] as [string, string],
   },
   secondary: {
     main: '#38BDF8',
@@ -25,20 +25,20 @@ export const colors = {
     danger:  ['#EF4444', '#DC2626'] as [string, string],
     warning: ['#F59E0B', '#D97706'] as [string, string],
     success: ['#22C55E', '#16A34A'] as [string, string],
-    primary: ['#F97316', '#C2410C'] as [string, string],
-    surface: ['rgba(20,23,32,0.85)', 'rgba(13,16,24,0.6)'] as [string, string],
+    primary: ['#C41230', '#7A0000'] as [string, string],
+    surface: ['rgba(24,15,18,0.9)', 'rgba(15,10,12,0.7)'] as [string, string],
   },
   text: {
     primary:   '#F1F5F9',
     secondary: '#94A3B8',
-    disabled:  '#475569',
-    inverse:   '#07080E',
-    accent:    '#FB923C',
+    disabled:  '#4B5563',
+    inverse:   '#080608',
+    accent:    '#E01A3C',
   },
   border: {
-    light:  'rgba(255,255,255,0.06)',
-    medium: 'rgba(255,255,255,0.11)',
-    accent: 'rgba(249,115,22,0.3)',
+    light:  'rgba(255,255,255,0.07)',
+    medium: 'rgba(255,255,255,0.12)',
+    accent: 'rgba(196,18,48,0.35)',
   },
 };
 
@@ -46,15 +46,15 @@ export const shadows = {
   soft: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
+    shadowOpacity: 0.55,
+    shadowRadius: 14,
     elevation: 8,
   },
   glow: (color: string) => ({
     shadowColor: color,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 14,
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
     elevation: 10,
   }),
 };
