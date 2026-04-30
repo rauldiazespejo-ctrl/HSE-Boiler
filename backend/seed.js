@@ -23,6 +23,14 @@ const seed = async () => {
         cargo: 'Gerente General',
         rut: null,
       },
+      {
+        email: 'ruben.arbelo@forjasafe.cl',
+        password: DEFAULT_PASSWORD,
+        nombre: 'Rubén Arbelo',
+        rol: 'gerente',
+        cargo: 'Gerente',
+        rut: null,
+      },
 
       {
         email: 'cristian.arancibia@forjasafe.cl',
