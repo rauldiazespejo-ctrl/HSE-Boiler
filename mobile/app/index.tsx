@@ -38,9 +38,12 @@ export default function LoginScreen() {
       if (response.data.success) {
         await login(response.data.token, response.data.usuario);
         const rol = response.data.usuario.rol;
-        if (rol === 'jefe') router.replace('/jefe');
-        else if (rol === 'gerente') router.replace('/gerente');
-        else router.replace('/lider');
+        const dest = rol === 'jefe' ? '/jefe' : rol === 'gerente' ? '/gerente' : '/lider';
+        if (typeof window !== 'undefined') {
+          window.location.href = dest;
+        } else {
+          router.replace(dest as any);
+        }
       }
     } catch (error: any) {
       setErrorMsg(error.response?.data?.message || 'Error al conectar con el servidor.');
