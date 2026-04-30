@@ -1,10 +1,16 @@
+databases:
+  - name: hse-maestranza-db
+    plan: free
+    databaseName: hse_maestranza_db
+    user: hse_admin
+
 services:
   - type: web
     name: hse-maestranza-api
     runtime: node
     rootDir: backend
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && node seed.js
     startCommand: npm start
     healthCheckPath: /health
     envVars:
@@ -21,4 +27,6 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: hse-maestranza-db
+          property: connectionString

@@ -1,24 +1,118 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Switch, Alert, Image } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity,
+  KeyboardAvoidingView, Platform, Switch, Alert, Modal, FlatList,
+} from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { Card } from '../../../src/components/Card';
-import { Button } from '../../../src/components/Button';
-import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, ArrowRight, ChevronDown, ShieldAlert, Camera } from 'lucide-react-native';
-import { PermisoContext, TipoPermiso } from '../../../src/context/PermisoContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, radius, shadows } from '../../../src/theme/colors';
+import {
+  ArrowLeft, ArrowRight, ChevronDown, Camera, CheckCircle2,
+  X, MapPin, Users, FileText, ShieldAlert,
+} from 'lucide-react-native';
+import { PermisoContext, TipoPermiso, TIPO_LABELS } from '../../../src/context/PermisoContext';
+
+const ZONAS_TRABAJO = [
+  'Taller de Tornería',
+  'Área CNC / Fresado',
+  'Zona Soldadura',
+  'Sector Corte y Esmerilado',
+  'Nave Principal — Puente Grúa',
+  'Taller Eléctrico',
+  'Área de Mantenimiento',
+  'Patio de Operaciones',
+  'Bodega de Materiales',
+  'Plataforma / Andamios',
+  'Sala de Compresores',
+  'Zona Tratamiento Superficies',
+];
+
+const CONTROLES_CRITICOS: Record<string, { key: string; label: string }[]> = {
+  TRABAJO_CALIENTE: [
+    { key: 'area_libre', label: 'Área libre de materiales inflamables (radio 10 m)' },
+    { key: 'extintor', label: 'Extintor inspeccionado y accesible en el punto de trabajo' },
+    { key: 'epp_caliente', label: 'EPP específico: careta, guantes cuero, coleto, polainas' },
+    { key: 'vigil_incendio', label: 'Vigía de incendio designado y presente' },
+    { key: 'ventilacion', label: 'Ventilación adecuada o extracción de humos activa' },
+  ],
+  IZAJE_GRUA: [
+    { key: 'inspeccion_grua', label: 'Puente grúa inspeccionado (frenos, limitadores, ganchos)' },
+    { key: 'zona_exclusion', label: 'Zona de exclusión delimitada con conos / cintas' },
+    { key: 'rigger_cert', label: 'Rigger certificado presente y asignado a la maniobra' },
+    { key: 'eslingas_ok', label: 'Eslingas y accesorios de izaje inspeccionados y certificados' },
+    { key: 'carga_estabilizada', label: 'Carga estabilizada antes del izaje (sin balanceo libre)' },
+  ],
+  MECANIZADO_CNC: [
+    { key: 'guardas', label: 'Guardas y resguardos de la máquina en posición cerrada' },
+    { key: 'fijacion', label: 'Fijación de pieza verificada (mordaza / plato / tornillo)' },
+    { key: 'programa_aprobado', label: 'Programa CNC revisado y aprobado por supervisor' },
+    { key: 'epp_cnc', label: 'EPP: lentes, zapatos punta acero, ropa ajustada' },
+    { key: 'viruta', label: 'Procedimiento de retirada de viruta con gancho (no con mano)' },
+  ],
+  TORNERIA: [
+    { key: 'chuck_ajustado', label: 'Chuck apretado y verificado sin llave insertada' },
+    { key: 'guarda_chuck', label: 'Guarda del chuck instalada y segura' },
+    { key: 'velocidad', label: 'Velocidad de corte correcta para material y herramienta' },
+    { key: 'epp_torno', label: 'EPP: lentes de seguridad, sin ropa suelta, sin guantes en torno' },
+    { key: 'soporte_pieza', label: 'Pieza larga con soporte luneta instalado si aplica' },
+  ],
+  ESMERILADO: [
+    { key: 'disco_ok', label: 'Disco inspeccionado (sin grietas, velocidad adecuada)' },
+    { key: 'guarda_disco', label: 'Guarda del disco instalada y ajustada correctamente' },
+    { key: 'epp_esmeril', label: 'EPP: careta facial, guantes, protección auditiva, mandil' },
+    { key: 'area_libre_esmeril', label: 'Área libre de personas y materiales en dirección de chispas' },
+    { key: 'pieza_fijada', label: 'Pieza firmemente fijada (nunca sostenida a mano libremente)' },
+  ],
+  TRABAJO_ALTURA: [
+    { key: 'arnes_ok', label: 'Arnés de seguridad inspeccionado y ajustado al cuerpo' },
+    { key: 'punto_anclaje', label: 'Punto de anclaje certificado y verificado (> 2 T)' },
+    { key: 'superficie_ok', label: 'Andamio / escalera inspeccionado y nivelado' },
+    { key: 'zona_exclusion_altura', label: 'Zona de exclusión bajo el área de trabajo demarcada' },
+    { key: 'doble_seguro', label: 'Sistema de doble seguro utilizado en todo momento' },
+  ],
+  TRABAJO_ELECTRICO: [
+    { key: 'loto', label: 'LOTO aplicado: energía bloqueada y etiquetada' },
+    { key: 'tension_cero', label: 'Verificación de tensión cero con instrumento calibrado' },
+    { key: 'puesta_tierra', label: 'Puesta a tierra temporal instalada' },
+    { key: 'epp_electrico', label: 'EPP dieléctrico: guantes AT/BT, calzado aislante, careta arco' },
+    { key: 'segundo_hombre', label: 'Segundo hombre presente durante la intervención' },
+  ],
+  MANTENIMIENTO: [
+    { key: 'loto_mant', label: 'Energías peligrosas bloqueadas y etiquetadas (LOTO)' },
+    { key: 'orden_trabajo', label: 'Orden de trabajo emitida y firmada por supervisión' },
+    { key: 'herramientas_ok', label: 'Herramientas específicas para la tarea inspeccionadas' },
+    { key: 'epp_mant', label: 'EPP adecuado para el trabajo a realizar' },
+    { key: 'residuos', label: 'Punto de disposición de residuos y aceites identificado' },
+  ],
+  GRUA_HORQUILLA: [
+    { key: 'check_diario', label: 'Check diario de grúa horquilla completado y firmado' },
+    { key: 'licencia', label: 'Operador con licencia interna vigente para grúa horquilla' },
+    { key: 'carga_max', label: 'Carga no excede capacidad nominal del equipo' },
+    { key: 'visibilidad', label: 'Visibilidad del operador garantizada (uso de espejo o asistente)' },
+    { key: 'peatones', label: 'Peatones alejados y área de tránsito despejada' },
+  ],
+  ESPACIO_CONFINADO: [
+    { key: 'medicion_gases', label: 'Medición de gases realizada: O₂, LEL, CO, H₂S dentro de rango' },
+    { key: 'ventilacion_ec', label: 'Ventilación forzada activa durante toda la operación' },
+    { key: 'vigil_exterior', label: 'Vigía exterior permanente designado con comunicación' },
+    { key: 'plan_rescate', label: 'Plan de rescate definido, comunicado y equipos disponibles' },
+    { key: 'epp_ec', label: 'EPP específico: arnés, equipo respiración autónoma si aplica' },
+  ],
+};
 
 export default function PermisoStep1() {
   const { tipo } = useLocalSearchParams<{ tipo: TipoPermiso }>();
-  const { data, updateData, initPermiso } = React.useContext(PermisoContext);
+  const { data, updateData, initPermiso } = useContext(PermisoContext);
+  const [zonaModal, setZonaModal] = useState(false);
 
   useEffect(() => {
-    if (tipo) {
-      initPermiso(tipo);
-    }
+    if (tipo) initPermiso(tipo);
   }, [tipo]);
 
-  const updateDetalleVerificado = (key: string, verificado: boolean) => {
+  const controles = CONTROLES_CRITICOS[tipo || ''] || [];
+
+  const updateControl = (key: string, verificado: boolean) => {
     const current = data.detalles?.[key] || { verificado: false };
     updateData({ detalles: { ...data.detalles, [key]: { ...current, verificado } } });
   };
@@ -26,10 +120,9 @@ export default function PermisoStep1() {
   const handlePickImage = async (key: string) => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permiso denegado', 'Se requiere permiso de cámara para adjuntar evidencia.');
+      Alert.alert('Permiso denegado', 'Se requiere acceso a la cámara.');
       return;
     }
-
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
@@ -37,292 +130,322 @@ export default function PermisoStep1() {
       quality: 0.5,
       base64: true,
     });
-
     if (!result.canceled && result.assets[0].base64) {
       const current = data.detalles?.[key] || { verificado: false };
-      updateData({ 
-        detalles: { 
-          ...data.detalles, 
-          [key]: { ...current, fotoBase64: `data:image/jpeg;base64,${result.assets[0].base64}` } 
-        } 
+      updateData({
+        detalles: {
+          ...data.detalles,
+          [key]: { ...current, fotoBase64: `data:image/jpeg;base64,${result.assets[0].base64}` },
+        },
       });
     }
   };
 
-  const isComplete = () => {
-    if (!data.zona) return false;
-    const d = data.detalles || {};
-    if (tipo === 'HOT_WORK') return !!(d.areaLimpia?.verificado && d.extintor?.verificado && d.epp?.verificado);
-    if (tipo === 'ALTURA') return !!(d.spdc?.verificado && d.anclajes?.verificado && d.superficie?.verificado);
-    if (tipo === 'PUENTE_GRUA') return !!(d.inspeccion?.verificado && d.exclusion?.verificado && d.comunicacion?.verificado);
-    return false;
-  };
+  const checkedCount = controles.filter(c => data.detalles?.[c.key]?.verificado).length;
+  const isComplete = !!data.zona && checkedCount === controles.length;
 
-  const renderSwitch = (label: string, key: string) => {
-    const control = data.detalles?.[key] || { verificado: false };
-    return (
-      <View style={styles.switchRow}>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => handlePickImage(key)} style={styles.cameraBtn}>
-            <Camera color={control.fotoBase64 ? colors.status.success : colors.text.secondary} size={20} />
-          </TouchableOpacity>
-          <Text style={styles.switchLabel}>{label}</Text>
-        </View>
-        <Switch 
-          value={control.verificado}
-          onValueChange={(val) => updateDetalleVerificado(key, val)}
-          trackColor={{ false: colors.border.medium, true: colors.status.success }}
-          thumbColor={'#FFF'}
-        />
-      </View>
-    );
-  };
+  const progress = 0.25;
+  const tipoLabel = TIPO_LABELS[tipo || ''] || 'Permiso de Trabajo';
 
   if (!tipo) return null;
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
-      style={styles.container}
-    >
+    <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <ArrowLeft color={colors.text.primary} size={24} />
+          <ArrowLeft color={colors.text.primary} size={22} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{tipo.replace('_', ' ')}</Text>
-        <View style={styles.stepIndicator}>
-          <Text style={styles.stepText}>1/4</Text>
+        <View style={styles.headerCenter}>
+          <Text style={styles.stepLabel}>PASO 1 / 4</Text>
+          <Text style={styles.tipoLabel} numberOfLines={1}>{tipoLabel}</Text>
+        </View>
+        <View style={styles.stepBubble}>
+          <Text style={styles.stepBubbleText}>1/4</Text>
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.alertBox}>
-          <ShieldAlert color={colors.status.warning} size={24} />
-          <Text style={styles.alertText}>
-            Este permiso ({tipo.replace('_', ' ')}) requiere autorización del Jefe de Turno antes de iniciar cualquier labor.
+      <View style={styles.progressTrack}>
+        <LinearGradient
+          colors={colors.primary.gradient}
+          style={[styles.progressFill, { width: `${progress * 100}%` }]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        />
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <Text style={styles.sectionTitle}>Información del Trabajo</Text>
+
+        <TouchableOpacity style={styles.zonaPicker} onPress={() => setZonaModal(true)} activeOpacity={0.75}>
+          <MapPin color={data.zona ? colors.primary.main : colors.text.disabled} size={18} />
+          <Text style={[styles.zonaText, !data.zona && styles.zonaPlaceholder]}>
+            {data.zona || 'Seleccionar zona de trabajo'}
           </Text>
+          <ChevronDown color={colors.text.disabled} size={18} />
+        </TouchableOpacity>
+
+        <TextInput
+          style={styles.textArea}
+          placeholder="Descripción detallada del trabajo a realizar..."
+          placeholderTextColor={colors.text.disabled}
+          value={data.descripcionTrabajo}
+          onChangeText={v => updateData({ descripcionTrabajo: v })}
+          multiline
+          numberOfLines={3}
+          textAlignVertical="top"
+        />
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Equipo de trabajo (nombres, separados por coma)"
+          placeholderTextColor={colors.text.disabled}
+          value={data.equipoTrabajo?.join(', ') || ''}
+          onChangeText={v => updateData({ equipoTrabajo: v.split(',').map(s => s.trim()).filter(Boolean) })}
+        />
+
+        <View style={styles.divider} />
+
+        <View style={styles.sectionHeaderRow}>
+          <ShieldAlert color={colors.status.danger} size={18} />
+          <Text style={styles.sectionTitle}>Controles Críticos — AST</Text>
+          <View style={styles.countBadge}>
+            <Text style={styles.countText}>{checkedCount}/{controles.length}</Text>
+          </View>
         </View>
+        <Text style={styles.sectionSub}>Verifica cada control ANTES de iniciar la tarea</Text>
 
-        <Card variant="solid" style={styles.formCard}>
-          {tipo === 'HOT_WORK' && (
-            <View style={styles.controlsGroup}>
-              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿Área libre de inflamables y biombos/mantas ignífugas instaladas?', 'areaLimpia')}
-              {renderSwitch('¿Extintor PQS inspeccionado y operativo en el punto de trabajo?', 'extintor')}
-              {renderSwitch('¿EPP Específico operativo (Traje cuero completo, máscara, respirador)?', 'epp')}
-            </View>
-          )}
-
-          {tipo === 'ALTURA' && (
-            <View style={styles.controlsGroup}>
-              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿SPDC (Arnés y colas) inspeccionado antes de uso?', 'spdc')}
-              {renderSwitch('¿Puntos de anclaje y líneas de vida asegurados correctamente?', 'anclajes')}
-              {renderSwitch('¿Superficie aprobada (Andamio con Tarjeta Verde o Alza Hombre)?', 'superficie')}
-            </View>
-          )}
-
-          {tipo === 'PUENTE_GRUA' && (
-            <View style={styles.controlsGroup}>
-              <Text style={styles.controlsTitle}>Controles Críticos (Go / No-Go)</Text>
-              {renderSwitch('¿Inspección pre-uso de Puente Grúa, ganchos y eslingas?', 'inspeccion')}
-              {renderSwitch('¿Zona de izaje delimitada y libre de personal ajeno?', 'exclusion')}
-              {renderSwitch('¿Mandos a distancia probados y comunicación de maniobra acordada?', 'comunicacion')}
-            </View>
-          )}
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Zona de Trabajo</Text>
-            <TouchableOpacity style={styles.dropdownInput} onPress={() => updateData({ zona: 'Sector Soldadura' })}>
-              <Text style={data.zona ? styles.inputText : styles.placeholderText}>
-                {data.zona || 'Seleccionar sector... (Toca para Sector)'}
+        {controles.map(ctrl => {
+          const control = data.detalles?.[ctrl.key] || { verificado: false };
+          return (
+            <View key={ctrl.key} style={[styles.controlRow, control.verificado && styles.controlRowChecked]}>
+              <View style={styles.controlLeft}>
+                <Switch
+                  value={control.verificado}
+                  onValueChange={val => updateControl(ctrl.key, val)}
+                  trackColor={{ false: colors.border.medium, true: colors.status.success + '80' }}
+                  thumbColor={control.verificado ? colors.status.success : '#94A3B8'}
+                />
+              </View>
+              <Text style={[styles.controlLabel, control.verificado && styles.controlLabelChecked]}>
+                {ctrl.label}
               </Text>
-              <ChevronDown color={colors.text.secondary} size={20} />
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                onPress={() => handlePickImage(ctrl.key)}
+                style={[styles.cameraBtn, !!control.fotoBase64 && styles.cameraBtnActive]}
+                hitSlop={8}
+              >
+                <Camera color={control.fotoBase64 ? colors.status.success : colors.text.disabled} size={16} />
+              </TouchableOpacity>
+            </View>
+          );
+        })}
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Operador Asignado</Text>
-            <TextInput
-              style={[styles.textInput, styles.disabledInput]}
-              value="Juan Pérez (Certificado ASME Vigente)"
-              editable={false}
-            />
+        {controles.length > 0 && !isComplete && (
+          <View style={styles.warningBanner}>
+            <ShieldAlert color={colors.status.warning} size={14} />
+            <Text style={styles.warningText}>
+              Completa todos los controles críticos y selecciona la zona para continuar
+            </Text>
           </View>
-        </Card>
+        )}
+
+        <View style={{ height: 100 }} />
       </ScrollView>
 
       <View style={styles.footer}>
-        <Button 
-          title="SIGUIENTE" 
-          icon={<ArrowRight color="#FFF" size={20} />}
-          iconPosition="right"
-          onPress={() => router.push('/lider/permiso/step2')} 
-          disabled={!isComplete()}
-        />
+        <TouchableOpacity
+          style={[styles.nextBtn, !isComplete && styles.nextBtnDisabled]}
+          onPress={() => isComplete && router.push('/lider/permiso/step2')}
+          disabled={!isComplete}
+          activeOpacity={0.85}
+        >
+          <LinearGradient
+            colors={isComplete ? colors.primary.gradient : ['#2D3344', '#1E2330']}
+            style={styles.nextBtnGrad}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Text style={[styles.nextBtnText, !isComplete && styles.nextBtnTextDisabled]}>
+              Análisis de Riesgos
+            </Text>
+            <ArrowRight color={isComplete ? '#FFF' : colors.text.disabled} size={18} />
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
+
+      <Modal visible={zonaModal} transparent animationType="slide" onRequestClose={() => setZonaModal(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalSheet}>
+            <View style={styles.modalHandle} />
+            <Text style={styles.modalTitle}>Zona de Trabajo</Text>
+            <FlatList
+              data={ZONAS_TRABAJO}
+              keyExtractor={item => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.zonaItem, data.zona === item && styles.zonaItemSelected]}
+                  onPress={() => { updateData({ zona: item }); setZonaModal(false); }}
+                >
+                  <MapPin color={data.zona === item ? colors.primary.main : colors.text.secondary} size={16} />
+                  <Text style={[styles.zonaItemText, data.zona === item && styles.zonaItemTextSelected]}>
+                    {item}
+                  </Text>
+                  {data.zona === item && <CheckCircle2 color={colors.primary.main} size={18} />}
+                </TouchableOpacity>
+              )}
+              showsVerticalScrollIndicator={false}
+            />
+            <TouchableOpacity style={styles.modalClose} onPress={() => setZonaModal(false)}>
+              <X color={colors.text.secondary} size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background.main,
-  },
+  root: { flex: 1, backgroundColor: colors.background.main },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
+    paddingTop: 56,
+    paddingBottom: 12,
+    paddingHorizontal: 16,
     backgroundColor: colors.background.paper,
     borderBottomWidth: 1,
     borderBottomColor: colors.border.light,
-  },
-  backBtn: {
-    padding: 8,
-    marginLeft: -8,
-  },
-  headerTitle: {
-    color: colors.text.primary,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  stepIndicator: {
-    backgroundColor: colors.primary.main + '20',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: radius.full,
-  },
-  stepText: {
-    color: colors.primary.main,
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 100,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.text.primary,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.text.secondary,
-    marginBottom: 24,
-  },
-  alertBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.status.warning + '20',
-    padding: 16,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.status.warning + '50',
-    marginBottom: 24,
     gap: 12,
   },
-  alertText: {
-    flex: 1,
-    color: colors.text.primary,
-    fontSize: 14,
-    lineHeight: 20,
+  backBtn: {
+    width: 36, height: 36, borderRadius: 10,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  formCard: {
-    padding: 20,
+  headerCenter: { flex: 1 },
+  stepLabel: { fontSize: 10, color: colors.text.disabled, fontWeight: '700', letterSpacing: 1 },
+  tipoLabel: { fontSize: 15, fontWeight: '700', color: colors.text.primary },
+  stepBubble: {
+    backgroundColor: colors.primary.main + '20',
+    paddingHorizontal: 10, paddingVertical: 4,
+    borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.primary.main + '40',
   },
-  inputGroup: {
-    marginBottom: 20,
+  stepBubbleText: { fontSize: 11, fontWeight: '700', color: colors.primary.main },
+  progressTrack: {
+    height: 3,
+    backgroundColor: colors.border.light,
   },
-  label: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
   },
-  dropdownInput: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    borderWidth: 1,
-    borderColor: colors.border.medium,
+  scroll: { padding: 16, paddingTop: 20 },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: colors.text.primary },
+  sectionSub: { fontSize: 12, color: colors.text.secondary, marginBottom: 14, marginTop: 2 },
+  sectionHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 },
+  countBadge: {
+    marginLeft: 'auto',
+    backgroundColor: colors.background.elevated,
+    paddingHorizontal: 8, paddingVertical: 2,
+    borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.border.medium,
+  },
+  countText: { fontSize: 11, fontWeight: '700', color: colors.text.secondary },
+  zonaPicker: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    backgroundColor: colors.background.paper,
     borderRadius: radius.md,
-    height: 50,
-    paddingHorizontal: 16,
+    borderWidth: 1, borderColor: colors.border.medium,
+    paddingHorizontal: 14, paddingVertical: 14,
+    marginBottom: 12,
+  },
+  zonaText: { flex: 1, fontSize: 14, color: colors.text.primary },
+  zonaPlaceholder: { color: colors.text.disabled },
+  textArea: {
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.md,
+    borderWidth: 1, borderColor: colors.border.light,
+    paddingHorizontal: 14, paddingVertical: 12,
+    color: colors.text.primary, fontSize: 14,
+    minHeight: 80, marginBottom: 12,
   },
   textInput: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    borderWidth: 1,
-    borderColor: colors.border.medium,
-    borderRadius: radius.md,
-    height: 50,
-    paddingHorizontal: 16,
-    color: colors.text.primary,
-    fontSize: 16,
-  },
-  disabledInput: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    color: colors.text.secondary,
-    borderColor: 'transparent',
-  },
-  inputText: {
-    color: colors.text.primary,
-    fontSize: 16,
-  },
-  placeholderText: {
-    color: colors.text.disabled,
-    fontSize: 16,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 24,
     backgroundColor: colors.background.paper,
-    borderTopWidth: 1,
-    borderTopColor: colors.border.light,
-  },
-  controlsGroup: {
-    marginBottom: 24,
-    backgroundColor: 'rgba(0,0,0,0.15)',
-    padding: 16,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border.medium,
+    borderWidth: 1, borderColor: colors.border.light,
+    paddingHorizontal: 14, paddingVertical: 13,
+    color: colors.text.primary, fontSize: 14,
+    marginBottom: 20,
   },
-  controlsTitle: {
-    color: colors.text.primary,
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  divider: { height: 1, backgroundColor: colors.border.light, marginBottom: 20 },
+  controlRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.md,
+    paddingHorizontal: 12, paddingVertical: 12,
+    marginBottom: 8,
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border.light,
-  },
-  switchLabel: {
-    flex: 1,
-    color: colors.text.primary,
-    fontSize: 14,
-    marginRight: 16,
-    lineHeight: 20,
-  },
+  controlRowChecked: { borderColor: colors.status.success + '50', backgroundColor: colors.status.success + '08' },
+  controlLeft: {},
+  controlLabel: { flex: 1, fontSize: 13, color: colors.text.secondary, lineHeight: 18 },
+  controlLabelChecked: { color: colors.text.primary },
   cameraBtn: {
-    marginRight: 12,
-    padding: 8,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: radius.full,
+    width: 30, height: 30, borderRadius: 8,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: colors.border.light,
   },
+  cameraBtnActive: { borderColor: colors.status.success + '60', backgroundColor: colors.status.success + '15' },
+  warningBanner: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
+    backgroundColor: colors.status.warning + '12',
+    borderRadius: radius.sm,
+    padding: 12, marginTop: 4,
+    borderWidth: 1, borderColor: colors.status.warning + '30',
+  },
+  warningText: { flex: 1, fontSize: 12, color: colors.status.warning, lineHeight: 17 },
+  footer: {
+    position: 'absolute', bottom: 0, left: 0, right: 0,
+    padding: 16, paddingBottom: 32,
+    backgroundColor: colors.background.main,
+    borderTopWidth: 1, borderTopColor: colors.border.light,
+  },
+  nextBtn: { borderRadius: radius.md, overflow: 'hidden' },
+  nextBtnDisabled: { opacity: 0.6 },
+  nextBtnGrad: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 8, paddingVertical: 15,
+  },
+  nextBtnText: { fontSize: 15, fontWeight: '700', color: '#FFF' },
+  nextBtnTextDisabled: { color: colors.text.disabled },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'flex-end' },
+  modalSheet: {
+    backgroundColor: colors.background.paper,
+    borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl,
+    padding: 20, paddingBottom: 40, maxHeight: '75%',
+  },
+  modalHandle: {
+    width: 40, height: 4, borderRadius: 2,
+    backgroundColor: colors.border.medium,
+    alignSelf: 'center', marginBottom: 16,
+  },
+  modalTitle: { fontSize: 16, fontWeight: '700', color: colors.text.primary, marginBottom: 16 },
+  modalClose: {
+    position: 'absolute', top: 16, right: 16,
+    width: 32, height: 32, borderRadius: 16,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  zonaItem: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    paddingVertical: 14, paddingHorizontal: 4,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
+  },
+  zonaItemSelected: { backgroundColor: colors.primary.main + '10', borderRadius: radius.sm, paddingHorizontal: 8 },
+  zonaItemText: { flex: 1, fontSize: 14, color: colors.text.secondary },
+  zonaItemTextSelected: { color: colors.primary.main, fontWeight: '600' },
 });

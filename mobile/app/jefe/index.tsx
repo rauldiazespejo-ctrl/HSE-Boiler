@@ -1,262 +1,325 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  View, Text, StyleSheet, ScrollView, TouchableOpacity,
+  ActivityIndicator, RefreshControl, Pressable,
+} from 'react-native';
 import { router } from 'expo-router';
-import { Card } from '../../src/components/Card';
-import { StatusBadge } from '../../src/components/StatusBadge';
-import { colors, radius } from '../../src/theme/colors';
-import { LogOut, Flame, Clock, Activity, ArrowUp, Truck } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, radius, shadows } from '../../src/theme/colors';
+import {
+  LogOut, Clock, CheckCircle, XCircle, AlertTriangle, ChevronRight,
+  Hammer, ClipboardList, TrendingUp, ShieldCheck,
+} from 'lucide-react-native';
 import { api } from '../../src/services/api';
 import { AuthContext } from '../../src/context/AuthContext';
+import { TIPO_LABELS } from '../../src/context/PermisoContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+
+function relativeDate(dateStr: string) {
+  const ms = Date.now() - new Date(dateStr).getTime();
+  const min = Math.floor(ms / 60000);
+  if (min < 1) return 'Ahora';
+  if (min < 60) return `${min} min`;
+  const hrs = Math.floor(min / 60);
+  if (hrs < 24) return `${hrs} h`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return 'Ayer';
+  return new Date(dateStr).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' });
+}
 
 export default function JefeDashboard() {
   const { user, logout } = useContext(AuthContext);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
   const [approvedToday, setApprovedToday] = useState(0);
+  const [rejectedToday, setRejectedToday] = useState(0);
+  const [totalActive, setTotalActive] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetchPending();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
-  const fetchPending = async () => {
+  const fetchData = async () => {
     try {
       const response = await api.get('/documentos');
       if (response.data.success) {
-        const pendientes = response.data.data.filter((doc: any) => doc.estado === 'PENDIENTE_JEFE');
-        const aprobadosHoy = response.data.data.filter((doc: any) => {
-          if (doc.estado !== 'APROBADO' || !doc.fecha_aprobacion) return false;
-          return new Date(doc.fecha_aprobacion).toDateString() === new Date().toDateString();
-        });
+        const docs: any[] = response.data.data;
+        const pendientes = docs.filter(d => d.estado === 'PENDIENTE_JEFE');
+        const today = new Date().toDateString();
+        const aprobados = docs.filter(d => d.estado === 'APROBADO' && new Date(d.fecha_aprobacion || d.fecha_actualizacion).toDateString() === today);
+        const rechazados = docs.filter(d => d.estado === 'RECHAZADO' && new Date(d.fecha_actualizacion).toDateString() === today);
+        const activos = docs.filter(d => d.estado === 'APROBADO');
         setPendingApprovals(pendientes);
-        setApprovedToday(aprobadosHoy.length);
+        setApprovedToday(aprobados.length);
+        setRejectedToday(rechazados.length);
+        setTotalActive(activos.length);
       }
-    } catch (error) {
-      console.error('Error fetching pending:', error);
+    } catch {
     } finally {
       setIsLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
-    router.replace('/');
+  const handleLogout = async () => { await logout(); router.replace('/'); };
+
+  const getRiskColor = (tipo: string) => {
+    if (['TRABAJO_CALIENTE', 'IZAJE_GRUA', 'TRABAJO_ALTURA', 'TRABAJO_ELECTRICO', 'ESPACIO_CONFINADO'].includes(tipo))
+      return colors.status.danger;
+    if (['GRUA_HORQUILLA', 'ESMERILADO'].includes(tipo)) return colors.status.warning;
+    return colors.status.info;
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Hola, {user?.nombre || 'Jefe'}</Text>
-          <Text style={styles.role}>Jefe General en Turno</Text>
+      <LinearGradient
+        colors={[colors.background.main, colors.background.paper]}
+        style={styles.header}
+        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+      >
+        <View style={styles.headerTop}>
+          <View style={styles.brandRow}>
+            <View style={styles.brandIcon}>
+              <LinearGradient colors={colors.secondary.gradient} style={StyleSheet.absoluteFill} />
+              <Hammer color="#FFF" size={15} strokeWidth={2.5} />
+            </View>
+            <Text style={styles.brandName}>ForjaSafe</Text>
+            <View style={styles.roleBadge}>
+              <ShieldCheck color={colors.secondary.main} size={11} />
+              <Text style={styles.roleBadgeText}>Jefe Maestranza</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} hitSlop={12}>
+            <LogOut color={colors.text.secondary} size={17} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <LogOut color={colors.text.secondary} size={20} />
-        </TouchableOpacity>
-      </View>
+        <Text style={styles.greeting}>Hola, {user?.nombre?.split(' ')[0] ?? 'Jefe'}</Text>
+        <Text style={styles.greetingSub}>Panel de Autorización de Permisos HSE</Text>
+      </LinearGradient>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchData(); }} tintColor={colors.secondary.main} />
+        }
+      >
         <View style={styles.statsRow}>
-          <View style={[styles.statBox, { borderColor: colors.status.warning }]}>
-            <Text style={styles.statNumber}>{pendingApprovals.length}</Text>
+          <View style={[styles.statCard, { borderColor: colors.status.warning + '50' }]}>
+            <View style={[styles.statIconCircle, { backgroundColor: colors.status.warning + '20' }]}>
+              <Clock color={colors.status.warning} size={18} />
+            </View>
+            <Text style={[styles.statNum, { color: colors.status.warning }]}>
+              {isLoading ? '—' : pendingApprovals.length}
+            </Text>
             <Text style={styles.statLabel}>Pendientes</Text>
           </View>
-          <View style={[styles.statBox, { borderColor: colors.status.success }]}>
-            <Text style={styles.statNumber}>{approvedToday}</Text>
-            <Text style={styles.statLabel}>Aprobados Hoy</Text>
+          <View style={[styles.statCard, { borderColor: colors.status.success + '50' }]}>
+            <View style={[styles.statIconCircle, { backgroundColor: colors.status.success + '20' }]}>
+              <CheckCircle color={colors.status.success} size={18} />
+            </View>
+            <Text style={[styles.statNum, { color: colors.status.success }]}>
+              {isLoading ? '—' : approvedToday}
+            </Text>
+            <Text style={styles.statLabel}>Aprobados hoy</Text>
+          </View>
+          <View style={[styles.statCard, { borderColor: colors.status.danger + '50' }]}>
+            <View style={[styles.statIconCircle, { backgroundColor: colors.status.danger + '20' }]}>
+              <XCircle color={colors.status.danger} size={18} />
+            </View>
+            <Text style={[styles.statNum, { color: colors.status.danger }]}>
+              {isLoading ? '—' : rejectedToday}
+            </Text>
+            <Text style={styles.statLabel}>Rechazados hoy</Text>
+          </View>
+          <View style={[styles.statCard, { borderColor: colors.status.info + '50' }]}>
+            <View style={[styles.statIconCircle, { backgroundColor: colors.status.info + '20' }]}>
+              <TrendingUp color={colors.status.info} size={18} />
+            </View>
+            <Text style={[styles.statNum, { color: colors.status.info }]}>
+              {isLoading ? '—' : totalActive}
+            </Text>
+            <Text style={styles.statLabel}>Activos total</Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Requieren Aprobación</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Requieren Autorización</Text>
+          {pendingApprovals.length > 0 && (
+            <View style={styles.pendingBadge}>
+              <Text style={styles.pendingBadgeText}>{pendingApprovals.length}</Text>
+            </View>
+          )}
+        </View>
 
         {isLoading ? (
-          <ActivityIndicator color={colors.primary.main} />
+          <ActivityIndicator color={colors.secondary.main} style={{ marginTop: 20 }} />
         ) : pendingApprovals.length === 0 ? (
-          <Text style={{ color: colors.text.secondary }}>No hay documentos pendientes.</Text>
+          <Animated.View entering={FadeInDown.springify()} style={styles.emptyState}>
+            <View style={styles.emptyIconCircle}>
+              <ShieldCheck color={colors.status.success} size={36} />
+            </View>
+            <Text style={styles.emptyTitle}>Todo al día</Text>
+            <Text style={styles.emptyText}>No hay permisos pendientes de autorización en este momento</Text>
+          </Animated.View>
         ) : (
-          pendingApprovals.map((doc, index) => (
-            <Animated.View key={doc.id_documento} entering={FadeInDown.delay(index * 100)}>
-              <Card 
-                variant="glass" 
-                style={[styles.approvalCard, doc.tipo_documento === 'HOT_WORK' && { borderColor: colors.status.danger }]}
-                onPress={() => router.push(`/jefe/approve/${doc.id_documento}`)}
-              >
-                <View style={styles.cardHeader}>
-                  <View style={styles.cardTitleRow}>
-                    {doc.tipo_documento === 'HOT_WORK' ? (
-                      <Flame color={colors.status.danger} size={24} />
-                    ) : doc.tipo_documento === 'ALTURA' ? (
-                      <ArrowUp color={colors.status.info} size={24} />
-                    ) : doc.tipo_documento === 'PUENTE_GRUA' ? (
-                      <Truck color={colors.status.warning} size={24} />
-                    ) : (
-                      <Activity color={colors.status.warning} size={24} />
-                    )}
-                    <Text style={styles.docId}>{doc.numero_documento}</Text>
-                  </View>
-                  {doc.tipo_documento === 'HOT_WORK' && (
-                    <View style={styles.urgentBadge}>
-                      <Text style={styles.urgentText}>URGENTE</Text>
+          pendingApprovals.map((doc, i) => {
+            const riskColor = getRiskColor(doc.tipo_documento);
+            const tipoLabel = TIPO_LABELS[doc.tipo_documento] || doc.tipo_documento;
+            return (
+              <Animated.View key={doc.id || i} entering={FadeInDown.delay(i * 60).springify()}>
+                <Pressable
+                  style={({ pressed }) => [styles.docCard, pressed && styles.docCardPressed]}
+                  onPress={() => router.push(`/jefe/approve/${doc.id}`)}
+                >
+                  <LinearGradient
+                    colors={[riskColor + '15', riskColor + '05']}
+                    style={StyleSheet.absoluteFill}
+                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                  />
+                  <View style={[styles.docCardBorder, { borderColor: riskColor + '40' }]} />
+
+                  <View style={[styles.riskIndicator, { backgroundColor: riskColor }]} />
+
+                  <View style={styles.docCardContent}>
+                    <View style={styles.docCardTop}>
+                      <View>
+                        <Text style={styles.docType}>{tipoLabel}</Text>
+                        <Text style={styles.docZona}>{doc.sector || '—'}</Text>
+                      </View>
+                      <View style={styles.docCardRight}>
+                        <View style={[styles.urgencyBadge, { backgroundColor: riskColor + '20', borderColor: riskColor + '50' }]}>
+                          <AlertTriangle color={riskColor} size={11} />
+                          <Text style={[styles.urgencyText, { color: riskColor }]}>PENDIENTE</Text>
+                        </View>
+                        <Text style={styles.docDate}>
+                          {doc.fecha_creacion ? relativeDate(doc.fecha_creacion) : '—'}
+                        </Text>
+                      </View>
                     </View>
-                  )}
-                </View>
 
-                <View style={styles.cardBody}>
-                  <View>
-                    <Text style={styles.infoLabel}>Solicitado por</Text>
-                    <Text style={styles.infoValue}>{doc.creador?.nombre || 'Líder'}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.infoLabel}>Sector</Text>
-                    <Text style={styles.infoValue}>{doc.sector}</Text>
-                  </View>
-                </View>
+                    {doc.operario && (
+                      <Text style={styles.docOperario}>Operario: {doc.operario}</Text>
+                    )}
 
-                <View style={styles.cardFooter}>
-                  <StatusBadge status="pendiente" label="ESPERANDO FIRMA" />
-                  <View style={styles.timeRow}>
-                    <Clock color={colors.text.secondary} size={14} />
-                    <Text style={styles.timeText}>
-                      {doc.fecha_creacion ? new Date(doc.fecha_creacion).toLocaleString() : 'sin fecha'}
-                    </Text>
+                    <View style={styles.docCardFooter}>
+                      <Text style={styles.docNum}>#{doc.numero_documento || doc.id?.slice(-6)}</Text>
+                      <View style={styles.reviewBtn}>
+                        <Text style={styles.reviewBtnText}>Revisar y Autorizar</Text>
+                        <ChevronRight color={colors.secondary.main} size={14} />
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </Card>
-            </Animated.View>
-          ))
+                </Pressable>
+              </Animated.View>
+            );
+          })
         )}
+
+        <View style={{ height: 40 }} />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
+  container: { flex: 1, backgroundColor: colors.background.main },
   header: {
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    paddingTop: 56, paddingHorizontal: 20, paddingBottom: 20,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
-  greeting: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.text.primary,
+  headerTop: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    marginBottom: 16,
   },
-  role: {
-    fontSize: 14,
-    color: colors.text.secondary,
-    marginTop: 4,
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  brandIcon: {
+    width: 28, height: 28, borderRadius: 8,
+    overflow: 'hidden', justifyContent: 'center', alignItems: 'center',
   },
+  brandName: { fontSize: 16, fontWeight: '800', color: colors.text.primary, letterSpacing: -0.3 },
+  roleBadge: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: colors.secondary.main + '15',
+    paddingHorizontal: 8, paddingVertical: 3,
+    borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.secondary.main + '30',
+  },
+  roleBadgeText: { fontSize: 10, fontWeight: '700', color: colors.secondary.main },
   logoutBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 36, height: 36, borderRadius: 10,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  scrollContent: {
-    padding: 24,
+  greeting: { fontSize: 22, fontWeight: '700', color: colors.text.primary },
+  greetingSub: { fontSize: 13, color: colors.text.secondary, marginTop: 2 },
+  scroll: { padding: 16, paddingTop: 20 },
+  statsRow: { flexDirection: 'row', gap: 8, marginBottom: 24 },
+  statCard: {
+    flex: 1, backgroundColor: colors.background.paper,
+    borderRadius: radius.md, padding: 10, alignItems: 'center', gap: 6,
+    borderWidth: 1,
   },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 32,
+  statIconCircle: {
+    width: 34, height: 34, borderRadius: 17,
+    justifyContent: 'center', alignItems: 'center',
   },
-  statBox: {
-    width: '47%',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: radius.md,
-    padding: 16,
-    alignItems: 'center',
-    borderTopWidth: 3,
+  statNum: { fontSize: 22, fontWeight: '800' },
+  statLabel: { fontSize: 9, color: colors.text.disabled, textAlign: 'center', fontWeight: '600' },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 14 },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.text.primary },
+  pendingBadge: {
+    backgroundColor: colors.status.warning,
+    width: 22, height: 22, borderRadius: 11,
+    justifyContent: 'center', alignItems: 'center',
   },
-  statNumber: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.text.primary,
+  pendingBadgeText: { color: '#FFF', fontSize: 11, fontWeight: '800' },
+  emptyState: { alignItems: 'center', paddingVertical: 48, gap: 12 },
+  emptyIconCircle: {
+    width: 72, height: 72, borderRadius: 36,
+    backgroundColor: colors.status.success + '15',
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 2, borderColor: colors.status.success + '30',
   },
-  statLabel: {
-    fontSize: 12,
-    color: colors.text.secondary,
-    marginTop: 4,
+  emptyTitle: { fontSize: 17, fontWeight: '700', color: colors.text.primary },
+  emptyText: { fontSize: 13, color: colors.text.secondary, textAlign: 'center', maxWidth: 240, lineHeight: 18 },
+  docCard: {
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.lg,
+    marginBottom: 12, overflow: 'hidden',
+    position: 'relative',
+    ...shadows.soft,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.text.primary,
-    marginBottom: 16,
+  docCardPressed: { opacity: 0.8, transform: [{ scale: 0.99 }] },
+  docCardBorder: {
+    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+    borderRadius: radius.lg, borderWidth: 1,
   },
-  approvalCard: {
-    marginBottom: 16,
+  riskIndicator: {
+    position: 'absolute', top: 0, left: 0, bottom: 0, width: 4,
+    borderTopLeftRadius: radius.lg, borderBottomLeftRadius: radius.lg,
   },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+  docCardContent: { padding: 16, paddingLeft: 20 },
+  docCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 },
+  docType: { fontSize: 14, fontWeight: '700', color: colors.text.primary },
+  docZona: { fontSize: 12, color: colors.text.secondary, marginTop: 2 },
+  docCardRight: { alignItems: 'flex-end', gap: 4 },
+  urgencyBadge: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    paddingHorizontal: 7, paddingVertical: 3,
+    borderRadius: radius.full, borderWidth: 1,
   },
-  cardTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  urgencyText: { fontSize: 9, fontWeight: '800', letterSpacing: 0.5 },
+  docDate: { fontSize: 10, color: colors.text.disabled },
+  docOperario: { fontSize: 12, color: colors.text.secondary, marginBottom: 10 },
+  docCardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  docNum: { fontSize: 11, color: colors.text.disabled, fontWeight: '600' },
+  reviewBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: colors.secondary.main + '15',
+    paddingHorizontal: 10, paddingVertical: 5,
+    borderRadius: radius.full, borderWidth: 1,
+    borderColor: colors.secondary.main + '40',
   },
-  docId: {
-    color: colors.text.primary,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  urgentBadge: {
-    backgroundColor: colors.status.danger + '20',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: radius.sm,
-  },
-  urgentText: {
-    color: colors.status.danger,
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  cardBody: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    padding: 12,
-    borderRadius: radius.md,
-    marginBottom: 16,
-  },
-  infoLabel: {
-    color: colors.text.secondary,
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  infoValue: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  timeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  timeText: {
-    color: colors.text.secondary,
-    fontSize: 12,
-  },
+  reviewBtnText: { fontSize: 11, fontWeight: '700', color: colors.secondary.main },
 });

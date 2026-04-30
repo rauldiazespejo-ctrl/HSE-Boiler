@@ -1,3 +1,4 @@
+import React, { useContext, useEffect } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
@@ -5,7 +6,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../src/theme/colors';
 import { AuthContext, AuthProvider } from '../src/context/AuthContext';
 import { PermisoProvider } from '../src/context/PermisoContext';
-import React, { useContext, useEffect } from 'react';
 
 function ProtectedNavigation() {
   const { user, isLoading } = useContext(AuthContext);
@@ -18,6 +18,7 @@ function ProtectedNavigation() {
     const inAuthScreen = !firstSegment;
     const inLiderArea = firstSegment === 'lider';
     const inJefeArea = firstSegment === 'jefe';
+    const inGerenteArea = firstSegment === 'gerente';
 
     if (!user && !inAuthScreen) {
       router.replace('/');
@@ -27,17 +28,25 @@ function ProtectedNavigation() {
     if (!user) return;
 
     if (inAuthScreen) {
+      const rol = user.rol;
+      if (rol === 'jefe') router.replace('/jefe');
+      else if (rol === 'gerente') router.replace('/gerente');
+      else router.replace('/lider');
+      return;
+    }
+
+    if (inGerenteArea && user.rol !== 'gerente') {
       router.replace(user.rol === 'jefe' ? '/jefe' : '/lider');
       return;
     }
 
-    if (inJefeArea && user.rol !== 'jefe' && user.rol !== 'gerente_hse') {
+    if (inJefeArea && user.rol !== 'jefe' && user.rol !== 'gerente') {
       router.replace('/lider');
       return;
     }
 
-    if (inLiderArea && user.rol === 'jefe') {
-      router.replace('/jefe');
+    if (inLiderArea && (user.rol === 'jefe' || user.rol === 'gerente')) {
+      router.replace(user.rol === 'gerente' ? '/gerente' : '/jefe');
     }
   }, [segments, user, isLoading, router]);
 
@@ -65,6 +74,7 @@ function ProtectedNavigation() {
       <Stack.Screen name="lider/permiso/step4" />
       <Stack.Screen name="jefe/index" />
       <Stack.Screen name="jefe/approve/[id]" />
+      <Stack.Screen name="gerente/index" />
     </Stack>
   );
 }
@@ -73,16 +83,16 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <PermisoProvider>
-      <LinearGradient 
-        colors={['#09090B', '#18181B', '#09090B']} 
-        style={styles.container}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-      <ProtectedNavigation />
-      <StatusBar style="light" />
-      </LinearGradient>
-    </PermisoProvider>
+        <LinearGradient
+          colors={[colors.background.main, '#0C0E18', colors.background.main]}
+          style={styles.container}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <ProtectedNavigation />
+          <StatusBar style="light" />
+        </LinearGradient>
+      </PermisoProvider>
     </AuthProvider>
   );
 }
@@ -96,5 +106,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.background.main,
   },
 });

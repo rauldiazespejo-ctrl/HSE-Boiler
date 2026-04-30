@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../models');
 
-const ADMIN_ROLES = ['gerente_hse', 'jefe'];
+const ADMIN_ROLES = ['gerente', 'jefe'];
 
 // Login User
 exports.login = async (req, res) => {

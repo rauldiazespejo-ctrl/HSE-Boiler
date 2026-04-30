@@ -1,578 +1,480 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Modal, Image, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  View, Text, StyleSheet, ScrollView, TouchableOpacity,
+  TextInput, Alert, ActivityIndicator, KeyboardAvoidingView, Platform,
+} from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Card } from '../../../src/components/Card';
-import { Button } from '../../../src/components/Button';
-import { colors, radius } from '../../../src/theme/colors';
-import { ArrowLeft, CheckCircle, XCircle, PenTool, Image as ImageIcon, X, FileText, MapPin } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, radius, shadows } from '../../../src/theme/colors';
+import {
+  ArrowLeft, CheckCircle2, XCircle, MapPin, Users, FileText,
+  ClipboardList, Wrench, Package, ShieldCheck, AlertTriangle, Clock,
+} from 'lucide-react-native';
 import { api } from '../../../src/services/api';
-import SignatureScreen from 'react-native-signature-canvas';
-import * as Linking from 'expo-linking';
+import { TIPO_LABELS } from '../../../src/context/PermisoContext';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-export default function JefeApproveScreen() {
-  const { id } = useLocalSearchParams();
-  const documentId = Array.isArray(id) ? id[0] : id;
-  const [signatureData, setSignatureData] = useState<string | null>(null);
-  const [isSignModalVisible, setIsSignModalVisible] = useState(false);
-  const [isRejectModalVisible, setIsRejectModalVisible] = useState(false);
-  const [rejectComment, setRejectComment] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [documento, setDocumento] = useState<any>(null);
-  const [loadingDoc, setLoadingDoc] = useState(true);
-
-  const fetchDocumento = useCallback(async () => {
-    try {
-      const response = await api.get(`/documentos/${documentId}`);
-      if (response.data.success) {
-        setDocumento(response.data.data);
-      }
-    } catch {
-      Alert.alert('Error', 'No se pudo cargar el documento');
-    } finally {
-      setLoadingDoc(false);
-    }
-  }, [documentId]);
-
-  useEffect(() => {
-    if (documentId) {
-      fetchDocumento();
-    }
-  }, [documentId, fetchDocumento]);
-
-  const handleSignature = (signature: string) => {
-    setSignatureData(signature);
-    setIsSignModalVisible(false);
-  };
-
-  const handleApprove = async () => {
-    if (!documentId) {
-      Alert.alert('Error', 'Documento inválido.');
-      return;
-    }
-    if (!signatureData) {
-      Alert.alert('Firma Requerida', 'Debe firmar el documento para aprobarlo.');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await api.post(`/documentos/${documentId}/aprobar`, {
-        firma: signatureData,
-        comentarios: 'Aprobado sin observaciones'
-      });
-      if (response.data.success) {
-        Alert.alert(
-          'Documento Aprobado',
-          `El documento ${documento?.numero_documento || documentId} ha sido aprobado exitosamente.`,
-          [{ text: 'OK', onPress: () => router.back() }]
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'No se pudo aprobar el documento.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleReject = async () => {
-    if (!documentId) {
-      Alert.alert('Error', 'Documento inválido.');
-      return;
-    }
-    if (rejectComment.trim().length < 10) {
-      Alert.alert('Justificación requerida', 'Por favor, ingrese un motivo detallado (mínimo 10 caracteres) para el rechazo.');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await api.post(`/documentos/${documentId}/rechazar`, { comentarios: rejectComment });
-      setIsRejectModalVisible(false);
-      Alert.alert(
-        'Documento Rechazado',
-        `Se rechazó el documento ${documento?.numero_documento || documentId}.`,
-        [{ text: 'OK', onPress: () => router.back() }]
-      );
-    } catch {
-      Alert.alert('Error', 'No se pudo rechazar el documento. Verifique su conexión.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+function InfoRow({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+  if (!value) return null;
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <ArrowLeft color={colors.text.primary} size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Aprobación</Text>
-        <View style={{ width: 40 }} />
+    <View style={styles.infoRow}>
+      {icon && <View style={styles.infoIcon}>{icon}</View>}
+      <View style={styles.infoContent}>
+        <Text style={styles.infoLabel}>{label}</Text>
+        <Text style={styles.infoValue}>{value}</Text>
       </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {loadingDoc ? (
-          <ActivityIndicator size="large" color={colors.primary.main} style={{ marginTop: 50 }} />
-        ) : !documento ? (
-          <Text style={{ textAlign: 'center', marginTop: 50, color: colors.text.secondary }}>Documento no encontrado</Text>
-        ) : (
-          <>
-            <View style={styles.docHeader}>
-              <Text style={styles.docId}>{documento.numero_documento}</Text>
-              <Text style={styles.docType}>{documento.tipo_documento} - {documento.contenido_json?.tipo || 'N/A'}</Text>
-            </View>
-
-            <Card variant="outline" style={styles.infoCard}>
-              <Text style={styles.sectionTitle}>Detalles</Text>
-              <View style={styles.infoGrid}>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Solicitante</Text>
-                  <Text style={styles.infoValue}>{documento.creador?.nombre || 'Líder'}</Text>
-                </View>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Sector</Text>
-                  <Text style={styles.infoValue}>{documento.sector}</Text>
-                </View>
-                {Object.entries(documento.contenido_json || {})
-                  .filter(([k]) => k !== 'firma' && k !== 'anexos')
-                  .map(([k, v]: [string, any]) => {
-                    const isObj = typeof v === 'object' && v !== null;
-                    const verificado = isObj ? v.verificado : (typeof v === 'boolean' ? v : false);
-                    const foto = isObj ? v.fotoBase64 : null;
-                    
-                    if (typeof v === 'boolean' || (isObj && 'verificado' in v)) {
-                      return (
-                        <View key={k} style={[styles.infoCol, { width: '100%' }]}>
-                          <Text style={styles.infoLabel}>{k.charAt(0).toUpperCase() + k.slice(1).replace(/([A-Z])/g, ' $1')}</Text>
-                          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                              {verificado ? <CheckCircle color={colors.status.success} size={16} /> : <XCircle color={colors.status.danger} size={16} />}
-                              <Text style={[styles.infoValue, {marginLeft: 6, color: verificado ? colors.status.success : colors.status.danger}]}>
-                                {verificado ? 'Verificado' : 'No verificado'}
-                              </Text>
-                            </View>
-                            {foto && (
-                              <TouchableOpacity onPress={() => Alert.alert('Evidencia Fotográfica', 'Aquí se mostraría la foto en pantalla completa.')}>
-                                <ImageIcon color={colors.primary.main} size={20} />
-                              </TouchableOpacity>
-                            )}
-                          </View>
-                        </View>
-                      );
-                    }
-                    return null;
-                  })}
-              </View>
-            </Card>
-
-            <Card variant="solid" style={styles.infoCard}>
-              <Text style={styles.sectionTitle}>Riesgos Críticos y Controles</Text>
-              
-              {documento.riesgos_json && documento.riesgos_json.map((riesgo: string, index: number) => (
-                <View key={index} style={styles.riskItem}>
-                  <View style={styles.riskDot} />
-                  <View style={styles.riskContent}>
-                    <Text style={styles.riskTitle}>{riesgo}</Text>
-                    <Text style={styles.riskControl}>Control verificado en terreno</Text>
-                  </View>
-                </View>
-              ))}
-            </Card>
-
-            <Card variant="solid" style={styles.infoCard}>
-              <Text style={styles.sectionTitle}>Anexos y Evidencias</Text>
-              <View style={styles.anexosList}>
-                {documento.contenido_json?.anexos && documento.contenido_json.anexos.map((anexo: any) => (
-                  <View key={anexo.id} style={styles.anexoRow}>
-                    <View style={styles.anexoInfo}>
-                      <Text style={styles.anexoTitle}>{anexo.nombre}</Text>
-                      <Text style={styles.statusTextOk}>Adjuntado ✓</Text>
-                    </View>
-                    <TouchableOpacity style={styles.evidenceBtn} onPress={() => {
-                        if(anexo.base64) Alert.alert('Anexo', 'Visualización de Base64 no implementada en MVP, pero el dato existe en BD.');
-                    }}>
-                      {anexo.tipoMime === 'application/pdf' ? <FileText color={colors.primary.main} size={20} /> : <ImageIcon color={colors.primary.main} size={20} />}
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            </Card>
-
-            {documento.contenido_json?.ubicacionGPS && (
-              <Card variant="outline" style={[styles.infoCard, { borderColor: colors.primary.main + '50', backgroundColor: colors.primary.main + '05' }]}>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12}}>
-                  <MapPin color={colors.primary.main} size={20} />
-                  <Text style={[styles.sectionTitle, {marginBottom: 0, marginLeft: 8}]}>Sello de Auditoría Incorruptible</Text>
-                </View>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Fecha/Hora Firma:</Text>
-                  <Text style={styles.infoValue}>{new Date(documento.contenido_json.ubicacionGPS.timestamp).toLocaleString()}</Text>
-                </View>
-                <View style={styles.infoCol}>
-                  <Text style={styles.infoLabel}>Coordenadas Exactas:</Text>
-                  <Text style={styles.infoValue}>{documento.contenido_json.ubicacionGPS.latitud.toFixed(5)}, {documento.contenido_json.ubicacionGPS.longitud.toFixed(5)}</Text>
-                </View>
-                <Button 
-                  title="Verificar en Mapa" 
-                  variant="outline" 
-                  style={{marginTop: 12}}
-                  onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${documento.contenido_json.ubicacionGPS.latitud},${documento.contenido_json.ubicacionGPS.longitud}`)}
-                />
-              </Card>
-            )}
-
-            <View style={styles.signSection}>
-              <Text style={styles.sectionTitle}>Firma del Jefe General</Text>
-              <View style={styles.signaturePad}>
-                {signatureData ? (
-                  <View style={styles.signedContainer}>
-                    <Image source={{ uri: signatureData }} style={styles.signatureImage} resizeMode="contain" />
-                    <Text style={styles.signedStamp}>FIRMADO DIGITALMENTE</Text>
-                  </View>
-                ) : (
-                  <TouchableOpacity style={styles.signActionArea} onPress={() => setIsSignModalVisible(true)}>
-                    <PenTool color={colors.text.secondary} size={32} />
-                    <Text style={styles.signHintText}>Toque aquí para dibujar su firma</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          </>
-        )}
-      </ScrollView>
-
-      {/* Modal de Firma */}
-      <Modal visible={isSignModalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Dibuje su firma de aprobación</Text>
-              <TouchableOpacity onPress={() => setIsSignModalVisible(false)}>
-                <X color={colors.text.primary} size={24} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.signatureContainer}>
-              <SignatureScreen
-                onOK={handleSignature}
-                onEmpty={() => Alert.alert('Error', 'Por favor dibuje su firma.')}
-                descriptionText="Firma del Jefe"
-                clearText="Borrar"
-                confirmText="Guardar"
-                webStyle={`
-                  .m-signature-pad { box-shadow: none; border: none; }
-                  .m-signature-pad--body { border: 1px solid #ccc; border-radius: 8px; }
-                  .m-signature-pad--footer { margin-top: 10px; }
-                `}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      <View style={styles.footer}>
-        <View style={styles.footerButtons}>
-          <Button 
-            title="RECHAZAR" 
-            variant="outline"
-            onPress={() => setIsRejectModalVisible(true)} 
-            style={{ flex: 1 }}
-          />
-          <View style={{ width: 12 }} />
-          <Button 
-            title="APROBAR" 
-            icon={<CheckCircle color="#FFF" size={20} />}
-            onPress={handleApprove} 
-            disabled={!signatureData}
-            isLoading={isLoading}
-            style={{ flex: 2 }}
-          />
-        </View>
-      </View>
-
-      {/* Modal de Rechazo Profesional */}
-      <Modal visible={isRejectModalVisible} animationType="fade" transparent={true}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { height: 'auto', paddingBottom: 40 }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.status.danger }]}>Rechazar Documento</Text>
-              <TouchableOpacity onPress={() => setIsRejectModalVisible(false)} disabled={isLoading}>
-                <X color={colors.text.primary} size={24} />
-              </TouchableOpacity>
-            </View>
-            
-            <Text style={styles.rejectSubtitle}>
-              Por favor indique el motivo del rechazo. Este comentario será enviado al líder solicitante para que realice las correcciones.
-            </Text>
-            
-            <TextInput
-              style={styles.rejectInput}
-              placeholder="Ej: Falta firma en la Charla de Comunicación..."
-              placeholderTextColor={colors.text.disabled}
-              multiline
-              numberOfLines={4}
-              value={rejectComment}
-              onChangeText={setRejectComment}
-              editable={!isLoading}
-            />
-            
-            <Button 
-              title="CONFIRMAR RECHAZO" 
-              icon={<XCircle color="#FFF" size={20} />}
-              onPress={handleReject}
-              isLoading={isLoading}
-              style={{ backgroundColor: colors.status.danger, borderColor: colors.status.danger }}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
-
     </View>
   );
 }
 
+function ChecklistPreview({ items, title }: { items: any[]; title: string }) {
+  if (!items || items.length === 0) return null;
+  const ok = items.filter(i => i.estado === 'OK').length;
+  const nok = items.filter(i => i.estado === 'NO_OK').length;
+  const na = items.filter(i => i.estado === 'NA').length;
+  return (
+    <View style={styles.checklistBox}>
+      <Text style={styles.checklistTitle}>{title}</Text>
+      <View style={styles.checklistStats}>
+        <View style={[styles.csStat, { backgroundColor: colors.status.success + '20' }]}>
+          <Text style={[styles.csVal, { color: colors.status.success }]}>{ok}</Text>
+          <Text style={styles.csKey}>OK</Text>
+        </View>
+        <View style={[styles.csStat, { backgroundColor: colors.status.danger + '20' }]}>
+          <Text style={[styles.csVal, { color: colors.status.danger }]}>{nok}</Text>
+          <Text style={styles.csKey}>NOK</Text>
+        </View>
+        <View style={[styles.csStat, { backgroundColor: colors.text.disabled + '20' }]}>
+          <Text style={[styles.csVal, { color: colors.text.disabled }]}>{na}</Text>
+          <Text style={styles.csKey}>N/A</Text>
+        </View>
+        <View style={[styles.csStat, { backgroundColor: colors.background.elevated }]}>
+          <Text style={[styles.csVal, { color: colors.text.secondary }]}>{items.length}</Text>
+          <Text style={styles.csKey}>Total</Text>
+        </View>
+      </View>
+      {nok > 0 && (
+        <View style={styles.nokWarning}>
+          <AlertTriangle color={colors.status.danger} size={13} />
+          <Text style={styles.nokWarningText}>{nok} item(s) NOK — requiere revisión</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+export default function ApproveScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [doc, setDoc] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [comentarios, setComentarios] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (id) fetchDoc();
+  }, [id]);
+
+  const fetchDoc = async () => {
+    try {
+      const res = await api.get(`/documentos/${id}`);
+      if (res.data.success) setDoc(res.data.data);
+    } catch {
+      Alert.alert('Error', 'No se pudo cargar el documento.');
+      router.back();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleApprove = () => {
+    Alert.alert(
+      'Confirmar Aprobación',
+      '¿Estás seguro de APROBAR este permiso de trabajo? Esta acción autorizará su ejecución.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Aprobar', style: 'default', onPress: submitApprove },
+      ]
+    );
+  };
+
+  const handleReject = () => {
+    if (!comentarios.trim()) {
+      Alert.alert('Motivo requerido', 'Debes indicar el motivo del rechazo en el campo de comentarios.');
+      return;
+    }
+    Alert.alert(
+      'Confirmar Rechazo',
+      '¿Estás seguro de RECHAZAR este permiso? El operario deberá corregirlo y reenviarlo.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Rechazar', style: 'destructive', onPress: submitReject },
+      ]
+    );
+  };
+
+  const submitApprove = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await api.post(`/documentos/${id}/aprobar`, { comentarios });
+      if (res.data.success) {
+        Alert.alert('✓ Permiso Aprobado', res.data.message || 'El permiso fue aprobado exitosamente.', [
+          { text: 'OK', onPress: () => router.replace('/jefe') },
+        ]);
+      }
+    } catch (e: any) {
+      Alert.alert('Error', e.response?.data?.message || 'No se pudo aprobar el documento.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const submitReject = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await api.post(`/documentos/${id}/rechazar`, { comentarios });
+      if (res.data.success) {
+        Alert.alert('Permiso Rechazado', 'El operario será notificado para corregir el documento.', [
+          { text: 'OK', onPress: () => router.replace('/jefe') },
+        ]);
+      }
+    } catch (e: any) {
+      Alert.alert('Error', e.response?.data?.message || 'No se pudo rechazar el documento.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const contenido = doc?.contenido_json || {};
+  const tipoLabel = TIPO_LABELS[doc?.tipo_documento] || doc?.tipo_documento || '—';
+
+  const controles = contenido.controlesCriticos ? Object.values(contenido.controlesCriticos) : [];
+  const controlesOK = controles.filter((c: any) => c.verificado).length;
+  const riesgos: string[] = contenido.riesgos_json || doc?.riesgos_json || [];
+
+  const estadoColor: Record<string, string> = {
+    PENDIENTE_JEFE: colors.status.warning,
+    PENDIENTE_LIDER: colors.primary.main,
+    APROBADO: colors.status.success,
+    RECHAZADO: colors.status.danger,
+  };
+  const estadoLabel: Record<string, string> = {
+    PENDIENTE_JEFE: 'Pendiente de autorización',
+    PENDIENTE_LIDER: 'Borrador — en revisión del operario',
+    APROBADO: 'Aprobado',
+    RECHAZADO: 'Rechazado',
+  };
+
+  return (
+    <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+          <ArrowLeft color={colors.text.primary} size={22} />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>Revisar Permiso</Text>
+          <Text style={styles.headerSub} numberOfLines={1}>{tipoLabel}</Text>
+        </View>
+      </View>
+
+      {isLoading ? (
+        <ActivityIndicator color={colors.secondary.main} style={{ marginTop: 80 }} />
+      ) : !doc ? null : (
+        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+
+          <Animated.View entering={FadeInDown.delay(0).springify()} style={styles.statusCard}>
+            <View style={[styles.statusDot, { backgroundColor: estadoColor[doc.estado] || colors.text.disabled }]} />
+            <View>
+              <Text style={styles.statusLabel}>{estadoLabel[doc.estado] || doc.estado}</Text>
+              <Text style={styles.statusNum}>#{doc.numero_documento}</Text>
+            </View>
+            <View style={[styles.statusBadge, { backgroundColor: (estadoColor[doc.estado] || colors.text.disabled) + '20', borderColor: (estadoColor[doc.estado] || colors.text.disabled) + '40' }]}>
+              <Clock color={estadoColor[doc.estado] || colors.text.disabled} size={11} />
+              <Text style={[styles.statusBadgeText, { color: estadoColor[doc.estado] || colors.text.disabled }]}>
+                {doc.fecha_creacion ? new Date(doc.fecha_creacion).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—'}
+              </Text>
+            </View>
+          </Animated.View>
+
+          <Animated.View entering={FadeInDown.delay(60).springify()} style={styles.card}>
+            <Text style={styles.cardTitle}>Información del Trabajo</Text>
+            <InfoRow label="Tipo de Trabajo" value={tipoLabel} icon={<ClipboardList color={colors.primary.main} size={14} />} />
+            <InfoRow label="Zona de Trabajo" value={doc.sector} icon={<MapPin color={colors.secondary.main} size={14} />} />
+            <InfoRow label="Descripción" value={contenido.descripcionTrabajo} icon={<FileText color={colors.text.disabled} size={14} />} />
+            <InfoRow
+              label="Equipo de Trabajo"
+              value={Array.isArray(contenido.equipoTrabajo) ? contenido.equipoTrabajo.join(', ') : contenido.equipoTrabajo}
+              icon={<Users color={colors.text.disabled} size={14} />}
+            />
+            <InfoRow label="Operario" value={doc.creador?.nombre} icon={<Users color={colors.text.disabled} size={14} />} />
+          </Animated.View>
+
+          <Animated.View entering={FadeInDown.delay(120).springify()} style={styles.card}>
+            <Text style={styles.cardTitle}>Controles Críticos — AST</Text>
+            <View style={styles.statsRow}>
+              <View style={[styles.statBox, { borderColor: controlesOK === controles.length && controles.length > 0 ? colors.status.success + '50' : colors.status.warning + '50' }]}>
+                <Text style={[styles.statNum, { color: controlesOK === controles.length && controles.length > 0 ? colors.status.success : colors.status.warning }]}>
+                  {controlesOK}/{controles.length}
+                </Text>
+                <Text style={styles.statLabel}>Verificados</Text>
+              </View>
+              <View style={[styles.statBox, { borderColor: colors.status.warning + '50' }]}>
+                <Text style={[styles.statNum, { color: colors.status.warning }]}>
+                  {Array.isArray(riesgos) ? riesgos.length : 0}
+                </Text>
+                <Text style={styles.statLabel}>Riesgos id.</Text>
+              </View>
+              <View style={[styles.statBox, { borderColor: colors.status.success + '50' }]}>
+                <Text style={[styles.statNum, { color: colors.status.success }]}>
+                  {contenido.checklistHerramientas?.filter((i: any) => i.estado !== null).length || 0}
+                </Text>
+                <Text style={styles.statLabel}>Herram. OK</Text>
+              </View>
+            </View>
+
+            {controlesOK < controles.length && (
+              <View style={styles.alertBanner}>
+                <AlertTriangle color={colors.status.warning} size={14} />
+                <Text style={styles.alertBannerText}>
+                  {controles.length - controlesOK} control(es) crítico(s) sin verificar
+                </Text>
+              </View>
+            )}
+          </Animated.View>
+
+          <Animated.View entering={FadeInDown.delay(180).springify()} style={styles.card}>
+            <Text style={styles.cardTitle}>Checklists</Text>
+            <ChecklistPreview items={contenido.checklistHerramientas || []} title="Checklist de Herramientas" />
+            <ChecklistPreview items={contenido.checklistEquipos || []} title="Checklist de Equipos" />
+          </Animated.View>
+
+          {contenido.anexos && contenido.anexos.length > 0 && (
+            <Animated.View entering={FadeInDown.delay(240).springify()} style={styles.card}>
+              <Text style={styles.cardTitle}>Documentos Adjuntos</Text>
+              {contenido.anexos.map((a: any) => (
+                <View key={a.id} style={styles.anexoRow}>
+                  <FileText color={a.base64 ? colors.status.success : colors.text.disabled} size={14} />
+                  <Text style={[styles.anexoName, a.base64 ? styles.anexoOK : styles.anexoPending]}>
+                    {a.nombre}
+                  </Text>
+                  <Text style={[styles.anexoBadge, { color: a.base64 ? colors.status.success : (a.requerido ? colors.status.danger : colors.text.disabled) }]}>
+                    {a.base64 ? 'OK' : a.requerido ? 'FALTANTE' : 'Opcional'}
+                  </Text>
+                </View>
+              ))}
+            </Animated.View>
+          )}
+
+          {contenido.ubicacionGPS && (
+            <Animated.View entering={FadeInDown.delay(300).springify()} style={styles.card}>
+              <Text style={styles.cardTitle}>Ubicación GPS</Text>
+              <View style={styles.gpsRow}>
+                <MapPin color={colors.secondary.main} size={14} />
+                <Text style={styles.gpsText}>
+                  {contenido.ubicacionGPS.latitud?.toFixed(6)}, {contenido.ubicacionGPS.longitud?.toFixed(6)}
+                </Text>
+              </View>
+            </Animated.View>
+          )}
+
+          <Animated.View entering={FadeInDown.delay(360).springify()} style={styles.card}>
+            <Text style={styles.cardTitle}>Comentarios del Jefe</Text>
+            <Text style={styles.cardSub}>Agrega observaciones (obligatorio en caso de rechazo)</Text>
+            <TextInput
+              style={styles.textArea}
+              value={comentarios}
+              onChangeText={setComentarios}
+              placeholder="Escribe tus observaciones aquí..."
+              placeholderTextColor={colors.text.disabled}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+            />
+          </Animated.View>
+
+          <View style={{ height: 140 }} />
+        </ScrollView>
+      )}
+
+      {!isLoading && doc && doc.estado === 'PENDIENTE_JEFE' && (
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={[styles.rejectBtn, isSubmitting && styles.btnDisabled]}
+            onPress={handleReject}
+            disabled={isSubmitting}
+            activeOpacity={0.8}
+          >
+            <XCircle color={colors.status.danger} size={18} />
+            <Text style={styles.rejectBtnText}>Rechazar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.approveBtn, isSubmitting && styles.btnDisabled]}
+            onPress={handleApprove}
+            disabled={isSubmitting}
+            activeOpacity={0.85}
+          >
+            <LinearGradient
+              colors={colors.gradients.success}
+              style={styles.approveBtnGrad}
+              start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+            >
+              {isSubmitting ? (
+                <ActivityIndicator color="#FFF" size="small" />
+              ) : (
+                <>
+                  <CheckCircle2 color="#FFF" size={18} />
+                  <Text style={styles.approveBtnText}>Autorizar Permiso</Text>
+                </>
+              )}
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {!isLoading && doc && doc.estado !== 'PENDIENTE_JEFE' && (
+        <View style={styles.footer}>
+          <View style={[styles.resolvedBanner, { borderColor: (estadoColor[doc.estado] || colors.text.disabled) + '40', backgroundColor: (estadoColor[doc.estado] || colors.text.disabled) + '12' }]}>
+            <ShieldCheck color={estadoColor[doc.estado] || colors.text.disabled} size={18} />
+            <Text style={[styles.resolvedText, { color: estadoColor[doc.estado] || colors.text.disabled }]}>
+              {estadoLabel[doc.estado] || doc.estado}
+            </Text>
+          </View>
+        </View>
+      )}
+    </KeyboardAvoidingView>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background.main,
-  },
+  root: { flex: 1, backgroundColor: colors.background.main },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingTop: 56, paddingBottom: 12, paddingHorizontal: 16,
     backgroundColor: colors.background.paper,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border.light,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
   backBtn: {
-    padding: 8,
-    marginLeft: -8,
+    width: 36, height: 36, borderRadius: 10,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  headerTitle: {
-    color: colors.text.primary,
-    fontSize: 18,
-    fontWeight: 'bold',
+  headerCenter: { flex: 1 },
+  headerTitle: { fontSize: 16, fontWeight: '700', color: colors.text.primary },
+  headerSub: { fontSize: 12, color: colors.text.secondary, marginTop: 1 },
+  scroll: { padding: 16, paddingTop: 20 },
+  statusCard: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.lg, padding: 14,
+    marginBottom: 14,
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 120,
+  statusDot: { width: 10, height: 10, borderRadius: 5 },
+  statusLabel: { fontSize: 13, fontWeight: '700', color: colors.text.primary },
+  statusNum: { fontSize: 11, color: colors.text.disabled, marginTop: 2 },
+  statusBadge: {
+    marginLeft: 'auto', flexDirection: 'row', alignItems: 'center', gap: 4,
+    paddingHorizontal: 8, paddingVertical: 4,
+    borderRadius: radius.full, borderWidth: 1,
   },
-  docHeader: {
-    marginBottom: 24,
-    alignItems: 'center',
+  statusBadgeText: { fontSize: 10, fontWeight: '600' },
+  card: {
+    backgroundColor: colors.background.paper,
+    borderRadius: radius.lg, padding: 16,
+    marginBottom: 14,
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  docId: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: colors.text.primary,
+  cardTitle: { fontSize: 14, fontWeight: '700', color: colors.text.primary, marginBottom: 12 },
+  cardSub: { fontSize: 12, color: colors.text.secondary, marginBottom: 10, marginTop: -8 },
+  infoRow: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 10,
+    paddingVertical: 8,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
-  docType: {
-    fontSize: 16,
-    color: colors.status.warning,
-    marginTop: 4,
+  infoIcon: {
+    width: 24, height: 24, borderRadius: 7,
+    backgroundColor: colors.background.elevated,
+    justifyContent: 'center', alignItems: 'center',
   },
-  infoCard: {
-    marginBottom: 20,
-    padding: 16,
+  infoContent: { flex: 1 },
+  infoLabel: { fontSize: 10, color: colors.text.disabled, fontWeight: '700', letterSpacing: 0.3 },
+  infoValue: { fontSize: 13, color: colors.text.primary, marginTop: 2, lineHeight: 18 },
+  statsRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  statBox: {
+    flex: 1, borderRadius: radius.md, padding: 10, alignItems: 'center',
+    backgroundColor: colors.background.elevated, borderWidth: 1,
   },
-  sectionTitle: {
-    color: colors.text.primary,
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 16,
+  statNum: { fontSize: 22, fontWeight: '800' },
+  statLabel: { fontSize: 10, color: colors.text.disabled, textAlign: 'center', marginTop: 2 },
+  alertBanner: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: colors.status.warning + '12',
+    borderRadius: radius.sm, padding: 10,
+    borderWidth: 1, borderColor: colors.status.warning + '30',
   },
-  infoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 16,
+  alertBannerText: { flex: 1, fontSize: 12, color: colors.status.warning },
+  checklistBox: {
+    backgroundColor: colors.background.elevated,
+    borderRadius: radius.md, padding: 12, marginBottom: 10,
   },
-  infoCol: {
-    width: '45%',
-    marginBottom: 8,
+  checklistTitle: { fontSize: 12, fontWeight: '700', color: colors.text.secondary, marginBottom: 10 },
+  checklistStats: { flexDirection: 'row', gap: 8, marginBottom: 6 },
+  csStat: {
+    flex: 1, borderRadius: radius.sm, padding: 8, alignItems: 'center',
   },
-  infoLabel: {
-    color: colors.text.secondary,
-    fontSize: 12,
-    marginBottom: 4,
+  csVal: { fontSize: 18, fontWeight: '800' },
+  csKey: { fontSize: 9, color: colors.text.disabled, fontWeight: '700', marginTop: 2 },
+  nokWarning: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: colors.status.danger + '10',
+    borderRadius: radius.sm, padding: 8, marginTop: 6,
+    borderWidth: 1, borderColor: colors.status.danger + '30',
   },
-  infoValue: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: '500',
+  nokWarningText: { flex: 1, fontSize: 11, color: colors.status.danger },
+  anexoRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    paddingVertical: 8,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
-  riskItem: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
-  riskDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.status.danger,
-    marginTop: 6,
-    marginRight: 12,
-  },
-  riskContent: {
-    flex: 1,
-  },
-  riskTitle: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 2,
-  },
-  riskControl: {
-    color: colors.text.secondary,
-    fontSize: 13,
-  },
-  evidenceBtns: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  evidenceBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 12,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: radius.md,
-    gap: 8,
-  },
-  evidenceBtnText: {
-    color: colors.primary.main,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  signSection: {
-    marginTop: 8,
-  },
-  signaturePad: {
-    height: 120,
-    backgroundColor: '#fff',
-    borderRadius: radius.md,
-    overflow: 'hidden',
-  },
-  signActionArea: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signHintText: {
-    color: colors.text.secondary,
-    marginTop: 12,
-    fontSize: 14,
-  },
-  signedContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signatureGraphic: {
-    fontFamily: 'Cochin',
-    fontSize: 40,
-    color: '#000',
-    transform: [{ rotate: '-10deg' }],
-  },
-  signedStamp: {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    color: colors.status.success,
-    fontSize: 10,
-    fontWeight: 'bold',
+  anexoName: { flex: 1, fontSize: 12 },
+  anexoOK: { color: colors.text.primary },
+  anexoPending: { color: colors.text.disabled },
+  anexoBadge: { fontSize: 10, fontWeight: '700' },
+  gpsRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  gpsText: { fontSize: 12, color: colors.text.secondary },
+  textArea: {
+    backgroundColor: colors.background.elevated,
+    borderRadius: radius.md, padding: 12,
+    color: colors.text.primary, fontSize: 14,
+    minHeight: 100, lineHeight: 20,
+    borderWidth: 1, borderColor: colors.border.medium,
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 24,
-    backgroundColor: colors.background.paper,
-    borderTopWidth: 1,
-    borderTopColor: colors.border.light,
+    position: 'absolute', bottom: 0, left: 0, right: 0,
+    flexDirection: 'row', gap: 10,
+    padding: 16, paddingBottom: 32,
+    backgroundColor: colors.background.main,
+    borderTopWidth: 1, borderTopColor: colors.border.light,
   },
-  footerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  rejectBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: colors.status.danger + '15',
+    borderRadius: radius.md, paddingHorizontal: 16, paddingVertical: 14,
+    borderWidth: 1, borderColor: colors.status.danger + '40',
   },
-  signatureImage: {
-    width: '100%',
-    height: '100%',
-    flex: 1,
+  rejectBtnText: { fontSize: 14, fontWeight: '700', color: colors.status.danger },
+  approveBtn: { flex: 1, borderRadius: radius.md, overflow: 'hidden' },
+  approveBtnGrad: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 8, paddingVertical: 14,
   },
-  anexosList: {
-    gap: 8,
-  },
-  anexoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    padding: 12,
-    borderRadius: radius.md,
-  },
-  anexoInfo: {
-    flex: 1,
-  },
-  anexoTitle: {
-    color: colors.text.primary,
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  statusTextOk: {
-    color: colors.status.success,
-    fontSize: 12,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    backgroundColor: colors.background.paper,
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-    height: '60%',
-    padding: 20,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.text.primary,
-  },
-  signatureContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: radius.md,
-    overflow: 'hidden',
-  },
-  rejectSubtitle: {
-    color: colors.text.secondary,
-    fontSize: 14,
-    marginBottom: 16,
-    lineHeight: 20,
-  },
-  rejectInput: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
+  approveBtnText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
+  btnDisabled: { opacity: 0.5 },
+  resolvedBanner: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10,
+    borderRadius: radius.md, padding: 14,
     borderWidth: 1,
-    borderColor: colors.border.medium,
-    borderRadius: radius.md,
-    color: colors.text.primary,
-    fontSize: 16,
-    padding: 16,
-    minHeight: 120,
-    textAlignVertical: 'top',
-    marginBottom: 24,
   },
+  resolvedText: { fontSize: 14, fontWeight: '700' },
 });
