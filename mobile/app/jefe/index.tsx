@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius, shadows } from '../../src/theme/colors';
 import {
   LogOut, Clock, CheckCircle, XCircle, AlertTriangle, ChevronRight,
-  Hammer, ClipboardList, TrendingUp, ShieldCheck,
+  Hammer, ClipboardList, TrendingUp, ShieldCheck, Plus,
 } from 'lucide-react-native';
 import { api } from '../../src/services/api';
 import { AuthContext } from '../../src/context/AuthContext';
@@ -215,8 +215,15 @@ export default function JefeDashboard() {
           })
         )}
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 100 }} />
       </ScrollView>
+
+      <TouchableOpacity style={styles.fab} onPress={() => router.push('/lider')} activeOpacity={0.85}>
+        <LinearGradient colors={colors.primary.gradient} style={styles.fabGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <Plus color="#FFF" size={22} strokeWidth={2.5} />
+          <Text style={styles.fabText}>Nueva Actividad</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -322,4 +329,14 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary.main + '40',
   },
   reviewBtnText: { fontSize: 11, fontWeight: '700', color: colors.secondary.main },
+  fab: {
+    position: 'absolute', bottom: 24, right: 20,
+    borderRadius: radius.full, overflow: 'hidden',
+    ...shadows.soft,
+  },
+  fabGrad: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingHorizontal: 20, paddingVertical: 14,
+  },
+  fabText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
 });

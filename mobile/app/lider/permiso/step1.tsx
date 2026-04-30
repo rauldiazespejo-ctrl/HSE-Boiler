@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, Switch, Alert, Modal, FlatList,
+  KeyboardAvoidingView, Platform, Switch, Alert, Modal, FlatList, ActivityIndicator,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,9 +9,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius, shadows } from '../../../src/theme/colors';
 import {
   ArrowLeft, ArrowRight, ChevronDown, Camera, CheckCircle2,
-  X, MapPin, Users, FileText, ShieldAlert,
+  X, MapPin, Users, FileText, ShieldAlert, Check,
 } from 'lucide-react-native';
 import { PermisoContext, TipoPermiso, TIPO_LABELS } from '../../../src/context/PermisoContext';
+import { api } from '../../../src/services/api';
 
 const ZONAS_TRABAJO = [
   'Taller de Tornería',
@@ -101,14 +102,44 @@ const CONTROLES_CRITICOS: Record<string, { key: string; label: string }[]> = {
   ],
 };
 
+interface Trabajador {
+  id_usuario: number;
+  nombre: string;
+  certificaciones_json?: { cargo?: string; rut?: string } | null;
+}
+
 export default function PermisoStep1() {
   const { tipo } = useLocalSearchParams<{ tipo: TipoPermiso }>();
   const { data, updateData, initPermiso } = useContext(PermisoContext);
   const [zonaModal, setZonaModal] = useState(false);
+  const [trabajadoresModal, setTrabajadoresModal] = useState(false);
+  const [trabajadores, setTrabajadores] = useState<Trabajador[]>([]);
+  const [loadingTrabajadores, setLoadingTrabajadores] = useState(false);
+  const [selectedTrabajadores, setSelectedTrabajadores] = useState<Trabajador[]>([]);
 
   useEffect(() => {
     if (tipo) initPermiso(tipo);
   }, [tipo]);
+
+  const fetchTrabajadores = async () => {
+    if (trabajadores.length > 0) { setTrabajadoresModal(true); return; }
+    setLoadingTrabajadores(true);
+    try {
+      const res = await api.get('/usuarios/trabajadores');
+      if (res.data.success) setTrabajadores(res.data.data);
+    } catch {}
+    finally { setLoadingTrabajadores(false); }
+    setTrabajadoresModal(true);
+  };
+
+  const toggleTrabajador = (t: Trabajador) => {
+    setSelectedTrabajadores(prev => {
+      const exists = prev.find(x => x.id_usuario === t.id_usuario);
+      const next = exists ? prev.filter(x => x.id_usuario !== t.id_usuario) : [...prev, t];
+      updateData({ equipoTrabajo: next.map(x => x.nombre) });
+      return next;
+    });
+  };
 
   const controles = CONTROLES_CRITICOS[tipo || ''] || [];
 
@@ -195,13 +226,33 @@ export default function PermisoStep1() {
           textAlignVertical="top"
         />
 
-        <TextInput
-          style={styles.textInput}
-          placeholder="Equipo de trabajo (nombres, separados por coma)"
-          placeholderTextColor={colors.text.disabled}
-          value={data.equipoTrabajo?.join(', ') || ''}
-          onChangeText={v => updateData({ equipoTrabajo: v.split(',').map(s => s.trim()).filter(Boolean) })}
-        />
+        <TouchableOpacity
+          style={[styles.zonaPicker, selectedTrabajadores.length > 0 && styles.zonaPickerSelected]}
+          onPress={fetchTrabajadores}
+          activeOpacity={0.75}
+          disabled={loadingTrabajadores}
+        >
+          <Users color={selectedTrabajadores.length > 0 ? colors.secondary.main : colors.text.disabled} size={18} />
+          <Text style={[styles.zonaText, selectedTrabajadores.length === 0 && styles.zonaPlaceholder]}>
+            {selectedTrabajadores.length > 0
+              ? `${selectedTrabajadores.length} trabajador${selectedTrabajadores.length > 1 ? 'es' : ''} seleccionado${selectedTrabajadores.length > 1 ? 's' : ''}`
+              : 'Seleccionar trabajadores participantes'}
+          </Text>
+          {loadingTrabajadores
+            ? <ActivityIndicator size="small" color={colors.text.disabled} />
+            : <ChevronDown color={colors.text.disabled} size={18} />}
+        </TouchableOpacity>
+
+        {selectedTrabajadores.length > 0 && (
+          <View style={styles.chipRow}>
+            {selectedTrabajadores.map(t => (
+              <TouchableOpacity key={t.id_usuario} style={styles.chip} onPress={() => toggleTrabajador(t)}>
+                <Text style={styles.chipText}>{t.nombre.split(' ')[0]} {t.nombre.split(' ')[1]}</Text>
+                <X color={colors.secondary.main} size={12} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         <View style={styles.divider} />
 
@@ -296,6 +347,53 @@ export default function PermisoStep1() {
               showsVerticalScrollIndicator={false}
             />
             <TouchableOpacity style={styles.modalClose} onPress={() => setZonaModal(false)}>
+              <X color={colors.text.secondary} size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={trabajadoresModal} transparent animationType="slide" onRequestClose={() => setTrabajadoresModal(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalSheet}>
+            <View style={styles.modalHandle} />
+            <Text style={styles.modalTitle}>Trabajadores Participantes</Text>
+            <FlatList
+              data={trabajadores}
+              keyExtractor={item => String(item.id_usuario)}
+              renderItem={({ item }) => {
+                const selected = !!selectedTrabajadores.find(x => x.id_usuario === item.id_usuario);
+                return (
+                  <TouchableOpacity
+                    style={[styles.trabajadorItem, selected && styles.trabajadorItemSelected]}
+                    onPress={() => toggleTrabajador(item)}
+                  >
+                    <View style={[styles.checkBox, selected && styles.checkBoxChecked]}>
+                      {selected && <Check color="#FFF" size={12} />}
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.trabajadorName}>{item.nombre}</Text>
+                      <Text style={styles.trabajadorCargo}>{item.certificaciones_json?.cargo || '—'}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <Text style={{ color: colors.text.disabled, textAlign: 'center', marginTop: 20 }}>
+                  No hay trabajadores registrados
+                </Text>
+              }
+            />
+            <TouchableOpacity
+              style={styles.modalConfirmBtn}
+              onPress={() => setTrabajadoresModal(false)}
+            >
+              <Text style={styles.modalConfirmBtnText}>
+                Confirmar ({selectedTrabajadores.length} seleccionado{selectedTrabajadores.length !== 1 ? 's' : ''})
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalClose} onPress={() => setTrabajadoresModal(false)}>
               <X color={colors.text.secondary} size={20} />
             </TouchableOpacity>
           </View>
@@ -440,6 +538,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.elevated,
     justifyContent: 'center', alignItems: 'center',
   },
+  zonaPickerSelected: { borderColor: colors.secondary.main + '60' },
+  chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
+  chip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: colors.secondary.main + '15',
+    borderRadius: radius.full,
+    paddingHorizontal: 10, paddingVertical: 5,
+    borderWidth: 1, borderColor: colors.secondary.main + '40',
+  },
+  chipText: { fontSize: 12, fontWeight: '600', color: colors.secondary.main },
   zonaItem: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
     paddingVertical: 14, paddingHorizontal: 4,
@@ -448,4 +556,26 @@ const styles = StyleSheet.create({
   zonaItemSelected: { backgroundColor: colors.primary.main + '10', borderRadius: radius.sm, paddingHorizontal: 8 },
   zonaItemText: { flex: 1, fontSize: 14, color: colors.text.secondary },
   zonaItemTextSelected: { color: colors.primary.main, fontWeight: '600' },
+  trabajadorItem: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingVertical: 12, paddingHorizontal: 4,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
+  },
+  trabajadorItemSelected: { backgroundColor: colors.secondary.main + '08' },
+  trabajadorName: { fontSize: 14, fontWeight: '600', color: colors.text.primary },
+  trabajadorCargo: { fontSize: 12, color: colors.text.secondary, marginTop: 2 },
+  checkBox: {
+    width: 22, height: 22, borderRadius: 6,
+    borderWidth: 2, borderColor: colors.border.medium,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  checkBoxChecked: { backgroundColor: colors.secondary.main, borderColor: colors.secondary.main },
+  modalConfirmBtn: {
+    marginTop: 16,
+    backgroundColor: colors.secondary.main,
+    borderRadius: radius.md,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  modalConfirmBtnText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
 });
