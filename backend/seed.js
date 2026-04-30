@@ -57,14 +57,22 @@ const seed = async () => {
         rut: '12.820.370-2',
       },
       {
+        email: 'jorge.vilches@forjasafe.cl',
+        password: DEFAULT_PASSWORD,
+        nombre: 'Jorge Vilches Vergara',
+        rol: 'jefe',
+        cargo: 'Especialista Líder',
+        rut: '18.421.336-2',
+      },
+
+      {
         email: 'ivan.cabrera@forjasafe.cl',
         password: DEFAULT_PASSWORD,
         nombre: 'Ivan Felipe Cabrera Pulgar',
-        rol: 'jefe',
+        rol: 'lider',
         cargo: 'Especialista 2',
         rut: '20.710.238-5',
       },
-
       {
         email: 'cristian.collao@forjasafe.cl',
         password: DEFAULT_PASSWORD,
@@ -80,14 +88,6 @@ const seed = async () => {
         rol: 'lider',
         cargo: 'Especialista 1',
         rut: '19.447.189-0',
-      },
-      {
-        email: 'jorge.vilches@forjasafe.cl',
-        password: DEFAULT_PASSWORD,
-        nombre: 'Jorge Vilches Vergara',
-        rol: 'lider',
-        cargo: 'Especialista Líder',
-        rut: '18.421.336-2',
       },
       {
         email: 'pablo.gonzalez@forjasafe.cl',
@@ -252,7 +252,7 @@ const seed = async () => {
     console.log('   leslye.cabrera@forjasafe.cl      / forja2024');
     console.log('   edgardo.garcia@forjasafe.cl      / forja2024');
     console.log('   alexis.olivares@forjasafe.cl     / forja2024');
-    console.log('   ivan.cabrera@forjasafe.cl        / forja2024');
+    console.log('   jorge.vilches@forjasafe.cl       / forja2024');
     console.log('\n--- OPERARIOS (crean permisos) ---');
     console.log('   cristian.collao@forjasafe.cl     / forja2024');
     console.log('   ismael.rozas@forjasafe.cl        / forja2024');
