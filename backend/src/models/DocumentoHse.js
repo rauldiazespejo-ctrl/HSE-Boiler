@@ -14,7 +14,18 @@ const DocumentoHse = sequelize.define('DocumentoHse', {
     allowNull: false
   },
   tipo_documento: {
-    type: DataTypes.ENUM('HOT_WORK', 'AST', 'LOTO', 'INSPECCION', 'ALTURA', 'PUENTE_GRUA'),
+    type: DataTypes.ENUM(
+      'TRABAJO_CALIENTE',
+      'IZAJE_GRUA',
+      'MECANIZADO_CNC',
+      'TORNERIA',
+      'ESMERILADO',
+      'TRABAJO_ALTURA',
+      'TRABAJO_ELECTRICO',
+      'MANTENIMIENTO',
+      'GRUA_HORQUILLA',
+      'ESPACIO_CONFINADO'
+    ),
     allowNull: false
   },
   sector: {

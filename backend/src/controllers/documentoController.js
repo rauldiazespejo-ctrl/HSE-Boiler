@@ -37,23 +37,25 @@ const normalizeTipoDocumento = (tipo) => {
   return String(tipo).trim().toUpperCase().replace(/\s+/g, '_');
 };
 
-const canApproveAsLider = (rol) => rol === 'líder' || rol === 'gerente_hse';
-const canApproveAsJefe = (rol) => rol === 'jefe' || rol === 'gerente_hse';
+const canApproveAsLider = (rol) => rol === 'lider' || rol === 'gerente';
+const canApproveAsJefe = (rol) => rol === 'jefe' || rol === 'gerente';
 
 // Obtener todos los documentos (Para Jefe o Filtro de Líder)
 exports.getAllDocumentos = async (req, res) => {
   try {
     const where = {};
 
-    if (req.user.rol === 'líder') {
+    if (req.user.rol === 'lider') {
       where[Op.or] = [
         { creado_por: req.user.id },
         { estado: ESTADOS.pendienteLider },
         { estado: ESTADOS.rechazado },
       ];
     } else if (req.user.rol === 'jefe') {
-      where.estado = ESTADOS.pendienteJefe;
-    } else if (req.user.rol === 'trabajador') {
+      // jefe sees pending approvals + all docs for stats
+    } else if (req.user.rol === 'gerente') {
+      // gerente sees all — no filter
+    } else {
       where.creado_por = req.user.id;
     }
 
