@@ -20,7 +20,7 @@ const seed = async () => {
         password: DEFAULT_PASSWORD,
         nombre: 'Raúl Díaz',
         rol: 'gerente',
-        cargo: 'Gerente General',
+        cargo: 'Gerente de HSEC',
         rut: null,
       },
       {
@@ -28,7 +28,7 @@ const seed = async () => {
         password: DEFAULT_PASSWORD,
         nombre: 'Rubén Arbelo',
         rol: 'gerente',
-        cargo: 'Gerente',
+        cargo: 'Gerente de Operaciones',
         rut: null,
       },
 
@@ -233,7 +233,13 @@ const seed = async () => {
     for (const u of usuarios) {
       const existing = await Usuario.findOne({ where: { email: u.email } });
       if (existing) {
-        console.log(`  · ${u.email} ya existe — omitido.`);
+        await existing.update({
+          nombre: u.nombre,
+          rol: u.rol,
+          activo: true,
+          certificaciones_json: { rut: u.rut, cargo: u.cargo },
+        });
+        console.log(`  ↻ [${u.rol.toUpperCase().padEnd(6)}] ${u.nombre} — actualizado.`);
         omitidos++;
         continue;
       }
