@@ -1,14 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import Constants from 'expo-constants';
 
-const configuredApiUrl =
-  Constants.expoConfig?.extra?.apiUrl ||
-  process.env.EXPO_PUBLIC_API_URL ||
-  '';
 const fallbackApiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api/v1' : 'http://localhost:3000/api/v1';
-const API_URL = configuredApiUrl || fallbackApiUrl;
+const API_URL = process.env.EXPO_PUBLIC_API_URL || fallbackApiUrl;
 
 export const api = axios.create({
   baseURL: API_URL,
