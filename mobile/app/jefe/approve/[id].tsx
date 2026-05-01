@@ -195,6 +195,56 @@ export default function ApproveScreen() {
             </View>
           </Animated.View>
 
+          {doc.estado === 'APROBADO' && doc.aprobador && (
+            <Animated.View entering={FadeInDown.delay(50).springify()} style={styles.selloCard}>
+              <LinearGradient
+                colors={[colors.status.success + '20', colors.status.success + '08']}
+                style={styles.selloGrad}
+                start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+              >
+                <View style={styles.selloHeader}>
+                  <View style={styles.selloIconWrap}>
+                    <ShieldCheck color={colors.status.success} size={22} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.selloTitle}>PERMISO AUTORIZADO</Text>
+                    <Text style={styles.selloSub}>Sello de aprobación oficial</Text>
+                  </View>
+                </View>
+                <View style={styles.selloDivider} />
+                <View style={styles.selloBody}>
+                  <View style={styles.selloField}>
+                    <Text style={styles.selloFieldLabel}>APROBADO POR</Text>
+                    <Text style={styles.selloFieldValue}>{doc.aprobador.nombre}</Text>
+                  </View>
+                  <View style={styles.selloField}>
+                    <Text style={styles.selloFieldLabel}>RUT</Text>
+                    <Text style={styles.selloFieldValue}>
+                      {doc.aprobador.certificaciones_json?.rut || '—'}
+                    </Text>
+                  </View>
+                  <View style={styles.selloField}>
+                    <Text style={styles.selloFieldLabel}>CARGO</Text>
+                    <Text style={styles.selloFieldValue}>
+                      {doc.aprobador.certificaciones_json?.cargo || doc.aprobador.rol}
+                    </Text>
+                  </View>
+                  <View style={styles.selloField}>
+                    <Text style={styles.selloFieldLabel}>FECHA Y HORA</Text>
+                    <Text style={styles.selloFieldValue}>
+                      {doc.fecha_aprobacion
+                        ? new Date(doc.fecha_aprobacion).toLocaleString('es-CL', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit',
+                          })
+                        : '—'}
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            </Animated.View>
+          )}
+
           <Animated.View entering={FadeInDown.delay(60).springify()} style={styles.card}>
             <Text style={styles.cardTitle}>Información del Trabajo</Text>
             <InfoRow label="Tipo de Trabajo" value={tipoLabel} icon={<ClipboardList color={colors.primary.main} size={14} />} />
@@ -477,4 +527,39 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   resolvedText: { fontSize: 14, fontWeight: '700' },
+  selloCard: {
+    borderRadius: radius.lg, overflow: 'hidden',
+    marginBottom: 14,
+    borderWidth: 1.5, borderColor: colors.status.success + '50',
+    ...shadows.glow(colors.status.success),
+  },
+  selloGrad: { padding: 16 },
+  selloHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
+  selloIconWrap: {
+    width: 40, height: 40, borderRadius: 12,
+    backgroundColor: colors.status.success + '25',
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: colors.status.success + '40',
+  },
+  selloTitle: {
+    fontSize: 13, fontWeight: '800', color: colors.status.success,
+    letterSpacing: 1.2,
+  },
+  selloSub: { fontSize: 11, color: colors.status.success + 'AA', marginTop: 2 },
+  selloDivider: {
+    height: 1, backgroundColor: colors.status.success + '30', marginBottom: 12,
+  },
+  selloBody: { gap: 10 },
+  selloField: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    backgroundColor: colors.status.success + '10',
+    borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 8,
+    borderWidth: 1, borderColor: colors.status.success + '20',
+  },
+  selloFieldLabel: {
+    fontSize: 9, fontWeight: '800', color: colors.status.success + 'AA', letterSpacing: 0.8,
+  },
+  selloFieldValue: {
+    fontSize: 13, fontWeight: '700', color: colors.text.primary, maxWidth: '65%', textAlign: 'right',
+  },
 });

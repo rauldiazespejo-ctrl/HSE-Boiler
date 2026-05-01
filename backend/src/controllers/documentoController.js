@@ -222,7 +222,7 @@ exports.getDocumentoById = async (req, res) => {
     const documento = await DocumentoHse.findByPk(idDocumento, {
       include: [
         { model: Usuario, as: 'creador', attributes: ['id_usuario', 'nombre', 'rol'] },
-        { model: Usuario, as: 'aprobador', attributes: ['id_usuario', 'nombre', 'rol'] }
+        { model: Usuario, as: 'aprobador', attributes: ['id_usuario', 'nombre', 'rol', 'certificaciones_json'] }
       ],
     });
     if (!documento) {
