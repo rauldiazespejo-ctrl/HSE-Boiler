@@ -84,8 +84,12 @@ export default function LoginScreen() {
 
   const gerentes = usuarios.filter(u => u.rol === 'gerente');
   const jefes = usuarios.filter(u => u.rol === 'jefe');
+  const lideres = usuarios.filter(u => u.rol === 'lider');
 
-  const rolLabel = (rol: string) => rol === 'gerente' ? 'Gerencia' : 'Jefe de Maestranza';
+  const rolLabel = (rol: string) =>
+    rol === 'gerente' ? 'Gerencia' :
+    rol === 'jefe' ? 'Jefe de Maestranza' :
+    'Trabajador / Operario';
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -240,6 +244,8 @@ export default function LoginScreen() {
                 ...gerentes,
                 ...(jefes.length ? [{ type: 'header', label: 'JEFES DE MAESTRANZA' } as any] : []),
                 ...jefes,
+                ...(lideres.length ? [{ type: 'header', label: 'TRABAJADORES / OPERARIOS' } as any] : []),
+                ...lideres,
               ]}
               keyExtractor={(item, i) => item.type === 'header' ? `h-${i}` : String(item.id_usuario)}
               showsVerticalScrollIndicator={false}

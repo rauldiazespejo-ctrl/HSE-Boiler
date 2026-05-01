@@ -7,7 +7,7 @@ const ADMIN_ROLES = ['gerente', 'jefe'];
 exports.listaUsuarios = async (req, res) => {
   try {
     const todos = await Usuario.findAll({
-      where: { activo: true, rol: ['jefe', 'gerente'] },
+      where: { activo: true, rol: ['jefe', 'gerente', 'lider'] },
       attributes: ['id_usuario', 'nombre', 'rol', 'certificaciones_json'],
       order: [['rol', 'ASC'], ['nombre', 'ASC']],
     });

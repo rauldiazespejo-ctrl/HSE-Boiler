@@ -198,8 +198,8 @@ export default function OperarioDashboard() {
             <LogOut color={colors.text.secondary} size={18} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.greeting}>Hola, {user?.nombre?.split(' ')[0] ?? 'Operario'} 👷</Text>
-        <Text style={styles.greetingSub}>¿Qué trabajo vas a realizar hoy?</Text>
+        <Text style={styles.greeting}>Hola, {user?.nombre?.split(' ')[0] ?? 'Trabajador'} 👷</Text>
+        <Text style={styles.greetingSub}>Selecciona el trabajo para iniciar tu documentación HSE</Text>
       </LinearGradient>
 
       <ScrollView
@@ -210,7 +210,7 @@ export default function OperarioDashboard() {
         }
       >
         <Text style={styles.sectionTitle}>Tipo de Trabajo</Text>
-        <Text style={styles.sectionSub}>Selecciona para iniciar la documentación HSE</Text>
+        <Text style={styles.sectionSub}>Completa el formulario HSE · El jefe de maestranza autorizará la actividad</Text>
 
         <View style={styles.grid}>
           {WORK_TYPES.map((wt, i) => (
@@ -256,7 +256,7 @@ export default function OperarioDashboard() {
           <View style={styles.emptyState}>
             <ClipboardList color={colors.text.disabled} size={40} />
             <Text style={styles.emptyTitle}>Sin documentos aún</Text>
-            <Text style={styles.emptyText}>Crea tu primer permiso seleccionando un trabajo arriba</Text>
+            <Text style={styles.emptyText}>Inicia tu primer permiso seleccionando el tipo de trabajo arriba</Text>
           </View>
         ) : (
           history.map((doc, i) => {
