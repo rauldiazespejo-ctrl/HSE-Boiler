@@ -61,6 +61,7 @@ export interface PermisoData {
   riesgosSeleccionados: string[];
   checklistHerramientas: ChecklistItem[];
   checklistEquipos: ChecklistItem[];
+  checklistMedioAmbiente: ChecklistItem[];
   anexos: Anexo[];
   firmaLider: string | null;
   ubicacionGPS: UbicacionGPS | null;
@@ -75,6 +76,7 @@ const initialState: PermisoData = {
   riesgosSeleccionados: [],
   checklistHerramientas: [],
   checklistEquipos: [],
+  checklistMedioAmbiente: [],
   anexos: [],
   firmaLider: null,
   ubicacionGPS: null,
@@ -164,55 +166,92 @@ function getChecklistEquipos(tipo: TipoPermiso): ChecklistItem[] {
 
 function getAnexos(tipo: TipoPermiso): Anexo[] {
   const base: Anexo[] = [
-    { id: 'ast', nombre: 'AST — Análisis Seguro del Trabajo', requerido: true, base64: null, tipoMime: null },
-    { id: 'charla', nombre: 'Registro Charla de Seguridad', requerido: true, base64: null, tipoMime: null },
+    { id: 'foto_area', nombre: 'Foto del área de trabajo', requerido: false, base64: null, tipoMime: null },
+    { id: 'foto_controles', nombre: 'Foto de controles implementados', requerido: false, base64: null, tipoMime: null },
+    { id: 'foto_epp', nombre: 'Foto del EPP del equipo de trabajo', requerido: false, base64: null, tipoMime: null },
   ];
 
   const extra: Record<string, Anexo[]> = {
     TRABAJO_CALIENTE: [
-      { id: 'permiso_caliente', nombre: 'Permiso de Trabajo en Caliente', requerido: true, base64: null, tipoMime: null },
-      { id: 'extintor', nombre: 'Check Extintor (foto)', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_extintor', nombre: 'Foto del extintor en el área', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_zona_caliente', nombre: 'Foto de zona delimitada / biombo', requerido: false, base64: null, tipoMime: null },
     ],
     IZAJE_GRUA: [
-      { id: 'permiso_izaje', nombre: 'Permiso de Izaje', requerido: true, base64: null, tipoMime: null },
-      { id: 'cert_grua', nombre: 'Certificado Puente Grúa vigente', requerido: true, base64: null, tipoMime: null },
-      { id: 'plan_izaje', nombre: 'Plan / Croquis de Izaje', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_eslinga', nombre: 'Foto de eslingas y accesorios', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_carga', nombre: 'Foto de la carga antes del izaje', requerido: false, base64: null, tipoMime: null },
     ],
     TRABAJO_ALTURA: [
-      { id: 'permiso_altura', nombre: 'Permiso de Trabajo en Altura', requerido: true, base64: null, tipoMime: null },
-      { id: 'cert_arnes', nombre: 'Certificado de Arnés de Seguridad', requerido: true, base64: null, tipoMime: null },
-      { id: 'insp_andamio', nombre: 'Inspección de Andamio / Escalera', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_arnes', nombre: 'Foto del arnés puesto correctamente', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_linea_vida', nombre: 'Foto del punto de anclaje / línea de vida', requerido: false, base64: null, tipoMime: null },
     ],
     TRABAJO_ELECTRICO: [
-      { id: 'permiso_electrico', nombre: 'Permiso de Trabajo Eléctrico', requerido: true, base64: null, tipoMime: null },
-      { id: 'bloqueo_tag', nombre: 'Procedimiento LOTO (Bloqueo/Etiquetado)', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_loto', nombre: 'Foto del bloqueo LOTO aplicado', requerido: false, base64: null, tipoMime: null },
     ],
     ESPACIO_CONFINADO: [
-      { id: 'permiso_confinado', nombre: 'Permiso Entrada Espacio Confinado', requerido: true, base64: null, tipoMime: null },
-      { id: 'medicion_gas', nombre: 'Registro Medición Gases', requerido: true, base64: null, tipoMime: null },
-      { id: 'rescate', nombre: 'Plan de Rescate', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_medicion', nombre: 'Foto del monitor de gases (pantalla)', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_ingreso', nombre: 'Foto del ingreso al espacio confinado', requerido: false, base64: null, tipoMime: null },
     ],
     MECANIZADO_CNC: [
-      { id: 'programa_cnc', nombre: 'Programa CNC aprobado', requerido: false, base64: null, tipoMime: null },
-      { id: 'orden_trabajo', nombre: 'Orden de Trabajo / Plano pieza', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_fijacion', nombre: 'Foto de la fijación de la pieza', requerido: false, base64: null, tipoMime: null },
     ],
     TORNERIA: [
-      { id: 'orden_trabajo', nombre: 'Orden de Trabajo / Plano pieza', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_chuck', nombre: 'Foto del chuck y guarda instalada', requerido: false, base64: null, tipoMime: null },
     ],
     ESMERILADO: [
-      { id: 'insp_disco', nombre: 'Inspección de Disco Esmeril (foto)', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_disco', nombre: 'Foto del disco esmeril (verificación)', requerido: false, base64: null, tipoMime: null },
     ],
     MANTENIMIENTO: [
-      { id: 'orden_mant', nombre: 'Orden de Mantención', requerido: true, base64: null, tipoMime: null },
-      { id: 'bloqueo_tag', nombre: 'Registro LOTO si aplica', requerido: false, base64: null, tipoMime: null },
+      { id: 'foto_equipo_mant', nombre: 'Foto del equipo a mantener', requerido: false, base64: null, tipoMime: null },
     ],
     GRUA_HORQUILLA: [
-      { id: 'check_horquilla', nombre: 'Check Diario Grúa Horquilla', requerido: true, base64: null, tipoMime: null },
-      { id: 'lic_operador', nombre: 'Licencia Operador vigente', requerido: true, base64: null, tipoMime: null },
+      { id: 'foto_horquilla', nombre: 'Foto de la horquilla y mástil', requerido: false, base64: null, tipoMime: null },
     ],
   };
 
   return [...base, ...(extra[tipo] || [])];
+}
+
+const CHECKLIST_MA_BASE: ChecklistItem[] = [
+  { id: 'ma1', descripcion: 'Residuos generados identificados y clasificados (peligrosos / no peligrosos)', estado: null },
+  { id: 'ma2', descripcion: 'Contenedores de residuos correctamente etiquetados y en buen estado', estado: null },
+  { id: 'ma3', descripcion: 'No hay derrames de aceite, lubricante o solvente en el área de trabajo', estado: null },
+  { id: 'ma4', descripcion: 'Sustancias peligrosas almacenadas con hoja de seguridad (MSDS) disponible', estado: null },
+  { id: 'ma5', descripcion: 'Ventilación adecuada para control de emisiones al ambiente (humos, polvos)', estado: null },
+  { id: 'ma6', descripcion: 'Área de trabajo delimitada para evitar contaminación de zonas adyacentes', estado: null },
+  { id: 'ma7', descripcion: 'Plan de respuesta ante emergencia ambiental conocido (derrame, incendio)', estado: null },
+];
+
+const CHECKLIST_MA_CALIENTE: ChecklistItem[] = [
+  ...CHECKLIST_MA_BASE,
+  { id: 'ma8', descripcion: 'Extracción de humos de soldadura activa o ventilación forzada', estado: null },
+  { id: 'ma9', descripcion: 'Escorias y colillas de electrodo segregadas en recipiente adecuado', estado: null },
+];
+
+const CHECKLIST_MA_MECANIZADO: ChecklistItem[] = [
+  ...CHECKLIST_MA_BASE,
+  { id: 'ma8', descripcion: 'Taladrinas / refrigerantes con manejo controlado (sin contacto con drenajes)', estado: null },
+  { id: 'ma9', descripcion: 'Viruta metálica segregada en contenedor habilitado para reciclaje', estado: null },
+  { id: 'ma10', descripcion: 'Aceites de corte almacenados en bidones herméticos etiquetados', estado: null },
+];
+
+const CHECKLIST_MA_ESMERILADO: ChecklistItem[] = [
+  ...CHECKLIST_MA_BASE,
+  { id: 'ma8', descripcion: 'Polvo metálico controlado con captación o barreras físicas', estado: null },
+  { id: 'ma9', descripcion: 'Fragmentos de disco deteriorado dispuestos como residuo peligroso', estado: null },
+];
+
+const CHECKLIST_MA_CONFINADO: ChecklistItem[] = [
+  ...CHECKLIST_MA_BASE,
+  { id: 'ma8', descripcion: 'Contaminantes en el espacio confinado medidos y dentro de límites permisibles', estado: null },
+  { id: 'ma9', descripcion: 'Sin introducción de sustancias de limpieza volátiles sin ventilación verificada', estado: null },
+];
+
+function getChecklistMedioAmbiente(tipo: TipoPermiso): ChecklistItem[] {
+  if (tipo === 'TRABAJO_CALIENTE') return CHECKLIST_MA_CALIENTE;
+  if (tipo === 'MECANIZADO_CNC' || tipo === 'TORNERIA') return CHECKLIST_MA_MECANIZADO;
+  if (tipo === 'ESMERILADO') return CHECKLIST_MA_ESMERILADO;
+  if (tipo === 'ESPACIO_CONFINADO') return CHECKLIST_MA_CONFINADO;
+  return CHECKLIST_MA_BASE;
 }
 
 interface PermisoContextData {
@@ -233,6 +272,7 @@ export const PermisoProvider = ({ children }: { children: ReactNode }) => {
       tipoPermiso: tipo,
       checklistHerramientas: getChecklistHerramientas(tipo),
       checklistEquipos: getChecklistEquipos(tipo),
+      checklistMedioAmbiente: getChecklistMedioAmbiente(tipo),
       anexos: getAnexos(tipo),
     });
   };

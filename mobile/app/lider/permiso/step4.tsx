@@ -38,6 +38,8 @@ export default function PermisoStep4() {
   const riesgosCount = data.riesgosSeleccionados?.length || 0;
   const herramientasOK = data.checklistHerramientas?.filter(i => i.estado !== null).length || 0;
   const equiposOK = data.checklistEquipos?.filter(i => i.estado !== null).length || 0;
+  const medioAmbienteOK = data.checklistMedioAmbiente?.filter(i => i.estado !== null).length || 0;
+  const medioAmbienteTotal = data.checklistMedioAmbiente?.length || 0;
   const docsAdjuntos = data.anexos?.filter(a => a.base64).length || 0;
   const docsTotal = data.anexos?.length || 0;
 
@@ -84,9 +86,11 @@ export default function PermisoStep4() {
           controlesCriticos: data.detalles,
           checklistHerramientas: data.checklistHerramientas,
           checklistEquipos: data.checklistEquipos,
+          checklistMedioAmbiente: data.checklistMedioAmbiente,
           firma: data.firmaLider,
-          anexos: data.anexos,
+          anexos: data.anexos.filter(a => a.base64),
           ubicacionGPS: currentLoc,
+          normas: ['ISO 45001:2018', 'ISO 14001:2015'],
         },
         riesgos_json: data.riesgosSeleccionados,
       });
@@ -173,8 +177,21 @@ export default function PermisoStep4() {
             <Text style={styles.statLabel}>Herram. OK</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={[styles.statNumber, { color: colors.status.success }]}>{docsAdjuntos}/{docsTotal}</Text>
-            <Text style={styles.statLabel}>Docs adjuntos</Text>
+            <Text style={[styles.statNumber, { color: '#22C55E' }]}>{medioAmbienteOK}/{medioAmbienteTotal}</Text>
+            <Text style={styles.statLabel}>ISO 14001</Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={[styles.statNumber, { color: colors.status.success }]}>{docsAdjuntos}</Text>
+            <Text style={styles.statLabel}>Fotos adjuntas</Text>
+          </View>
+        </View>
+
+        <View style={[styles.normBadgeRow]}>
+          <View style={styles.normBadge}>
+            <Text style={styles.normBadgeText}>ISO 45001:2018</Text>
+          </View>
+          <View style={[styles.normBadge, { borderColor: '#22C55E50', backgroundColor: '#22C55E10' }]}>
+            <Text style={[styles.normBadgeText, { color: '#22C55E' }]}>ISO 14001:2015</Text>
           </View>
         </View>
 
@@ -307,7 +324,7 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: colors.border.light,
   },
   statsGrid: {
-    flexDirection: 'row', gap: 8, marginBottom: 20,
+    flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 10,
   },
   statCard: {
     flex: 1,
@@ -318,6 +335,15 @@ const styles = StyleSheet.create({
   },
   statNumber: { fontSize: 20, fontWeight: '800', color: colors.primary.main },
   statLabel: { fontSize: 10, color: colors.text.disabled, textAlign: 'center', marginTop: 2 },
+  normBadgeRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
+  normBadge: {
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 10, paddingVertical: 4,
+    borderRadius: radius.full, borderWidth: 1,
+    borderColor: colors.primary.main + '40',
+    backgroundColor: colors.primary.main + '12',
+  },
+  normBadgeText: { fontSize: 10, fontWeight: '700', color: colors.primary.main },
   divider: { height: 1, backgroundColor: colors.border.light, marginBottom: 20 },
   signTitle: { fontSize: 15, fontWeight: '700', color: colors.text.primary, marginBottom: 4 },
   signSub: { fontSize: 12, color: colors.text.secondary, marginBottom: 16, lineHeight: 17 },

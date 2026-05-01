@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius } from '../../../src/theme/colors';
 import {
   ArrowLeft, ArrowRight, Camera as CameraIcon, Upload,
-  CheckCircle2, X, Wrench, Package, FileText, ChevronDown, ChevronRight,
+  CheckCircle2, X, Wrench, Package, FileText, ChevronDown, ChevronRight, Leaf, Info,
 } from 'lucide-react-native';
 import { PermisoContext, TIPO_LABELS, ChecklistItem } from '../../../src/context/PermisoContext';
 import { CameraView, useCameraPermissions } from 'expo-camera';
@@ -135,12 +135,12 @@ export default function PermisoStep3() {
     } catch {}
   };
 
-  const requiredAnexos = data.anexos.filter(a => a.requerido);
-  const allRequiredDone = requiredAnexos.every(a => a.base64 !== null);
   const herramientasDone = data.checklistHerramientas.filter(i => i.estado !== null).length;
   const equiposDone = data.checklistEquipos.filter(i => i.estado !== null).length;
+  const medioAmbienteDone = data.checklistMedioAmbiente.filter(i => i.estado !== null).length;
+  const fotosAdjuntas = data.anexos.filter(a => a.base64).length;
 
-  const isComplete = allRequiredDone;
+  const isComplete = true;
 
   if (isCameraVisible) {
     return (
@@ -198,15 +198,29 @@ export default function PermisoStep3() {
           onUpdate={items => updateData({ checklistEquipos: items })}
         />
 
+        <ChecklistSection
+          title="Controles Ambientales — ISO 14001"
+          icon={<Leaf color="#22C55E" size={16} />}
+          items={data.checklistMedioAmbiente}
+          onUpdate={items => updateData({ checklistMedioAmbiente: items })}
+        />
+
+        <View style={styles.infoBanner}>
+          <Info color={colors.secondary.main} size={14} />
+          <Text style={styles.infoText}>
+            <Text style={{ fontWeight: '700' }}>Evidencia fotográfica opcional.</Text>
+            {' '}Adjunta fotos de los controles implementados para fortalecer el expediente HSE en auditoría.
+          </Text>
+        </View>
+
         <View style={styles.docSection}>
           <View style={styles.docHeader}>
-            <FileText color={colors.status.warning} size={16} />
-            <Text style={styles.docTitle}>Documentos Adjuntos</Text>
+            <CameraIcon color={colors.status.warning} size={16} />
+            <Text style={styles.docTitle}>Evidencia Fotográfica</Text>
             <View style={styles.docBadge}>
-              <Text style={styles.docBadgeText}>
-                {data.anexos.filter(a => a.base64).length}/{data.anexos.length}
-              </Text>
+              <Text style={styles.docBadgeText}>{fotosAdjuntas}/{data.anexos.length}</Text>
             </View>
+            <Text style={styles.docOptionalTag}>Opcional</Text>
           </View>
 
           {data.anexos.map(anexo => (
@@ -215,14 +229,11 @@ export default function PermisoStep3() {
                 {anexo.base64 ? (
                   <CheckCircle2 color={colors.status.success} size={18} />
                 ) : (
-                  <View style={[styles.anexoDot, !anexo.requerido && styles.anexoDotOptional]} />
+                  <View style={styles.anexoDotOptional} />
                 )}
-                <View>
-                  <Text style={[styles.anexoName, anexo.base64 && styles.anexoNameDone]}>{anexo.nombre}</Text>
-                  {!anexo.requerido && (
-                    <Text style={styles.anexoOptional}>Opcional</Text>
-                  )}
-                </View>
+                <Text style={[styles.anexoName, anexo.base64 && styles.anexoNameDone]} numberOfLines={2}>
+                  {anexo.nombre}
+                </Text>
               </View>
               <View style={styles.anexoBtns}>
                 <TouchableOpacity style={styles.anexoBtn} onPress={() => handleTakePhoto(anexo.id)}>
@@ -235,13 +246,6 @@ export default function PermisoStep3() {
             </View>
           ))}
         </View>
-
-        {!allRequiredDone && (
-          <View style={styles.warningBanner}>
-            <FileText color={colors.status.warning} size={14} />
-            <Text style={styles.warningText}>Adjunta todos los documentos requeridos para continuar</Text>
-          </View>
-        )}
 
         <View style={{ height: 100 }} />
       </ScrollView>
@@ -386,14 +390,12 @@ const styles = StyleSheet.create({
   },
   anexoRowDone: {},
   anexoLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
-  anexoDot: {
+  anexoDotOptional: {
     width: 18, height: 18, borderRadius: 9,
-    borderWidth: 2, borderColor: colors.status.danger,
+    borderWidth: 2, borderColor: colors.border.medium,
   },
-  anexoDotOptional: { borderColor: colors.border.medium },
-  anexoName: { fontSize: 13, color: colors.text.secondary, maxWidth: '90%' },
+  anexoName: { flex: 1, fontSize: 13, color: colors.text.secondary },
   anexoNameDone: { color: colors.status.success },
-  anexoOptional: { fontSize: 10, color: colors.text.disabled },
   anexoBtns: { flexDirection: 'row', gap: 6 },
   anexoBtn: {
     width: 34, height: 34, borderRadius: 9,
@@ -401,14 +403,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center',
     borderWidth: 1, borderColor: colors.border.medium,
   },
-  warningBanner: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: colors.status.warning + '12',
-    borderRadius: radius.sm,
-    padding: 12,
-    borderWidth: 1, borderColor: colors.status.warning + '30',
+  docOptionalTag: {
+    fontSize: 10, fontWeight: '700', color: colors.secondary.main,
+    backgroundColor: colors.secondary.main + '15',
+    paddingHorizontal: 7, paddingVertical: 2,
+    borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.secondary.main + '30',
   },
-  warningText: { flex: 1, fontSize: 12, color: colors.status.warning, lineHeight: 17 },
+  infoBanner: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
+    backgroundColor: colors.secondary.main + '10',
+    borderRadius: radius.sm, padding: 12, marginBottom: 10,
+    borderWidth: 1, borderColor: colors.secondary.main + '25',
+  },
+  infoText: { flex: 1, fontSize: 12, color: colors.text.secondary, lineHeight: 17 },
   footer: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
     padding: 16, paddingBottom: 32,
