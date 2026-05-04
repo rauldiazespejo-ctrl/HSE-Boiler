@@ -100,7 +100,7 @@ exports.createDocumento = async (req, res) => {
       empresa_id: empresa_id || req.user.empresa_id || 1,
       contenido_json,
       riesgos_json,
-      estado: ESTADOS.pendienteLider,
+      estado: ESTADOS.pendienteJefe,
       creado_por: req.user.id,
       firma_digital_creador: contenido_json?.firma || null,
       ubicacion_gps_creacion: gpsCreacion,
