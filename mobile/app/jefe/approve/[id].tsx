@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  TextInput, Alert, ActivityIndicator, KeyboardAvoidingView, Platform,
+  TextInput, ActivityIndicator, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -69,6 +69,9 @@ export default function ApproveScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [comentarios, setComentarios] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmMode, setConfirmMode] = useState<null | 'approve' | 'reject'>(null);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   useEffect(() => {
     if (id) fetchDoc();
@@ -78,51 +81,52 @@ export default function ApproveScreen() {
     try {
       const res = await api.get(`/documentos/${id}`);
       if (res.data.success) setDoc(res.data.data);
+      else {
+        setErrorMsg('No se pudo cargar el documento.');
+        setTimeout(() => router.back(), 2000);
+      }
     } catch {
-      Alert.alert('Error', 'No se pudo cargar el documento.');
-      router.back();
+      setErrorMsg('No se pudo cargar el documento.');
+      setTimeout(() => router.back(), 2000);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleApprove = () => {
-    Alert.alert(
-      'Confirmar Aprobación',
-      '¿Estás seguro de APROBAR este permiso de trabajo? Esta acción autorizará su ejecución.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Aprobar', style: 'default', onPress: submitApprove },
-      ]
-    );
+    setErrorMsg('');
+    setConfirmMode('approve');
   };
 
   const handleReject = () => {
     if (!comentarios.trim()) {
-      Alert.alert('Motivo requerido', 'Debes indicar el motivo del rechazo en el campo de comentarios.');
+      setErrorMsg('Debes indicar el motivo del rechazo en el campo de comentarios antes de rechazar.');
       return;
     }
-    Alert.alert(
-      'Confirmar Rechazo',
-      '¿Estás seguro de RECHAZAR este permiso? El operario deberá corregirlo y reenviarlo.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Rechazar', style: 'destructive', onPress: submitReject },
-      ]
-    );
+    setErrorMsg('');
+    setConfirmMode('reject');
+  };
+
+  const cancelConfirm = () => {
+    setConfirmMode(null);
+    setErrorMsg('');
   };
 
   const submitApprove = async () => {
     setIsSubmitting(true);
+    setErrorMsg('');
     try {
       const res = await api.post(`/documentos/${id}/aprobar`, { comentarios });
       if (res.data.success) {
-        Alert.alert('✓ Permiso Aprobado', res.data.message || 'El permiso fue aprobado exitosamente.', [
-          { text: 'OK', onPress: () => router.replace('/jefe') },
-        ]);
+        setSuccessMsg('✓ Permiso autorizado exitosamente');
+        setTimeout(() => router.replace('/jefe'), 1500);
+      } else {
+        setErrorMsg('No se pudo autorizar el permiso. Intenta nuevamente.');
+        setConfirmMode(null);
       }
     } catch (e: any) {
-      Alert.alert('Error', e.response?.data?.message || 'No se pudo aprobar el documento.');
+      setErrorMsg(e.response?.data?.message || 'Error al conectar con el servidor.');
+      setConfirmMode(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -130,15 +134,19 @@ export default function ApproveScreen() {
 
   const submitReject = async () => {
     setIsSubmitting(true);
+    setErrorMsg('');
     try {
       const res = await api.post(`/documentos/${id}/rechazar`, { comentarios });
       if (res.data.success) {
-        Alert.alert('Permiso Rechazado', 'El operario será notificado para corregir el documento.', [
-          { text: 'OK', onPress: () => router.replace('/jefe') },
-        ]);
+        setSuccessMsg('Permiso rechazado — el operario será notificado');
+        setTimeout(() => router.replace('/jefe'), 1500);
+      } else {
+        setErrorMsg('No se pudo rechazar el permiso. Intenta nuevamente.');
+        setConfirmMode(null);
       }
     } catch (e: any) {
-      Alert.alert('Error', e.response?.data?.message || 'No se pudo rechazar el documento.');
+      setErrorMsg(e.response?.data?.message || 'Error al conectar con el servidor.');
+      setConfirmMode(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -345,43 +353,105 @@ export default function ApproveScreen() {
         </ScrollView>
       )}
 
-      {!isLoading && doc && doc.estado === 'PENDIENTE_JEFE' && (
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={[styles.rejectBtn, isSubmitting && styles.btnDisabled]}
-            onPress={handleReject}
-            disabled={isSubmitting}
-            activeOpacity={0.8}
-          >
-            <XCircle color={colors.status.danger} size={18} />
-            <Text style={styles.rejectBtnText}>Rechazar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.approveBtn, isSubmitting && styles.btnDisabled]}
-            onPress={handleApprove}
-            disabled={isSubmitting}
-            activeOpacity={0.85}
-          >
-            <LinearGradient
-              colors={colors.gradients.success}
-              style={styles.approveBtnGrad}
-              start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-            >
-              {isSubmitting ? (
-                <ActivityIndicator color="#FFF" size="small" />
-              ) : (
-                <>
-                  <CheckCircle2 color="#FFF" size={18} />
-                  <Text style={styles.approveBtnText}>Autorizar Permiso</Text>
-                </>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
+      {successMsg !== '' && (
+        <View style={styles.successBanner}>
+          <CheckCircle2 color={colors.status.success} size={18} />
+          <Text style={styles.successBannerText}>{successMsg}</Text>
         </View>
       )}
 
-      {!isLoading && doc && doc.estado !== 'PENDIENTE_JEFE' && (
+      {errorMsg !== '' && !successMsg && (
+        <View style={styles.errorBanner}>
+          <AlertTriangle color={colors.status.danger} size={16} />
+          <Text style={styles.errorBannerText}>{errorMsg}</Text>
+        </View>
+      )}
+
+      {!isLoading && doc && doc.estado === 'PENDIENTE_JEFE' && !successMsg && (
+        <View style={styles.footer}>
+          {confirmMode === null ? (
+            <>
+              <TouchableOpacity
+                style={[styles.rejectBtn, isSubmitting && styles.btnDisabled]}
+                onPress={handleReject}
+                disabled={isSubmitting}
+                activeOpacity={0.8}
+              >
+                <XCircle color={colors.status.danger} size={18} />
+                <Text style={styles.rejectBtnText}>Rechazar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.approveBtn, isSubmitting && styles.btnDisabled]}
+                onPress={handleApprove}
+                disabled={isSubmitting}
+                activeOpacity={0.85}
+              >
+                <LinearGradient
+                  colors={colors.gradients.success}
+                  style={styles.approveBtnGrad}
+                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                >
+                  <CheckCircle2 color="#FFF" size={18} />
+                  <Text style={styles.approveBtnText}>Autorizar Permiso</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </>
+          ) : confirmMode === 'approve' ? (
+            <>
+              <View style={styles.confirmCard}>
+                <Text style={styles.confirmTitle}>¿Confirmar autorización?</Text>
+                <Text style={styles.confirmSub}>Esta acción autorizará la ejecución del permiso</Text>
+              </View>
+              <TouchableOpacity style={styles.cancelConfirmBtn} onPress={cancelConfirm} disabled={isSubmitting}>
+                <Text style={styles.cancelConfirmText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.approveBtn, isSubmitting && styles.btnDisabled]}
+                onPress={submitApprove}
+                disabled={isSubmitting}
+                activeOpacity={0.85}
+              >
+                <LinearGradient
+                  colors={colors.gradients.success}
+                  style={styles.approveBtnGrad}
+                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                >
+                  {isSubmitting ? (
+                    <ActivityIndicator color="#FFF" size="small" />
+                  ) : (
+                    <Text style={styles.approveBtnText}>Confirmar ✓</Text>
+                  )}
+                </LinearGradient>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <View style={styles.confirmCard}>
+                <Text style={[styles.confirmTitle, { color: colors.status.danger }]}>¿Confirmar rechazo?</Text>
+                <Text style={styles.confirmSub}>El operario deberá corregir y reenviar</Text>
+              </View>
+              <TouchableOpacity style={styles.cancelConfirmBtn} onPress={cancelConfirm} disabled={isSubmitting}>
+                <Text style={styles.cancelConfirmText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.rejectBtn, styles.rejectBtnWide, isSubmitting && styles.btnDisabled]}
+                onPress={submitReject}
+                disabled={isSubmitting}
+                activeOpacity={0.8}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color={colors.status.danger} size="small" />
+                ) : (
+                  <Text style={styles.rejectBtnText}>Confirmar ✗</Text>
+                )}
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+      )}
+
+      {!isLoading && doc && doc.estado !== 'PENDIENTE_JEFE' && !successMsg && (
         <View style={styles.footer}>
           <View style={[styles.resolvedBanner, { borderColor: (estadoColor[doc.estado] || colors.text.disabled) + '40', backgroundColor: (estadoColor[doc.estado] || colors.text.disabled) + '12' }]}>
             <ShieldCheck color={estadoColor[doc.estado] || colors.text.disabled} size={18} />
@@ -521,6 +591,35 @@ const styles = StyleSheet.create({
   },
   approveBtnText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
   btnDisabled: { opacity: 0.5 },
+  rejectBtnWide: { flex: 1, justifyContent: 'center' },
+  confirmCard: { flex: 1 },
+  confirmTitle: { fontSize: 13, fontWeight: '700', color: colors.text.primary },
+  confirmSub: { fontSize: 10, color: colors.text.disabled, marginTop: 2 },
+  cancelConfirmBtn: {
+    paddingHorizontal: 14, paddingVertical: 12,
+    borderRadius: radius.md,
+    backgroundColor: colors.background.elevated,
+    borderWidth: 1, borderColor: colors.border.medium,
+    alignItems: 'center',
+  },
+  cancelConfirmText: { fontSize: 13, color: colors.text.secondary, fontWeight: '600' },
+  successBanner: {
+    position: 'absolute', bottom: 0, left: 0, right: 0,
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    padding: 20, paddingBottom: 36,
+    backgroundColor: colors.status.success + '18',
+    borderTopWidth: 1.5, borderTopColor: colors.status.success + '60',
+  },
+  successBannerText: { flex: 1, fontSize: 14, fontWeight: '700', color: colors.status.success },
+  errorBanner: {
+    position: 'absolute', bottom: 120, left: 16, right: 16,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    padding: 12,
+    backgroundColor: colors.status.danger + '12',
+    borderRadius: radius.md,
+    borderWidth: 1, borderColor: colors.status.danger + '40',
+  },
+  errorBannerText: { flex: 1, fontSize: 12, color: colors.status.danger },
   resolvedBanner: {
     flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10,
     borderRadius: radius.md, padding: 14,
