@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Alert, Modal,
+  Alert, Modal, PanResponder,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,8 +12,121 @@ import {
 } from 'lucide-react-native';
 import { PermisoContext, TIPO_LABELS } from '../../../src/context/PermisoContext';
 import { api } from '../../../src/services/api';
-import SignatureScreen from 'react-native-signature-canvas';
+import Svg, { Path } from 'react-native-svg';
 import * as Location from 'expo-location';
+
+interface SignaturePoint { x: number; y: number; }
+
+function SignaturePad({ onOK, onEmpty }: { onOK: (sig: string) => void; onEmpty: () => void }) {
+  const [paths, setPaths] = useState<SignaturePoint[][]>([]);
+  const [currentPath, setCurrentPath] = useState<SignaturePoint[]>([]);
+  const [layout, setLayout] = useState({ width: 300, height: 200 });
+  const currentPathRef = React.useRef<SignaturePoint[]>([]);
+
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (e) => {
+        const { locationX, locationY } = e.nativeEvent;
+        const pt = [{ x: locationX, y: locationY }];
+        currentPathRef.current = pt;
+        setCurrentPath(pt);
+      },
+      onPanResponderMove: (e) => {
+        const { locationX, locationY } = e.nativeEvent;
+        const pt = [...currentPathRef.current, { x: locationX, y: locationY }];
+        currentPathRef.current = pt;
+        setCurrentPath(pt);
+      },
+      onPanResponderRelease: () => {
+        const finished = currentPathRef.current;
+        currentPathRef.current = [];
+        setCurrentPath([]);
+        if (finished.length >= 2) {
+          setPaths(prev => [...prev, finished]);
+        }
+      },
+    })
+  ).current;
+
+  const pointsToD = (pts: SignaturePoint[]) => {
+    if (pts.length < 2) return '';
+    return pts.reduce((d, p, i) => d + (i === 0 ? `M ${p.x} ${p.y}` : ` L ${p.x} ${p.y}`), '');
+  };
+
+  const handleConfirm = () => {
+    const allPaths = paths.filter(p => p.length >= 2);
+    if (allPaths.length === 0) { onEmpty(); return; }
+    const pathsMarkup = allPaths
+      .map(pts => `<path d="${pointsToD(pts)}" stroke="#DC143C" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`)
+      .join('');
+    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${layout.height}" style="background:#1A1A2E">${pathsMarkup}</svg>`;
+    onOK(`data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgStr)))}`);
+  };
+
+  const handleClear = () => { currentPathRef.current = []; setPaths([]); setCurrentPath([]); };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View
+        style={sigStyles.canvas}
+        onLayout={e => setLayout({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })}
+        {...panResponder.panHandlers}
+      >
+        <Svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+          {paths.map((pts, i) => (
+            <Path key={i} d={pointsToD(pts)} stroke={colors.primary.main} strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          ))}
+          {currentPath.length >= 2 && (
+            <Path d={pointsToD(currentPath)} stroke={colors.primary.main} strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          )}
+        </Svg>
+        {paths.length === 0 && currentPath.length === 0 && (
+          <View style={sigStyles.placeholder} pointerEvents="none">
+            <PenTool color={colors.text.disabled} size={28} />
+            <Text style={sigStyles.placeholderText}>Dibuja tu firma aquí</Text>
+            <Text style={sigStyles.placeholderSub}>Usa el dedo (móvil) o el mouse (computador)</Text>
+          </View>
+        )}
+      </View>
+      <View style={sigStyles.actions}>
+        <TouchableOpacity style={sigStyles.clearBtn} onPress={handleClear}>
+          <Text style={sigStyles.clearBtnText}>Limpiar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={sigStyles.confirmBtn} onPress={handleConfirm}>
+          <LinearGradient colors={colors.primary.gradient} style={StyleSheet.absoluteFill} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} />
+          <Text style={sigStyles.confirmBtnText}>Confirmar Firma</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const sigStyles = StyleSheet.create({
+  canvas: {
+    flex: 1, margin: 16, borderRadius: 12,
+    backgroundColor: colors.background.elevated,
+    borderWidth: 1, borderColor: colors.border.medium,
+    overflow: 'hidden',
+    justifyContent: 'center', alignItems: 'center',
+  },
+  placeholder: { alignItems: 'center', gap: 8 },
+  placeholderText: { fontSize: 14, color: colors.text.disabled, fontWeight: '600' },
+  placeholderSub: { fontSize: 11, color: colors.text.disabled, textAlign: 'center' },
+  actions: { flexDirection: 'row', gap: 12, paddingHorizontal: 16, paddingBottom: 16 },
+  clearBtn: {
+    flex: 1, paddingVertical: 14, borderRadius: radius.md,
+    borderWidth: 1, borderColor: colors.border.medium,
+    alignItems: 'center',
+  },
+  clearBtnText: { fontSize: 14, fontWeight: '600', color: colors.text.secondary },
+  confirmBtn: {
+    flex: 2, paddingVertical: 14, borderRadius: radius.md,
+    alignItems: 'center', overflow: 'hidden',
+  },
+  confirmBtnText: { fontSize: 14, fontWeight: '700', color: '#FFF' },
+});
 
 function SummaryRow({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
   return (
@@ -257,13 +370,9 @@ export default function PermisoStep4() {
               <X color={colors.text.primary} size={20} />
             </TouchableOpacity>
           </View>
-          <SignatureScreen
+          <SignaturePad
             onOK={handleSignature}
             onEmpty={() => Alert.alert('Firma vacía', 'Por favor, dibuja tu firma.')}
-            descriptionText="Firma con tu dedo"
-            clearText="Limpiar"
-            confirmText="Confirmar"
-            webStyle={`.m-signature-pad { background: ${colors.background.paper}; } .m-signature-pad--body canvas { background: ${colors.background.elevated}; }`}
           />
         </View>
       </Modal>
