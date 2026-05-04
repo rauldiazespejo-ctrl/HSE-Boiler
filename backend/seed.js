@@ -72,6 +72,14 @@ const seed = async () => {
         cargo: 'Especialista Líder',
         rut: '18.421.336-2',
       },
+      {
+        email: 'alejandra.perez@forjasafe.cl',
+        password: DEFAULT_PASSWORD,
+        nombre: 'Alejandra Pérez',
+        rol: 'jefe',
+        cargo: 'Especialista HSE',
+        rut: '13.822.365-7',
+      },
 
       {
         email: 'ivan.cabrera@forjasafe.cl',
@@ -267,6 +275,7 @@ const seed = async () => {
     console.log('   edgardo.garcia@forjasafe.cl      / forja2024');
     console.log('   alexis.olivares@forjasafe.cl     / forja2024');
     console.log('   jorge.vilches@forjasafe.cl       / forja2024');
+    console.log('   alejandra.perez@forjasafe.cl     / forja2024');
     console.log('\n--- OPERARIOS (crean permisos) ---');
     console.log('   cristian.collao@forjasafe.cl     / forja2024');
     console.log('   ismael.rozas@forjasafe.cl        / forja2024');
