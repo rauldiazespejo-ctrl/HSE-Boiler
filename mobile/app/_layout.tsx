@@ -75,6 +75,8 @@ function ProtectedNavigation() {
       <Stack.Screen name="jefe/index" />
       <Stack.Screen name="jefe/approve/[id]" />
       <Stack.Screen name="gerente/index" />
+      <Stack.Screen name="gerente/repositorio" />
+      <Stack.Screen name="gerente/documento/[id]" />
     </Stack>
   );
 }

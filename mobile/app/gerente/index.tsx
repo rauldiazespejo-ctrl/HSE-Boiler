@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radius, shadows } from '../../src/theme/colors';
 import {
   LogOut, TrendingUp, ShieldCheck, AlertTriangle, CheckCircle,
-  XCircle, Clock, BarChart2, Hammer, Activity, FileText,
+  XCircle, Clock, BarChart2, Hammer, Activity, FileText, Archive, ChevronRight,
 } from 'lucide-react-native';
 import { api } from '../../src/services/api';
 import { AuthContext } from '../../src/context/AuthContext';
@@ -254,6 +254,22 @@ export default function GerenteDashboard() {
               </View>
             </Animated.View>
 
+            <Animated.View entering={FadeInDown.delay(480).springify()}>
+              <TouchableOpacity style={styles.repoBtn} onPress={() => router.push('/gerente/repositorio')} activeOpacity={0.85}>
+                <LinearGradient colors={['#1A0C10', '#0F0A0C']} style={StyleSheet.absoluteFill} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} />
+                <View style={styles.repoBtnLeft}>
+                  <View style={styles.repoBtnIcon}>
+                    <Archive color={colors.primary.main} size={20} />
+                  </View>
+                  <View>
+                    <Text style={styles.repoBtnTitle}>Repositorio Documental</Text>
+                    <Text style={styles.repoBtnSub}>{total} documento(s) registrado(s) · Ver historial completo</Text>
+                  </View>
+                </View>
+                <ChevronRight color={colors.text.disabled} size={18} />
+              </TouchableOpacity>
+            </Animated.View>
+
             <View style={{ height: 40 }} />
           </>
         )}
@@ -351,4 +367,18 @@ const styles = StyleSheet.create({
   complianceTitle: { fontSize: 14, fontWeight: '700', color: '#FFF' },
   complianceSub: { fontSize: 11, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
   compliancePct: { marginLeft: 'auto', fontSize: 36, fontWeight: '800', color: '#FFF' },
+  repoBtn: {
+    flexDirection: 'row', alignItems: 'center',
+    borderRadius: radius.lg, padding: 16,
+    borderWidth: 1, borderColor: colors.primary.main + '30',
+    marginBottom: 14, overflow: 'hidden', position: 'relative',
+  },
+  repoBtnLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  repoBtnIcon: {
+    width: 40, height: 40, borderRadius: 12,
+    backgroundColor: colors.primary.main + '18',
+    justifyContent: 'center', alignItems: 'center',
+  },
+  repoBtnTitle: { fontSize: 14, fontWeight: '700', color: colors.text.primary },
+  repoBtnSub: { fontSize: 11, color: colors.text.secondary, marginTop: 2 },
 });
