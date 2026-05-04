@@ -166,10 +166,10 @@ export default function JefeDashboard() {
             const riskColor = getRiskColor(doc.tipo_documento);
             const tipoLabel = TIPO_LABELS[doc.tipo_documento] || doc.tipo_documento;
             return (
-              <Animated.View key={doc.id || i} entering={FadeInDown.delay(i * 60).springify()}>
+              <Animated.View key={doc.id_documento || i} entering={FadeInDown.delay(i * 60).springify()}>
                 <Pressable
                   style={({ pressed }) => [styles.docCard, pressed && styles.docCardPressed]}
-                  onPress={() => router.push(`/jefe/approve/${doc.id}`)}
+                  onPress={() => router.push(`/jefe/approve/${doc.id_documento}`)}
                 >
                   <LinearGradient
                     colors={[riskColor + '15', riskColor + '05']}
@@ -202,7 +202,7 @@ export default function JefeDashboard() {
                     )}
 
                     <View style={styles.docCardFooter}>
-                      <Text style={styles.docNum}>#{doc.numero_documento || doc.id?.slice(-6)}</Text>
+                      <Text style={styles.docNum}>#{doc.numero_documento || String(doc.id_documento).slice(-6)}</Text>
                       <View style={styles.reviewBtn}>
                         <Text style={styles.reviewBtnText}>Revisar y Autorizar</Text>
                         <ChevronRight color={colors.secondary.main} size={14} />
