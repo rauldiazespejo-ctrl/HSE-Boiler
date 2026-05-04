@@ -81,10 +81,10 @@ const DocumentoHse = sequelize.define('DocumentoHse', {
     type: DataTypes.TEXT
   },
   firma_digital_creador: {
-    type: DataTypes.STRING(500)
+    type: DataTypes.TEXT
   },
   firma_digital_aprobador: {
-    type: DataTypes.STRING(500)
+    type: DataTypes.TEXT
   },
   valido_desde: {
     type: DataTypes.DATE
